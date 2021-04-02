@@ -1,0 +1,14 @@
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\bin\Debug\net5.0\EdProject.DAL.deps.json
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\bin\Debug\net5.0\EdProject.DAL.runtimeconfig.json
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\bin\Debug\net5.0\EdProject.DAL.runtimeconfig.dev.json
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\bin\Debug\net5.0\EdProject.DAL.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\bin\Debug\net5.0\ref\EdProject.DAL.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\bin\Debug\net5.0\EdProject.DAL.pdb
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.AssemblyInfoInputs.cache
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.AssemblyInfo.cs
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\ref\EdProject.DAL.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.pdb
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.genruntimeconfig.cache
