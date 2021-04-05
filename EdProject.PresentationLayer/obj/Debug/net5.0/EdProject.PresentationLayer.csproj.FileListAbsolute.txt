@@ -69,3 +69,8 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\EdProject.PresentationLayer.genruntimeconfig.cache
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Humanizer.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Microsoft.Extensions.Identity.Stores.dll

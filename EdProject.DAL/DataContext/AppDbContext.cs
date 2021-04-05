@@ -1,11 +1,13 @@
 ﻿using EdProject.DAL.Entities;
 using EdProject.DAL.Entities.Enums;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace EdProject.DAL.DataContext
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User,Role,long>
     {
         #region Config Options
         public class OptionsBuild
@@ -26,7 +28,7 @@ namespace EdProject.DAL.DataContext
         #endregion
 
         #region Constructor
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {  }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,14 +65,14 @@ namespace EdProject.DAL.DataContext
                 .Property(e => e.Currency)
                 .HasConversion(
                 v => v.ToString(),
-                v => (Currencies)Enum.Parse(typeof(Currencies), v)
+                v => (CurrencyTypes)Enum.Parse(typeof(CurrencyTypes), v)
                 );
             modelBuilder
                 .Entity<Edition>()
                 .Property(e => e.Status)
                 .HasConversion(
                 v => v.ToString(),
-                v => (EditionStatuses)Enum.Parse(typeof(EditionStatuses), v)
+                v => (EditionStatusTypes)Enum.Parse(typeof(EditionStatusTypes), v)
                 );
             modelBuilder
                 .Entity<Edition>()
@@ -86,15 +88,21 @@ namespace EdProject.DAL.DataContext
                 .HasOne(p => p.Payment)
                 .WithOne(o => o.Order)
                 .HasForeignKey<Orders>(o => o.PaymentId);
+            #endregion
 
             modelBuilder.Seed();
 
-            #endregion
+            base.OnModelCreating(modelBuilder);
         }
 
         DbSet<Author> Authors { set; get; }
+        DbSet<AuthorInEditions> AuthorInEditions { get; set; }
+        DbSet<Edition> Editions { get; set; }
         DbSet<OrderItems> OrderItems { get; set; }
+        DbSet<Orders> Orders { get; set; }
+        DbSet<Payments> Payments { get; set; }
         
+
     }
     public static class ModelBuilderExtension
     {
@@ -105,11 +113,11 @@ namespace EdProject.DAL.DataContext
                 new Author { Id = 2, Name = "Stephen King" }
                 );
             modelBuilder.Entity<Edition>().HasData(
-                new Edition { Id = 1, Title = "Hamlet", Desciption = "Classic Printing Edition", Price = 1444.9M, Currency = Currencies.UAH, Status = EditionStatuses.Available, Type = EditionTypes.Book },
-                new Edition { Id = 2, Title = "Othello", Desciption = "Classic Printing Edition", Price = 1200.9M, Currency = Currencies.UAH, Status = EditionStatuses.Available, Type = EditionTypes.Book},
-                new Edition { Id = 3, Title = "Pet Graveyard", Desciption = "Classic Printing Edition", Price = 1300.9M, Currency = Currencies.UAH, Status = EditionStatuses.Available, Type = EditionTypes.Book },
-                new Edition { Id = 4, Title = "Confrontation", Desciption = "Classic Printing Edition", Price = 1140.6M, Currency = Currencies.UAH, Status = EditionStatuses.NotAvailable, Type= EditionTypes.Book},
-                new Edition { Id = 5, Title = "Something Weird", Desciption = "Featuring Willy Shakespare", Price = 120.23M , Currency = Currencies.EUR, Status = EditionStatuses.NotAvailable, Type = EditionTypes.Magazine}
+                new Edition { Id = 1, Title = "Hamlet", Desciption = "Classic Printing Edition", Price = 1444.9M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.Available, Type = EditionTypes.Book },
+                new Edition { Id = 2, Title = "Othello", Desciption = "Classic Printing Edition", Price = 1200.9M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.Available, Type = EditionTypes.Book},
+                new Edition { Id = 3, Title = "Pet Graveyard", Desciption = "Classic Printing Edition", Price = 1300.9M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.Available, Type = EditionTypes.Book },
+                new Edition { Id = 4, Title = "Confrontation", Desciption = "Classic Printing Edition", Price = 1140.6M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.NotAvailable, Type= EditionTypes.Book},
+                new Edition { Id = 5, Title = "Something Weird", Desciption = "Featuring Willy Shakespare", Price = 120.23M , Currency = CurrencyTypes.EUR, Status = EditionStatusTypes.NotAvailable, Type = EditionTypes.Magazine}
                 );
             modelBuilder.Entity<AuthorInEditions>().HasData(
                 new AuthorInEditions { AuthorId = 1, EditionId = 1},
@@ -119,7 +127,12 @@ namespace EdProject.DAL.DataContext
                 new AuthorInEditions { AuthorId = 1, EditionId = 5 },
                 new AuthorInEditions { AuthorId = 2, EditionId = 5 }
                 );
-           
+
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = 1, Name = "admin", RolesType = Enums.UserRolesType.Admin},
+                new Role { Id = 2, Name = "client-user", RolesType = Enums.UserRolesType.Client}
+                );
+
         }
     }
 }

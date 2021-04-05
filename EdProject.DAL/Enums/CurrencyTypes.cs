@@ -1,6 +1,6 @@
 ﻿namespace EdProject.DAL.Entities.Enums
 {
-    public enum Currencies
+    public enum CurrencyTypes
     {
         None = 0,
         UAH = 1,

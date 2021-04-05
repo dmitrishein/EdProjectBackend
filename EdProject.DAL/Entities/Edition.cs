@@ -16,8 +16,8 @@ namespace EdProject.DAL.Entities
 
         public Decimal Price { get; set; }
 
-        public EditionStatuses Status { get; set; }
-        public Currencies Currency { get; set; }
+        public EditionStatusTypes Status { get; set; }
+        public CurrencyTypes Currency { get; set; }
         public EditionTypes Type { get; set; }
 
         //relationships
