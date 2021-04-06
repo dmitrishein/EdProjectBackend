@@ -7,8 +7,9 @@ using System;
 
 namespace EdProject.DAL.DataContext
 {
-    public class AppDbContext : IdentityDbContext<User,Role,long>
+    public class AppDbContext : IdentityDbContext<AppUser,AppRole,long>
     {
+       
         #region Config Options
         public class OptionsBuild
         {
@@ -28,12 +29,15 @@ namespace EdProject.DAL.DataContext
         #endregion
 
         #region Constructor
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {  }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
+        {
+            
+        }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region Создание связи многие-ко-многим через AuthorInEdition
+            #region relations Author and Edition (many-to-many)
             modelBuilder.Entity<AuthorInEditions>()
                 .HasKey(ba => new { ba.EditionId, ba.AuthorId });
             modelBuilder.Entity<AuthorInEditions>()
@@ -46,20 +50,40 @@ namespace EdProject.DAL.DataContext
                 .HasForeignKey(ba => ba.AuthorId);
             #endregion
 
-            #region один-ко-одному связь между Edition and OrderItems
+            #region relations between User and Roles(many-to-many)
+            modelBuilder.Entity<UserInRole>()
+                .HasKey(ur => new { ur.UserId, ur.AppRoleId});
+            modelBuilder.Entity<UserInRole>()
+                .HasOne(ur => ur.AppUser)
+                .WithMany(rl => rl.Roles)
+                .HasForeignKey(ur => ur.UserId);
+            modelBuilder.Entity<UserInRole>()
+                .HasOne(ur => ur.AppRole)
+                .WithMany(u => u.Users)
+                .HasForeignKey(ba => ba.AppRoleId);
+            #endregion
+
+            #region relations Edition and OrderItems(one-to-one) 
             modelBuilder.Entity<OrderItems>()
                 .HasOne(e => e.Edition)
                 .WithOne(o => o.OrderItem)
                 .HasForeignKey<OrderItems>(o => o.EditionId);
             #endregion
 
-            #region связь между orders and ordersItems
+            #region relations orders and ordersItems(one-to-many)
             modelBuilder.Entity<Orders>().HasMany(o => o.OrderItems)
                 .WithOne(oi => oi.Order)
                 .HasForeignKey(oi => oi.OrderId);
             #endregion
 
-            #region Настройка преобразователя значений enum в string
+            #region relations Payments and Orders(one-to-one)
+            modelBuilder.Entity<Orders>()
+                .HasOne(p => p.Payment)
+                .WithOne(o => o.Order)
+                .HasForeignKey<Orders>(o => o.PaymentId);
+            #endregion
+
+            #region Настройка преобразователя значений enum.Currency в string
             modelBuilder
                 .Entity<Edition>()
                 .Property(e => e.Currency)
@@ -83,31 +107,42 @@ namespace EdProject.DAL.DataContext
                 );
             #endregion
 
-            #region отношения между Payments and Orders
-            modelBuilder.Entity<Orders>()
-                .HasOne(p => p.Payment)
-                .WithOne(o => o.Order)
-                .HasForeignKey<Orders>(o => o.PaymentId);
-            #endregion
-
             modelBuilder.Seed();
-
             base.OnModelCreating(modelBuilder);
         }
-
+  
+        #region Tables
         DbSet<Author> Authors { set; get; }
         DbSet<AuthorInEditions> AuthorInEditions { get; set; }
         DbSet<Edition> Editions { get; set; }
         DbSet<OrderItems> OrderItems { get; set; }
         DbSet<Orders> Orders { get; set; }
         DbSet<Payments> Payments { get; set; }
-        
+        #endregion
 
     }
+
     public static class ModelBuilderExtension
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
+            var hasher = new PasswordHasher<AppUser>();
+     
+            modelBuilder.Entity<AppUser>().HasData(
+                new AppUser { Id = 1, UserName = "admin", NormalizedUserName="ADMIN", FirstName="Admin", LastName = "Admin",PasswordHash = hasher.HashPassword(null, "Admin756") , EmailConfirmed = true, Email = "adminex@sample.te"},
+                new AppUser { Id = 2, UserName = "client", NormalizedUserName = "CLIENT", FirstName = "Client", LastName = "User", PasswordHash = hasher.HashPassword(null, "123User"), EmailConfirmed = true, Email = "userex@sample.te" },
+                new AppUser { UserName = "try", NormalizedUserName = "ADeeMIN", FirstName = "You", LastName = "Admfin", PasswordHash = hasher.HashPassword(null, "Admifffn756"), EmailConfirmed = false, Email = "adminex@sample.te" }
+                );
+            modelBuilder.Entity<AppRole>().HasData(
+                new AppRole { Id = 1, Name = "admin", RolesType = Enums.UserRolesType.Admin, NormalizedName = "admin" },
+                new AppRole { Id = 2, Name = "client-user", RolesType = Enums.UserRolesType.Client, NormalizedName = "client" }
+                );
+            modelBuilder.Entity<UserInRole>().HasData(
+                new UserInRole{ UserId = 1, AppRoleId = 1},
+                new UserInRole { UserId = 2, AppRoleId = 2}
+                );
+            
+
             modelBuilder.Entity<Author>().HasData(
                 new Author { Id = 1, Name = "William Shakespare"},
                 new Author { Id = 2, Name = "Stephen King" }
@@ -128,10 +163,7 @@ namespace EdProject.DAL.DataContext
                 new AuthorInEditions { AuthorId = 2, EditionId = 5 }
                 );
 
-            modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "admin", RolesType = Enums.UserRolesType.Admin},
-                new Role { Id = 2, Name = "client-user", RolesType = Enums.UserRolesType.Client}
-                );
+            
 
         }
     }

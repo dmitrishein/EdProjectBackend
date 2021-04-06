@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 namespace EdProject.DAL.Entities
 {
-    public class User : IdentityUser<long>
+    public class AppUser : IdentityUser<long>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public ICollection<Role> Roles { get; set; }
+        public ICollection<UserInRole> Roles { get; set; }
+
     }
 }
