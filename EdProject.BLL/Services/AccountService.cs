@@ -1,12 +1,6 @@
 ﻿using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -14,6 +8,7 @@ namespace EdProject.BLL.Services
     public class AccountService : IAccountService
     {
         #region UserManager, SignInManager and constructor
+
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
      
@@ -26,10 +21,10 @@ namespace EdProject.BLL.Services
 
         #endregion
 
-
-        public async Task<bool> Login(string password, string email)
+        public async Task<bool> Login(string password, string email, bool rememberMe)
         {
-            var result = await _signInManager.PasswordSignInAsync(email,password,false,false);
+            var result = await _signInManager.PasswordSignInAsync(email,password,rememberMe,false);
+           
             if (result.Succeeded)
                 return true;
             else
@@ -39,7 +34,7 @@ namespace EdProject.BLL.Services
         {   //удаляем аутентификационные куки
             await _signInManager.SignOutAsync();
         }
-
+        //в регистрацию надо добавить отправку письма-подтверждения
         public async Task<AppUser> RegisterUser(string userName, string firstName, string lastName, string password, string email)
         {
             //создаем пользователя
@@ -60,7 +55,6 @@ namespace EdProject.BLL.Services
 
             return newUser;
         }
-
         //метод получает параметры из сгенерированой ссылки,по которой перейдет пользователь
         public async Task<bool> ConfirmEmail(string userId, string token)
         {
@@ -79,6 +73,5 @@ namespace EdProject.BLL.Services
 
         }
 
-       
     }
 }

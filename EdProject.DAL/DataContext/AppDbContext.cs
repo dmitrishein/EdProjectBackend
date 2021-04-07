@@ -130,8 +130,7 @@ namespace EdProject.DAL.DataContext
      
             modelBuilder.Entity<AppUser>().HasData(
                 new AppUser { Id = 1, UserName = "admin", NormalizedUserName="ADMIN", FirstName="Admin", LastName = "Admin",PasswordHash = hasher.HashPassword(null, "Admin756") , EmailConfirmed = true, Email = "adminex@sample.te"},
-                new AppUser { Id = 2, UserName = "client", NormalizedUserName = "CLIENT", FirstName = "Client", LastName = "User", PasswordHash = hasher.HashPassword(null, "123User"), EmailConfirmed = true, Email = "userex@sample.te" },
-                new AppUser { UserName = "try", NormalizedUserName = "ADeeMIN", FirstName = "You", LastName = "Admfin", PasswordHash = hasher.HashPassword(null, "Admifffn756"), EmailConfirmed = false, Email = "adminex@sample.te" }
+                new AppUser { Id = 2, UserName = "client", NormalizedUserName = "CLIENT", FirstName = "Client", LastName = "User", PasswordHash = hasher.HashPassword(null, "123User"), EmailConfirmed = true, Email = "userex@sample.te" }
                 );
             modelBuilder.Entity<AppRole>().HasData(
                 new AppRole { Id = 1, Name = "admin", RolesType = Enums.UserRolesType.Admin, NormalizedName = "admin" },
