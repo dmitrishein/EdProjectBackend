@@ -1,5 +1,5 @@
-﻿using EdProject.BLL.Common.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -19,14 +19,13 @@ namespace EdProject.PresentationLayer.Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
-            //идучи по контейнеру и сталкиваясь с ошибкой отправляем её в лог
             try
             {
                 await next(httpContext);
             }
             catch(Exception ex)
             {
-                logger.LogWrite(ex.Message);
+                logger.LogError(ex.Message,ex);
             }
         }
 

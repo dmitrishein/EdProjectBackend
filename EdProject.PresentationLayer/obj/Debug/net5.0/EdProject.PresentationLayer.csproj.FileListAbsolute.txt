@@ -76,3 +76,4 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\EdProject.DAL.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\EdProject.BLL.pdb
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\EdProject.DAL.pdb
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\AutoMapper.dll

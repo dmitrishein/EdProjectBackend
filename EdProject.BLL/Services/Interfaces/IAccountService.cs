@@ -5,9 +5,9 @@ namespace EdProject.BLL.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<AppUser> RegisterUser(string userName, string firstName, string lastName, string password, string email);
+        Task RegisterUser(UserModel newUser);
         Task<bool> Login(string password, string email, bool RememberMe); 
-        Task LogOff(string password, string email);
+        Task Logout(string password, string email);
         Task<bool> ConfirmEmail(string userId, string token);
     }
 }

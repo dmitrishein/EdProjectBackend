@@ -1,4 +1,5 @@
-﻿using EdProject.BLL.Services.Interfaces;
+﻿using AutoMapper;
+using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
@@ -9,58 +10,81 @@ namespace EdProject.BLL.Services
     {
         #region UserManager, SignInManager and constructor
 
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-     
-
+        private UserManager<AppUser> _userManager;
+        private SignInManager<AppUser> _signInManager;
+        
         public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            this._userManager = userManager;
-            this._signInManager = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
+
 
         #endregion
 
         public async Task<bool> Login(string password, string email, bool rememberMe)
         {
-            var result = await _signInManager.PasswordSignInAsync(email,password,rememberMe,false);
+            var user = await _userManager.FindByEmailAsync(email);
            
-            if (result.Succeeded)
-                return true;
-            else
+            //user validation
+            if (user == null)
                 return false;
-        }
-        public async Task LogOff(string password, string email)
-        {   //удаляем аутентификационные куки
-            await _signInManager.SignOutAsync();
-        }
-        //в регистрацию надо добавить отправку письма-подтверждения
-        public async Task<AppUser> RegisterUser(string userName, string firstName, string lastName, string password, string email)
-        {
-            //создаем пользователя
-            AppUser newUser = new AppUser
+
+            //login with confirmed email
+            if (user.EmailConfirmed)
             {
-                UserName = userName,
-                FirstName = firstName,
-                LastName = lastName,
-            };
-
-            var result = await _userManager.CreateAsync(newUser, password);
-
-            //если регистрация успешна
-            if(result.Succeeded)
-            {   
-                await _signInManager.SignInAsync(newUser, isPersistent: false);
+                var result = await _signInManager.PasswordSignInAsync(email, password, rememberMe, false);
+                if (result.Succeeded)
+                    return true;
+                return false;
+            }
+            
+            //without
+            if(!user.EmailConfirmed)
+            {
+                return false;
             }
 
-            return newUser;
+
+            return false;
         }
-        //метод получает параметры из сгенерированой ссылки,по которой перейдет пользователь
+        public async Task Logout(string password, string email)
+        {   
+            await _signInManager.SignOutAsync();
+        }
+        public async Task RegisterUser(UserModel userModel)
+        {
+            //AppUser newUser = await _userManager.FindByEmailAsync(userModel.Email);
+            //if user doesn't exist
+            if (userModel != null)
+            {
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<UserModel, AppUser>());
+                var _mapper = new Mapper(config); 
+                AppUser newUser = _mapper.Map<UserModel, AppUser>(userModel);
+
+                var result = await _userManager.CreateAsync(newUser, userModel.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(newUser,"Client");
+
+                    //send email confiramtion
+
+
+                    await _signInManager.SignInAsync(newUser, isPersistent: false);
+                }
+
+            }
+
+
+            
+
+        }
+
         public async Task<bool> ConfirmEmail(string userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
-            //если пользователь передал неверные данные
             if (user == null)
                 return false;
 

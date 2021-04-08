@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "yDY9Xxgsv8Fg2hzDPKhMBX+kHBsKbDGBZslQRKJv7IJ+QhHQQch+KLRd0KFJHWv16gTuhj10nefhJVy+MRdKjg==",
+  "dgSpecHash": "aiXagkAdxOSP1howroBZ65C3yI6J8Pinoq11o/fzoOvb0a7bKr8l7YTJY/ubnXL8N/raJly0Dq2e4l05//Zeog==",
   "success": true,
   "projectFilePath": "C:\\Users\\Anuitex-96\\source\\repos\\EdProject\\EdProject.BLL\\EdProject.BLL.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Anuitex-96\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
@@ -92,7 +93,7 @@
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.private.datacontractserialization\\4.3.0\\system.private.datacontractserialization.4.3.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.private.uri\\4.3.2\\system.private.uri.4.3.2.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
-    "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.reflection.emit\\4.3.0\\system.reflection.emit.4.3.0.nupkg.sha512",
+    "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.reflection.emit.ilgeneration\\4.3.0\\system.reflection.emit.ilgeneration.4.3.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.reflection.emit.lightweight\\4.3.0\\system.reflection.emit.lightweight.4.3.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.reflection.extensions\\4.3.0\\system.reflection.extensions.4.3.0.nupkg.sha512",
