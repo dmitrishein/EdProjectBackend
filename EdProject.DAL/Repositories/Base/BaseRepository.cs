@@ -1,29 +1,78 @@
-﻿using EdProject.DAL.Entities.Base;
+﻿using EdProject.DAL.DataContext;
+using EdProject.DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories.Base
 {
-    public abstract class BaseRepository<T>
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity:class
     {
-        private List<T> _itemsList;
-        public BaseRepository()
-        {
+        #region private members
+        AppDbContext _dbContext;
+        DbSet<TEntity> _dbSet;
+        #endregion
 
-        }
-        
-        public void AddToRepos(T itemToAdd)
+        #region constructor
+        public BaseRepository(AppDbContext appDbContext)
         {
-            _itemsList.Add(itemToAdd);
+            _dbContext = appDbContext;
+            _dbSet = appDbContext.Set<TEntity>();
         }
-        public void DeleteFromRepos(T itemToRemove)
+        #endregion
+
+
+        public async Task Create(TEntity item)
         {
-            _itemsList.Remove(itemToRemove);
+            await _dbSet.AddAsync(item);
+            await _dbContext.SaveChangesAsync();
         }
- 
+        public async Task Remove(TEntity item)
+        {
+            _dbSet.Remove(item);
+          await _dbContext.SaveChangesAsync();
+        }
+        public async Task <TEntity> FindById(long id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+        public IEnumerable<TEntity> Get()
+        {
+            return _dbSet.AsNoTracking().ToList();
+        }
+        public  IEnumerable<TEntity> GetAll(Func<TEntity, bool> predicate)
+        {
+            return _dbSet.AsNoTracking().Where(predicate).ToList();
+        }
+        public async Task Update(TEntity item)
+        {
+            _dbContext.Entry(item).State = EntityState.Modified;
+             await _dbContext.SaveChangesAsync();
+        }
+
+
+        //Eager Loading
+        public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            return Include(includeProperties).ToList();
+        }
+
+        public IEnumerable<TEntity> GetWithInclude(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var query = Include(includeProperties);
+            return query.Where(predicate).ToList();
+        }
+
+        private IQueryable<TEntity> Include(params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> query = _dbSet.AsNoTracking();
+            return includeProperties
+                .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+        }
 
     }
+    
 }

@@ -54,25 +54,21 @@ namespace EdProject.BLL.Services
         }
         public async Task RegisterUser(UserModel userModel)
         {
-            //AppUser newUser = await _userManager.FindByEmailAsync(userModel.Email);
-            //if user doesn't exist
             if (userModel != null)
             {
                 var config = new MapperConfiguration(cfg => cfg.CreateMap<UserModel, AppUser>());
                 var _mapper = new Mapper(config); 
-                AppUser newUser = _mapper.Map<UserModel, AppUser>(userModel);
+               AppUser newUser = _mapper.Map<UserModel, AppUser>(userModel);
 
                 var result = await _userManager.CreateAsync(newUser, userModel.Password);
 
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(newUser,"Client");
-
                     //send email confiramtion
-
-
                     await _signInManager.SignInAsync(newUser, isPersistent: false);
                 }
+                
 
             }
 
@@ -80,7 +76,6 @@ namespace EdProject.BLL.Services
             
 
         }
-
         public async Task<bool> ConfirmEmail(string userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId);

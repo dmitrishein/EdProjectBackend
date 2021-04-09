@@ -33,7 +33,22 @@ namespace EdProject.PresentationLayer
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
 
-          
+            //add AppDbContext to DI
+            services.AddDbContext<AppDbContext>(options =>
+                                                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //add cookie based authentication
+            //add scoped classes for things like UserManager, SignInManager
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<AppDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -44,10 +59,8 @@ namespace EdProject.PresentationLayer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //create local logger with only file output
-            var loggerfactory = LoggerFactory.Create(builder => builder.ClearProviders());
-            loggerfactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
-            var logger = loggerfactory.CreateLogger("FileLogger");
+            app.UseAuthentication();
+            
 
             if (env.IsDevelopment())
             {
@@ -55,12 +68,10 @@ namespace EdProject.PresentationLayer
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
             }
-            
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
