@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdProject.BLL.EmailSender;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -33,52 +34,48 @@ namespace EdProject.BLL.Services
             //login with confirmed email
             if (user.EmailConfirmed)
             {
-                var result = await _signInManager.PasswordSignInAsync(email, password, rememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, password, false, false);
+
                 if (result.Succeeded)
                     return true;
-                return false;
             }
-            
-            //without
-            if(!user.EmailConfirmed)
-            {
-                return false;
-            }
-
-
             return false;
         }
         public async Task Logout(string password, string email)
         {   
             await _signInManager.SignOutAsync();
         }
-        public async Task RegisterUser(UserModel userModel)
+        public async Task<string> RegisterUser(UserModel userModel)
         {
             if (userModel != null)
             {
                 var config = new MapperConfiguration(cfg => cfg.CreateMap<UserModel, AppUser>());
                 var _mapper = new Mapper(config); 
-               AppUser newUser = _mapper.Map<UserModel, AppUser>(userModel);
+                var newUser = _mapper.Map<UserModel, AppUser>(userModel);
 
                 var result = await _userManager.CreateAsync(newUser, userModel.Password);
 
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(newUser,"Client");
-                    //send email confiramtion
-                    await _signInManager.SignInAsync(newUser, isPersistent: false);
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+                    return code;
                 }
                 
 
             }
-
-
-            
+            return null;
+        }
+        public async Task SendEmailConfiramtion(string confirmationLink, string email)
+        {
+            EmailProvider emailService = new EmailProvider();
+            await emailService.SendEmailAsync(email, "Confirm your account",$"Confirm your registration, follow the link : <a href='{confirmationLink}'>link</a>");
 
         }
-        public async Task<bool> ConfirmEmail(string userId, string token)
+        public async Task<bool> ConfirmEmail(string token, string email)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByEmailAsync(email);
 
             if (user == null)
                 return false;

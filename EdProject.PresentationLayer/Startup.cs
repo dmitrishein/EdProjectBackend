@@ -38,7 +38,8 @@ namespace EdProject.PresentationLayer
                                                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //add cookie based authentication
             //add scoped classes for things like UserManager, SignInManager
-            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<AppDbContext>();
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<AppDbContext>()
+                                                    .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -59,7 +60,6 @@ namespace EdProject.PresentationLayer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseAuthentication();
             
 
             if (env.IsDevelopment())
@@ -72,11 +72,13 @@ namespace EdProject.PresentationLayer
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+              
             });
         }
     }

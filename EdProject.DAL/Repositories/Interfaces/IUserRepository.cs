@@ -10,6 +10,7 @@ namespace EdProject.DAL.Repositories.Interfaces
     public interface IUserRepository : IBaseRepository<AppUser>
     {
         Task AddUserToRole(string userId, string role);
+        Task<bool> Authentication(string email);
 
     }
 }

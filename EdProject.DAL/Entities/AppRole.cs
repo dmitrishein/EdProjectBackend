@@ -6,6 +6,14 @@ namespace EdProject.DAL.Entities
 {
     public class AppRole : IdentityRole<long>
     {
+        public AppRole(string roleName) : base(roleName)
+        {
+            Name = roleName;
+        }
+        public AppRole()
+        {
+
+        }
         public UserRolesType RolesType { get; set; }
         public ICollection<UserInRole> Users { get; set; }
     }

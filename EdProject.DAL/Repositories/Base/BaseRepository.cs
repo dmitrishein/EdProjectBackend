@@ -12,9 +12,11 @@ namespace EdProject.DAL.Repositories.Base
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity:class
     {
         #region private members
-        AppDbContext _dbContext;
-        DbSet<TEntity> _dbSet;
+
+        private AppDbContext _dbContext;
+        protected DbSet<TEntity> _dbSet;
         #endregion
+
 
         #region constructor
         public BaseRepository(AppDbContext appDbContext)
@@ -41,11 +43,11 @@ namespace EdProject.DAL.Repositories.Base
         }
         public IEnumerable<TEntity> Get()
         {
-            return _dbSet.AsNoTracking().ToList();
+            return _dbSet.ToList();
         }
         public  IEnumerable<TEntity> GetAll(Func<TEntity, bool> predicate)
         {
-            return _dbSet.AsNoTracking().Where(predicate).ToList();
+            return _dbSet.Where(predicate).ToList();
         }
         public async Task Update(TEntity item)
         {
@@ -54,7 +56,7 @@ namespace EdProject.DAL.Repositories.Base
         }
 
 
-        //Eager Loading
+      
         public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
         {
             return Include(includeProperties).ToList();
