@@ -8,11 +8,11 @@ namespace EdProject.DAL.Repositories.Interfaces
 {
     public interface IBaseRepository<TEntity> where TEntity : class
     {
-        public Task Create(TEntity item);
-        public Task<TEntity> FindById(long id);
+        public Task CreateAsync(TEntity item);
+        public Task<TEntity> FindByIdAsync(long id);
         IEnumerable<TEntity> Get();
         IEnumerable<TEntity> GetAll(Func<TEntity,bool> predicate);
-        public Task Update(TEntity item);
-        public Task Remove(TEntity item);
+        public Task UpdateAsync(TEntity item);
+        public Task RemoveAsync(TEntity item);
     }
 }

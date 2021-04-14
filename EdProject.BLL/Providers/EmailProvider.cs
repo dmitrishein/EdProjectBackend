@@ -1,10 +1,11 @@
-﻿using MailKit.Net.Smtp;
+﻿using EdProject.BLL.Providers;
+using MailKit.Net.Smtp;
 using MimeKit;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.EmailSender
 {
-    public class EmailProvider
+    public class EmailProvider : IEmailProvider
     {
         public async Task SendEmailAsync(string email, string subject, string message)
         {

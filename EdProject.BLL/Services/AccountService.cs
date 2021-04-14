@@ -19,15 +19,13 @@ namespace EdProject.BLL.Services
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
-
         #endregion
 
-        public async Task<bool> Login(string password, string email, bool rememberMe)
+        public async Task<bool> SignInAsync(string password, string email, bool rememberMe)
         {
             var user = await _userManager.FindByEmailAsync(email);
            
-            //user validation
+           
             if (user == null)
                 return false;
 
@@ -41,11 +39,11 @@ namespace EdProject.BLL.Services
             }
             return false;
         }
-        public async Task Logout(string password, string email)
+        public async Task SignOutAsync(string password, string email)
         {   
             await _signInManager.SignOutAsync();
         }
-        public async Task<string> RegisterUser(UserModel userModel)
+        public async Task<string> RegisterUserAsync(UserModel userModel)
         {
             if (userModel != null)
             {
@@ -62,18 +60,17 @@ namespace EdProject.BLL.Services
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                     return code;
                 }
-                
-
             }
             return null;
         }
-        public async Task SendEmailConfiramtion(string confirmationLink, string email)
+        public async Task SendEmail(string confirmationLink, string email, string subject)
         {
             EmailProvider emailService = new EmailProvider();
-            await emailService.SendEmailAsync(email, "Confirm your account",$"Confirm your registration, follow the link : <a href='{confirmationLink}'>link</a>");
 
+            await emailService.SendEmailAsync(email, $"{subject}",$"To confirm action, follow the link : {confirmationLink}");
+            
         }
-        public async Task<bool> ConfirmEmail(string token, string email)
+        public async Task<bool> ConfirmEmailAsync(string token, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -87,6 +84,28 @@ namespace EdProject.BLL.Services
 
             return false;
 
+        }
+
+        
+
+        public async Task<string> PasswordRecoveryAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            var recoveryToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            return recoveryToken;
+        }
+        public async Task<bool> ResetPassword(string token, string email,string newPasssword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user!=null)
+            {
+                var result = await _userManager.ResetPasswordAsync(user, token, newPasssword);
+                if (result.Succeeded)
+                    return true;
+            }
+            return false;
         }
 
     }

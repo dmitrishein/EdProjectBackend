@@ -27,17 +27,17 @@ namespace EdProject.DAL.Repositories.Base
         #endregion
 
 
-        public async Task Create(TEntity item)
+        public async Task CreateAsync(TEntity item)
         {
             await _dbSet.AddAsync(item);
             await _dbContext.SaveChangesAsync();
         }
-        public async Task Remove(TEntity item)
+        public async Task RemoveAsync(TEntity item)
         {
             _dbSet.Remove(item);
           await _dbContext.SaveChangesAsync();
         }
-        public async Task <TEntity> FindById(long id)
+        public async Task <TEntity> FindByIdAsync(long id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -49,7 +49,7 @@ namespace EdProject.DAL.Repositories.Base
         {
             return _dbSet.Where(predicate).ToList();
         }
-        public async Task Update(TEntity item)
+        public async Task UpdateAsync(TEntity item)
         {
             _dbContext.Entry(item).State = EntityState.Modified;
              await _dbContext.SaveChangesAsync();

@@ -8,5 +8,7 @@ namespace EdProject.BLL.Providers
 {
     interface IEmailProvider
     {
+        Task SendEmailAsync(string email, string subject, string message);
+
     }
 }
