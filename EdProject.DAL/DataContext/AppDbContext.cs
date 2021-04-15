@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 
 namespace EdProject.DAL.DataContext
 {
@@ -31,7 +32,6 @@ namespace EdProject.DAL.DataContext
         #region Constructor
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         {
-            
         }
         #endregion
 
@@ -48,19 +48,6 @@ namespace EdProject.DAL.DataContext
                 .HasOne(ba => ba.Author)
                 .WithMany(ba => ba.Editions)
                 .HasForeignKey(ba => ba.AuthorId);
-            #endregion
-
-            #region relations between User and Roles(many-to-many)
-            modelBuilder.Entity<UserInRole>()
-                .HasKey(ur => new { ur.UserId, ur.AppRoleId});
-            modelBuilder.Entity<UserInRole>()
-                .HasOne(ur => ur.AppUser)
-                .WithMany(rl => rl.Roles)
-                .HasForeignKey(ur => ur.UserId);
-            modelBuilder.Entity<UserInRole>()
-                .HasOne(ur => ur.AppRole)
-                .WithMany(u => u.Users)
-                .HasForeignKey(ba => ba.AppRoleId);
             #endregion
 
             #region relations Edition and OrderItems(one-to-one) 
@@ -127,21 +114,45 @@ namespace EdProject.DAL.DataContext
         public static void Seed(this ModelBuilder modelBuilder)
         {
             var hasher = new PasswordHasher<AppUser>();
-     
-            modelBuilder.Entity<AppUser>().HasData(
-                new AppUser { Id = 1, UserName = "admin", NormalizedUserName="ADMIN", FirstName="Admin", LastName = "Admin",PasswordHash = hasher.HashPassword(null, "Admin756") , EmailConfirmed = true, Email = "adminex@sample.te"},
-                new AppUser { Id = 2, UserName = "client", NormalizedUserName = "CLIENT", FirstName = "Client", LastName = "User", PasswordHash = hasher.HashPassword(null, "123User"), EmailConfirmed = true, Email = "userex@sample.te" }
+
+            _ = modelBuilder.Entity<AppUser>().HasData(
+                new AppUser
+                {
+                    Id = 1,
+                    UserName = "admin",
+                    NormalizedUserName = "ADMIN",
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    PasswordHash = hasher.HashPassword(null, "Admin756"),
+                    EmailConfirmed = true,
+                    Email = "adminex@sample.te",
+                    NormalizedEmail = "ADMINEX@SAMPLE.TE",
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                },
+                new AppUser
+                {
+                    Id = 2,
+                    UserName = "client",
+                    NormalizedUserName = "CLIENT",
+                    FirstName = "Client",
+                    LastName = "User",
+                    PasswordHash = hasher.HashPassword(null, "123User"),
+                    EmailConfirmed = true,
+                    Email = "userex@sample.te",
+                    NormalizedEmail = "USEREX@SAMPLE.TE",
+                    SecurityStamp = Guid.NewGuid().ToString("d")
+                }
                 );
+           
             modelBuilder.Entity<AppRole>().HasData(
                 new AppRole { Id = 1, Name = "admin", RolesType = Enums.UserRolesType.Admin, NormalizedName = "admin" },
                 new AppRole { Id = 2, Name = "client-user", RolesType = Enums.UserRolesType.Client, NormalizedName = "client" }
                 );
-            modelBuilder.Entity<UserInRole>().HasData(
-                new UserInRole{ UserId = 1, AppRoleId = 1},
-                new UserInRole { UserId = 2, AppRoleId = 2}
+            modelBuilder.Entity<IdentityUserRole<long>>().HasData(
+                new IdentityUserRole<long> {  UserId = 1, RoleId = 1},
+                new IdentityUserRole<long> {  UserId = 1, RoleId = 2},
+                new IdentityUserRole<long> { UserId = 2 , RoleId = 2}
                 );
-            
-
             modelBuilder.Entity<Author>().HasData(
                 new Author { Id = 1, Name = "William Shakespare"},
                 new Author { Id = 2, Name = "Stephen King" }
@@ -161,9 +172,6 @@ namespace EdProject.DAL.DataContext
                 new AuthorInEditions { AuthorId = 1, EditionId = 5 },
                 new AuthorInEditions { AuthorId = 2, EditionId = 5 }
                 );
-
-            
-
         }
     }
 }

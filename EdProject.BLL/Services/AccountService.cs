@@ -61,8 +61,10 @@ namespace EdProject.BLL.Services
                     return code;
                 }
             }
+
             return null;
         }
+
         public async Task SendEmail(string confirmationLink, string email, string subject)
         {
             EmailProvider emailService = new EmailProvider();
@@ -86,8 +88,6 @@ namespace EdProject.BLL.Services
 
         }
 
-        
-
         public async Task<string> PasswordRecoveryAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -96,12 +96,14 @@ namespace EdProject.BLL.Services
 
             return recoveryToken;
         }
-        public async Task<bool> ResetPassword(string token, string email,string newPasssword)
+        public async Task<bool> ResetPasswordAsync(string token, string email,string newPasssword)
         {
             var user = await _userManager.FindByEmailAsync(email);
+            
             if(user!=null)
             {
                 var result = await _userManager.ResetPasswordAsync(user, token, newPasssword);
+
                 if (result.Succeeded)
                     return true;
             }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdProject.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210412100140_init")]
-    partial class init
+    [Migration("20210415135613_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,6 +43,9 @@ namespace EdProject.DAL.Migrations
                     b.Property<int>("RolesType")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isRemoved")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
@@ -56,18 +59,20 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "a485b50f-b0ca-4be8-8db2-1373dca8675d",
+                            ConcurrencyStamp = "90ba6ae6-c94d-4175-ab28-66fb87149ab2",
                             Name = "admin",
                             NormalizedName = "admin",
-                            RolesType = 1
+                            RolesType = 1,
+                            isRemoved = false
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "dd1103bf-25aa-4861-a670-f32fad115732",
+                            ConcurrencyStamp = "bfcb641b-f284-4d1f-a38b-e071eeee9db6",
                             Name = "client-user",
                             NormalizedName = "client",
-                            RolesType = 2
+                            RolesType = 2,
+                            isRemoved = false
                         });
                 });
 
@@ -131,6 +136,9 @@ namespace EdProject.DAL.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<bool>("isRemoved")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -148,33 +156,39 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e1518bc2-f0ed-4b76-9451-4cbc6d3be5cd",
+                            ConcurrencyStamp = "c6dd3d5c-ce35-49ee-8902-67145a50d38e",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
                             LastName = "Admin",
                             LockoutEnabled = false,
+                            NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEr8Qj178FmsuqaPTs6rEkEvSed9VY0UGyAzWoGvHiTUyEZyhoiX0YyoWI+/sHYliQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJbSuJcr/OcGeVbCDq5fP+81ZlBnJnNZTdvAlNSU6XX4EA8ts9HJ79l6F/eJWA2yFg==",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "d02ef817-4f60-47bc-8323-3bc88c4b440c",
                             TwoFactorEnabled = false,
-                            UserName = "admin"
+                            UserName = "admin",
+                            isRemoved = false
                         },
                         new
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ca780417-7819-47db-a5b6-456173563f85",
+                            ConcurrencyStamp = "e8798e86-de31-417a-ae75-c2ef12e3bb36",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
                             LastName = "User",
                             LockoutEnabled = false,
+                            NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAEP5mh0ErhD7QDpFWdbYR49LQMgmmChYsvwJK5u+q3CdG4yP6CfTUaaw0h3GGGjoXpA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA8Ewhl2NFF8SvU3TM0UnzIbBGvqeQL+SmY9iUKfnHgmN/9eP5JHN+gNzrK4rJ1uJQ==",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "fcd73f62-119d-413a-9d46-12f1e6c234c0",
                             TwoFactorEnabled = false,
-                            UserName = "client"
+                            UserName = "client",
+                            isRemoved = false
                         });
                 });
 
@@ -442,33 +456,6 @@ namespace EdProject.DAL.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("EdProject.DAL.Entities.UserInRole", b =>
-                {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("AppRoleId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("UserId", "AppRoleId");
-
-                    b.HasIndex("AppRoleId");
-
-                    b.ToTable("UserInRole");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1L,
-                            AppRoleId = 1L
-                        },
-                        new
-                        {
-                            UserId = 2L,
-                            AppRoleId = 2L
-                        });
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.Property<int>("Id")
@@ -549,6 +536,23 @@ namespace EdProject.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1L,
+                            RoleId = 1L
+                        },
+                        new
+                        {
+                            UserId = 1L,
+                            RoleId = 2L
+                        },
+                        new
+                        {
+                            UserId = 2L,
+                            RoleId = 2L
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
@@ -619,25 +623,6 @@ namespace EdProject.DAL.Migrations
                     b.Navigation("Payment");
                 });
 
-            modelBuilder.Entity("EdProject.DAL.Entities.UserInRole", b =>
-                {
-                    b.HasOne("EdProject.DAL.Entities.AppRole", "AppRole")
-                        .WithMany("Users")
-                        .HasForeignKey("AppRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EdProject.DAL.Entities.AppUser", "AppUser")
-                        .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppRole");
-
-                    b.Navigation("AppUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.HasOne("EdProject.DAL.Entities.AppRole", null)
@@ -687,16 +672,6 @@ namespace EdProject.DAL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.AppRole", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.AppUser", b =>
-                {
-                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("EdProject.DAL.Entities.Author", b =>

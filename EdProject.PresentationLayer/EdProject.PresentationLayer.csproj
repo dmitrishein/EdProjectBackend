@@ -22,8 +22,4 @@
     <ProjectReference Include="..\EdProject.BLL\EdProject.BLL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\Base\" />
-  </ItemGroup>
-
 </Project>

@@ -8,7 +8,7 @@ namespace EdProject.DAL.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public ICollection<UserInRole> Roles { get; set; }
+        public bool isRemoved { get; set; } = false;
 
     }
 }

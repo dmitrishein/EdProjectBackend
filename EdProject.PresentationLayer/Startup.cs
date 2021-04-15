@@ -46,7 +46,6 @@ namespace EdProject.PresentationLayer
                          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                      };
                  });
-
             services.AddDbContext<AppDbContext>(options =>
                                                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
           

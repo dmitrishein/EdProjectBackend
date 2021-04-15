@@ -24,6 +24,7 @@ namespace EdProject.PresentationLayer.Controllers
         IConfiguration _config;
         #endregion
 
+        #region Constructor
         public AccountController(AppDbContext dbContext, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config)
         {
             _dbContext = dbContext;
@@ -32,8 +33,7 @@ namespace EdProject.PresentationLayer.Controllers
             _accountService = new AccountService(_userManager, _signInManager);
             _config = config;
         }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        #endregion
         [HttpPost("[action]")]
         public async Task Registration(RegisterViewModel register)
         {
@@ -68,6 +68,10 @@ namespace EdProject.PresentationLayer.Controllers
             return Ok(new { access_token = tokenString, refresh_token = refreshTokenString});
         }
 
+
+
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("[action]")]
         public async Task ForgotPassword(string email)
         {
@@ -76,15 +80,25 @@ namespace EdProject.PresentationLayer.Controllers
             await _accountService.SendEmail(confirmationLink, email, "Reset Password");
         }
 
-        [HttpPost("[action]")]
-        public async Task ResetPassword(string token,string email, ResetPasswordModel resetPasswordModel)
+        [HttpGet("[action]")]
+        public RedirectToActionResult ResetPassword(string token, string email)
         {
-            await _accountService.ResetPassword(token,email,resetPasswordModel.Password);
+            ResetPasswordModel resModel = new ResetPasswordModel
+            {
+                Email = email,
+                Token = token
+            };
+
+            return RedirectToAction("PasswordUpdate","Account",resModel);
         }
 
-
-        
-
+        [HttpGet("[action]")]
+        public async Task PasswordUpdate(ResetPasswordModel resetModel)
+        {   //-----
+            //call ViewModel to enter and confirm new password
+            //-----
+            await _accountService.ResetPasswordAsync(resetModel.Token, resetModel.Email, resetModel.ConfirmPassword);
+        }
 
     }
 }

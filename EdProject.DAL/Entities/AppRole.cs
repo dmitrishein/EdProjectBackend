@@ -15,6 +15,6 @@ namespace EdProject.DAL.Entities
 
         }
         public UserRolesType RolesType { get; set; }
-        public ICollection<UserInRole> Users { get; set; }
+        public bool isRemoved { get; set; } = false;
     }
 }

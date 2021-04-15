@@ -8,6 +8,7 @@ namespace EdProject.PresentationLayer.Models
 {
     public class ResetPasswordModel
     {
+        public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }
@@ -17,5 +18,6 @@ namespace EdProject.PresentationLayer.Models
         [Required]
         public string ConfirmPassword { get; set; }
 
+        public string Token { get; set; }
     }
 }

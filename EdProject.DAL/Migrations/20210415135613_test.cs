@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EdProject.DAL.Migrations
 {
-    public partial class init : Migration
+    public partial class test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,6 +14,7 @@ namespace EdProject.DAL.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RolesType = table.Column<int>(type: "int", nullable: false),
+                    isRemoved = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -31,6 +32,7 @@ namespace EdProject.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isRemoved = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -205,30 +207,6 @@ namespace EdProject.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserInRole",
-                columns: table => new
-                {
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    AppRoleId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserInRole", x => new { x.UserId, x.AppRoleId });
-                    table.ForeignKey(
-                        name: "FK_UserInRole_AspNetRoles_AppRoleId",
-                        column: x => x.AppRoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserInRole_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AuthorInEditions",
                 columns: table => new
                 {
@@ -308,20 +286,20 @@ namespace EdProject.DAL.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RolesType" },
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RolesType", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, "a485b50f-b0ca-4be8-8db2-1373dca8675d", "admin", "admin", 1 },
-                    { 2L, "dd1103bf-25aa-4861-a670-f32fad115732", "client-user", "client", 2 }
+                    { 1L, "90ba6ae6-c94d-4175-ab28-66fb87149ab2", "admin", "admin", 1, false },
+                    { 2L, "bfcb641b-f284-4d1f-a38b-e071eeee9db6", "client-user", "client", 2, false }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, 0, "e1518bc2-f0ed-4b76-9451-4cbc6d3be5cd", "adminex@sample.te", true, "Admin", "Admin", false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEEr8Qj178FmsuqaPTs6rEkEvSed9VY0UGyAzWoGvHiTUyEZyhoiX0YyoWI+/sHYliQ==", null, false, null, false, "admin" },
-                    { 2L, 0, "ca780417-7819-47db-a5b6-456173563f85", "userex@sample.te", true, "Client", "User", false, null, null, "CLIENT", "AQAAAAEAACcQAAAAEP5mh0ErhD7QDpFWdbYR49LQMgmmChYsvwJK5u+q3CdG4yP6CfTUaaw0h3GGGjoXpA==", null, false, null, false, "client" }
+                    { 1L, 0, "c6dd3d5c-ce35-49ee-8902-67145a50d38e", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEJbSuJcr/OcGeVbCDq5fP+81ZlBnJnNZTdvAlNSU6XX4EA8ts9HJ79l6F/eJWA2yFg==", null, false, "d02ef817-4f60-47bc-8323-3bc88c4b440c", false, "admin", false },
+                    { 2L, 0, "e8798e86-de31-417a-ae75-c2ef12e3bb36", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEA8Ewhl2NFF8SvU3TM0UnzIbBGvqeQL+SmY9iUKfnHgmN/9eP5JHN+gNzrK4rJ1uJQ==", null, false, "fcd73f62-119d-413a-9d46-12f1e6c234c0", false, "client", false }
                 });
 
             migrationBuilder.InsertData(
@@ -346,6 +324,16 @@ namespace EdProject.DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { 1L, 1L },
+                    { 2L, 1L },
+                    { 2L, 2L }
+                });
+
+            migrationBuilder.InsertData(
                 table: "AuthorInEditions",
                 columns: new[] { "AuthorId", "EditionId", "Date" },
                 values: new object[,]
@@ -356,15 +344,6 @@ namespace EdProject.DAL.Migrations
                     { 2L, 4L, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 1L, 5L, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 2L, 5L, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
-                });
-
-            migrationBuilder.InsertData(
-                table: "UserInRole",
-                columns: new[] { "AppRoleId", "UserId" },
-                values: new object[,]
-                {
-                    { 1L, 1L },
-                    { 2L, 2L }
                 });
 
             migrationBuilder.CreateIndex(
@@ -427,11 +406,6 @@ namespace EdProject.DAL.Migrations
                 table: "Orders",
                 column: "PaymentId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserInRole_AppRoleId",
-                table: "UserInRole",
-                column: "AppRoleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -458,7 +432,10 @@ namespace EdProject.DAL.Migrations
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "UserInRole");
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Authors");
@@ -468,12 +445,6 @@ namespace EdProject.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Payments");
