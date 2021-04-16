@@ -11,7 +11,6 @@ namespace EdProject.DAL.Repositories.Interfaces
         public Task CreateAsync(TEntity item);
         public Task<TEntity> FindByIdAsync(long id);
         IEnumerable<TEntity> Get();
-        IEnumerable<TEntity> GetAll(Func<TEntity,bool> predicate);
         public Task UpdateAsync(TEntity item);
         public Task RemoveAsync(TEntity item);
     }

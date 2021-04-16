@@ -15,6 +15,7 @@ namespace EdProject.DAL.Repositories.Base
 
         private AppDbContext _dbContext;
         protected DbSet<TEntity> _dbSet;
+
         #endregion
 
 
@@ -26,7 +27,10 @@ namespace EdProject.DAL.Repositories.Base
         }
         #endregion
 
-
+        public async Task<TEntity> FindByIdAsync(long id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
         public async Task CreateAsync(TEntity item)
         {
             await _dbSet.AddAsync(item);
@@ -37,17 +41,9 @@ namespace EdProject.DAL.Repositories.Base
             _dbSet.Remove(item);
           await _dbContext.SaveChangesAsync();
         }
-        public async Task <TEntity> FindByIdAsync(long id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
         public IEnumerable<TEntity> Get()
         {
             return _dbSet.ToList();
-        }
-        public  IEnumerable<TEntity> GetAll(Func<TEntity, bool> predicate)
-        {
-            return _dbSet.Where(predicate).ToList();
         }
         public async Task UpdateAsync(TEntity item)
         {
@@ -75,6 +71,7 @@ namespace EdProject.DAL.Repositories.Base
                 .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }
 
+       
     }
     
 }

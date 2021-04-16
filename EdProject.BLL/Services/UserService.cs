@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using EdProject.BLL.Services.Interfaces;
-using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
-using EdProject.DAL.Repositories;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -37,7 +33,6 @@ namespace EdProject.BLL.Services
                await _userManager.AddToRoleAsync(user, role);
             }
         }
-
         public async Task CreateUserAsync(UserModel userModel)
         {     
             var config = new MapperConfiguration(cfg => cfg.CreateMap<UserModel, AppUser>());
@@ -46,6 +41,7 @@ namespace EdProject.BLL.Services
 
             await _userManager.CreateAsync(newUser,userModel.Password);
         }
+
 
         public async Task<AppUser> GetUserByEmail(string email)
         {
@@ -56,38 +52,51 @@ namespace EdProject.BLL.Services
 
             return null;
         }
-
         public async Task<AppUser> GetUserByIdAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user != null)
+            if(user != null)
+            {
                 return user;
-
+            }
             return null;
         }
-
         public async Task<AppUser> GetUserByUsername(string username)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var res = await _userManager.FindByNameAsync(username);
 
-            if (user != null)
-                return user;
+            if (res != null)
+            {
+                return res;
+            }
 
             return null;
         }
-        
         public IQueryable GetAllUsers()
         {
             var users = _userManager.Users;
 
             return users;
         }
-        public IQueryable GetUserListByRole(string roleName)
+        public IQueryable GetAllUsersByQuery(string searchString)
         {
-            var res = _userManager.GetUsersInRoleAsync(roleName).Wait();
+            var users = _userManager.Users.Where(u => u.Id.ToString() == searchString ||
+                                               u.UserName == searchString ||
+                                               u.FirstName == searchString ||
+                                               u.LastName == searchString ||
+                                               u.Email == searchString
+                                               );
+
+            return users;
         }
-      
+        public async Task<IList<AppUser>> GetUserListByRole(string roleName)
+        {
+            var res = await _userManager.GetUsersInRoleAsync(roleName);
+
+            return res;
+        }
+
 
 
         public async Task RemoveUserAsync(string userName)
@@ -99,7 +108,6 @@ namespace EdProject.BLL.Services
                 await _userManager.DeleteAsync(user);
             }
         }
-
         public async Task UpdateUserAsync(UserModel userModel)
         {
             var user = await _userManager.FindByNameAsync(userModel.UserName);
@@ -108,6 +116,20 @@ namespace EdProject.BLL.Services
             {
                 user.FirstName = userModel.FirstName;
                 user.LastName = userModel.LastName;
+            }
+        }
+        public async Task BlockUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            await _userManager.SetLockoutEnabledAsync(user, true);
+            await _userManager.SetLockoutEndDateAsync(user, DateTime.Today.AddYears(100));
+        }
+        public async Task UnblockUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                await _userManager.SetLockoutEnabledAsync(user, false);
             }
         }
 

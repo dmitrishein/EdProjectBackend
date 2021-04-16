@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EdProject.DAL.Migrations
 {
-    public partial class test : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -74,7 +74,7 @@ namespace EdProject.DAL.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Desciption = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -289,8 +289,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RolesType", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, "90ba6ae6-c94d-4175-ab28-66fb87149ab2", "admin", "admin", 1, false },
-                    { 2L, "bfcb641b-f284-4d1f-a38b-e071eeee9db6", "client-user", "client", 2, false }
+                    { 1L, "80de3c86-7903-4c9d-8003-294a6f98ab19", "admin", "admin", 1, false },
+                    { 2L, "ddb63c30-9f8a-43a8-87f0-93e8da629b38", "client-user", "client", 2, false }
                 });
 
             migrationBuilder.InsertData(
@@ -298,8 +298,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, 0, "c6dd3d5c-ce35-49ee-8902-67145a50d38e", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEJbSuJcr/OcGeVbCDq5fP+81ZlBnJnNZTdvAlNSU6XX4EA8ts9HJ79l6F/eJWA2yFg==", null, false, "d02ef817-4f60-47bc-8323-3bc88c4b440c", false, "admin", false },
-                    { 2L, 0, "e8798e86-de31-417a-ae75-c2ef12e3bb36", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEA8Ewhl2NFF8SvU3TM0UnzIbBGvqeQL+SmY9iUKfnHgmN/9eP5JHN+gNzrK4rJ1uJQ==", null, false, "fcd73f62-119d-413a-9d46-12f1e6c234c0", false, "client", false }
+                    { 1L, 0, "2bcbcbab-6306-456c-adf1-7f8611279098", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEGhwTDihui7V7/c37FsM4sNqco0+WT2Xke+cixcdIllVK6MP9GSE8Biylwh2ELEPRQ==", null, false, "5bfe2f7f-f3dd-4d9f-a095-1cfaa3a9fe08", false, "admin", false },
+                    { 2L, 0, "8d4b0879-85c1-43ba-a5cd-5915f10ea262", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEJEZK6AVMMtswt6AdLagmS2/MZHTTKbD4my/6T7P5crzXMV2jjZiixB18xNuthBSBQ==", null, false, "b5dbc8d9-b611-4bb7-b231-b236488e1947", false, "client", false }
                 });
 
             migrationBuilder.InsertData(
@@ -313,7 +313,7 @@ namespace EdProject.DAL.Migrations
 
             migrationBuilder.InsertData(
                 table: "Editions",
-                columns: new[] { "Id", "Currency", "Desciption", "IsRemoved", "Price", "Status", "Title", "Type" },
+                columns: new[] { "Id", "Currency", "Description", "IsRemoved", "Price", "Status", "Title", "Type" },
                 values: new object[,]
                 {
                     { 1L, "UAH", "Classic Printing Edition", false, 1444.9m, "Available", "Hamlet", "Book" },

@@ -11,11 +11,8 @@ namespace EdProject.DAL.Entities
     public class Edition:BaseEntity
     {
         public string Title { get; set; }
-
-        public string Desciption { get; set; }
-
+        public string Description { get; set; }
         public Decimal Price { get; set; }
-
         public EditionStatusTypes Status { get; set; }
         public CurrencyTypes Currency { get; set; }
         public EditionTypes Type { get; set; }

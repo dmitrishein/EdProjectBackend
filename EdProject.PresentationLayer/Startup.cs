@@ -1,8 +1,11 @@
+using AutoMapper;
 using EdProject.BLL.Common;
 using EdProject.BLL.Services;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
+using EdProject.DAL.Repositories;
+using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -51,6 +54,13 @@ namespace EdProject.PresentationLayer
           
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<AppDbContext>()
                                                     .AddDefaultTokenProviders();
+
+            services.AddScoped<IPrintingEditionService, PrintingEditionService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddAutoMapper(typeof(Startup));
+
 
             services.Configure<IdentityOptions>(options =>
             {

@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "1D6bq2Ul9h5XB+W65s2Yzt0wf/HVlmY/qhO5vo+qR6l3f3d35ZZpmGrmi61/m4KOhY3hu8EPusng2HUn1txOMw==",
+  "dgSpecHash": "EZvcAn9zQMMppnUaI2+gzF3pqkAbO1J8zqfgNPKE5pTOF+YbgJVd20f0S4YTbcK2NRmeLJaYNTgYqdRh2FeLvQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Anuitex-96\\source\\repos\\EdProject\\EdProject.PresentationLayer\\EdProject.PresentationLayer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
+    "C:\\Users\\Anuitex-96\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\azure.core\\1.4.1\\azure.core.1.4.1.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\azure.identity\\1.2.3\\azure.identity.1.2.3.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\azure.security.keyvault.certificates\\4.1.0\\azure.security.keyvault.certificates.4.1.0.nupkg.sha512",

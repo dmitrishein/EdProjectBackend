@@ -1,4 +1,5 @@
 ﻿using EdProject.BLL.Services;
+using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,44 +18,45 @@ namespace EdProject.PresentationLayer.Controllers
     public class UserController : Controller
     {
         #region Private Members
-        UserService _userService;
-        UserManager<AppUser> _userManager;
-        RoleManager<AppRole> _roleManager;
-        AppDbContext _dbContext;
-        IConfiguration _config;
+        IUserService _userService;
+       
         #endregion
 
         #region Constructor
-        public UserController(AppDbContext dbContext, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IConfiguration config)
+        public UserController(IUserService userService)
         {
-            _dbContext = dbContext;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _userService = new UserService(_userManager,_roleManager);
-            _config = config;
+            _userService = userService;
+            
         }
         #endregion
 
+
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public IQueryable GetAdmins()
+        public async Task<AppUser> GetUserByEmail(string email)
         {
-            return _userService.GetAllUsers();
+            var res = await _userService.GetUserByEmail(email);
+
+            return res;
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public IQueryable GetUsers()
+        public async Task<AppUser> GetUserByUsername(string name)
         {
-            return _userService.GetAllUsers();
+            var res = await _userService.GetUserByUsername(name);
+
+            return res;
         }
 
-        //[Authorize(Roles = "admin")]
-        //[HttpGet("[action]")]
-        //public IQueryable GetUserByRole(string roleName)
-        //{
-        //    return (IQueryable)_userService.GetUserListByRole(roleName);
-        //}
+        [Authorize(Roles = "admin")]
+        [HttpGet("[action]")]
+        public async Task<IList<AppUser>> GetUserByRole(string roleName)
+        {
+            var res = await _userService.GetUserListByRole(roleName);
+
+            return res;
+        }
 
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
@@ -65,20 +69,14 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task BlockUser(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            await _userManager.SetLockoutEnabledAsync(user, true);
-            await _userManager.SetLockoutEndDateAsync(user, DateTime.Today.AddYears(100));
+            await _userService.BlockUser(userId);
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UnblockUser(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                await _userManager.SetLockoutEnabledAsync(user, false);
-            }
+            await _userService.UnblockUser(userId);
         }
     }
 }

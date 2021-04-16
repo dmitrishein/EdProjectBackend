@@ -99,12 +99,12 @@ namespace EdProject.DAL.DataContext
         }
   
         #region Tables
-        DbSet<Author> Authors { set; get; }
-        DbSet<AuthorInEditions> AuthorInEditions { get; set; }
-        DbSet<Edition> Editions { get; set; }
-        DbSet<OrderItems> OrderItems { get; set; }
-        DbSet<Orders> Orders { get; set; }
-        DbSet<Payments> Payments { get; set; }
+        public DbSet<Author> Authors { set; get; }
+        public DbSet<AuthorInEditions> AuthorInEditions { get; set; }
+        public DbSet<Edition> Editions { get; set; }
+        public DbSet<OrderItems> OrderItems { get; set; }
+        public DbSet<Orders> Orders { get; set; }
+        public DbSet<Payments> Payments { get; set; }
         #endregion
 
     }
@@ -158,11 +158,11 @@ namespace EdProject.DAL.DataContext
                 new Author { Id = 2, Name = "Stephen King" }
                 );
             modelBuilder.Entity<Edition>().HasData(
-                new Edition { Id = 1, Title = "Hamlet", Desciption = "Classic Printing Edition", Price = 1444.9M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.Available, Type = EditionTypes.Book },
-                new Edition { Id = 2, Title = "Othello", Desciption = "Classic Printing Edition", Price = 1200.9M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.Available, Type = EditionTypes.Book},
-                new Edition { Id = 3, Title = "Pet Graveyard", Desciption = "Classic Printing Edition", Price = 1300.9M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.Available, Type = EditionTypes.Book },
-                new Edition { Id = 4, Title = "Confrontation", Desciption = "Classic Printing Edition", Price = 1140.6M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.NotAvailable, Type= EditionTypes.Book},
-                new Edition { Id = 5, Title = "Something Weird", Desciption = "Featuring Willy Shakespare", Price = 120.23M , Currency = CurrencyTypes.EUR, Status = EditionStatusTypes.NotAvailable, Type = EditionTypes.Magazine}
+                new Edition { Id = 1, Title = "Hamlet", Description = "Classic Printing Edition", Price = 1444.9M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.Available, Type = EditionTypes.Book },
+                new Edition { Id = 2, Title = "Othello", Description = "Classic Printing Edition", Price = 1200.9M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.Available, Type = EditionTypes.Book},
+                new Edition { Id = 3, Title = "Pet Graveyard", Description = "Classic Printing Edition", Price = 1300.9M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.Available, Type = EditionTypes.Book },
+                new Edition { Id = 4, Title = "Confrontation", Description = "Classic Printing Edition", Price = 1140.6M, Currency = CurrencyTypes.UAH, Status = EditionStatusTypes.NotAvailable, Type= EditionTypes.Book},
+                new Edition { Id = 5, Title = "Something Weird", Description = "Featuring Willy Shakespare", Price = 120.23M , Currency = CurrencyTypes.EUR, Status = EditionStatusTypes.NotAvailable, Type = EditionTypes.Magazine}
                 );
             modelBuilder.Entity<AuthorInEditions>().HasData(
                 new AuthorInEditions { AuthorId = 1, EditionId = 1},

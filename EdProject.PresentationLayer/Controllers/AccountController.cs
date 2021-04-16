@@ -1,5 +1,6 @@
 ﻿using EdProject.BLL;
 using EdProject.BLL.Services;
+using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.PresentationLayer.Helpers;
@@ -17,23 +18,18 @@ namespace EdProject.PresentationLayer.Controllers
     public class AccountController : Controller
     {
         #region Private Members
-        AccountService _accountService;
-        UserManager<AppUser> _userManager;
-        SignInManager<AppUser> _signInManager;
-        AppDbContext _dbContext;
+        IAccountService _accountService;
         IConfiguration _config;
         #endregion
 
         #region Constructor
-        public AccountController(AppDbContext dbContext, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config)
+        public AccountController(IAccountService accountService, IConfiguration config)
         {
-            _dbContext = dbContext;
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _accountService = new AccountService(_userManager, _signInManager);
+            _accountService = accountService;
             _config = config;
         }
         #endregion
+
         [HttpPost("[action]")]
         public async Task Registration(RegisterViewModel register)
         {
@@ -42,7 +38,6 @@ namespace EdProject.PresentationLayer.Controllers
             var confirmationLink = Url.Action("ConfirmEmail", "Account", new { token = token, email = userModel.Email }, Request.Scheme);
             await _accountService.SendEmail(confirmationLink, userModel.Email,"Confirm Account");
         }
-
         
         [HttpGet]
         [Route("[action]")]

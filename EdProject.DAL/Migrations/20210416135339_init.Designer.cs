@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdProject.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210415135613_test")]
-    partial class test
+    [Migration("20210416135339_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,7 +59,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "90ba6ae6-c94d-4175-ab28-66fb87149ab2",
+                            ConcurrencyStamp = "80de3c86-7903-4c9d-8003-294a6f98ab19",
                             Name = "admin",
                             NormalizedName = "admin",
                             RolesType = 1,
@@ -68,7 +68,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "bfcb641b-f284-4d1f-a38b-e071eeee9db6",
+                            ConcurrencyStamp = "ddb63c30-9f8a-43a8-87f0-93e8da629b38",
                             Name = "client-user",
                             NormalizedName = "client",
                             RolesType = 2,
@@ -156,7 +156,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c6dd3d5c-ce35-49ee-8902-67145a50d38e",
+                            ConcurrencyStamp = "2bcbcbab-6306-456c-adf1-7f8611279098",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -164,9 +164,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJbSuJcr/OcGeVbCDq5fP+81ZlBnJnNZTdvAlNSU6XX4EA8ts9HJ79l6F/eJWA2yFg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGhwTDihui7V7/c37FsM4sNqco0+WT2Xke+cixcdIllVK6MP9GSE8Biylwh2ELEPRQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d02ef817-4f60-47bc-8323-3bc88c4b440c",
+                            SecurityStamp = "5bfe2f7f-f3dd-4d9f-a095-1cfaa3a9fe08",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             isRemoved = false
@@ -175,7 +175,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e8798e86-de31-417a-ae75-c2ef12e3bb36",
+                            ConcurrencyStamp = "8d4b0879-85c1-43ba-a5cd-5915f10ea262",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
@@ -183,9 +183,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA8Ewhl2NFF8SvU3TM0UnzIbBGvqeQL+SmY9iUKfnHgmN/9eP5JHN+gNzrK4rJ1uJQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJEZK6AVMMtswt6AdLagmS2/MZHTTKbD4my/6T7P5crzXMV2jjZiixB18xNuthBSBQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fcd73f62-119d-413a-9d46-12f1e6c234c0",
+                            SecurityStamp = "b5dbc8d9-b611-4bb7-b231-b236488e1947",
                             TwoFactorEnabled = false,
                             UserName = "client",
                             isRemoved = false
@@ -291,7 +291,7 @@ namespace EdProject.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Desciption")
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsRemoved")
@@ -320,7 +320,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             Currency = "UAH",
-                            Desciption = "Classic Printing Edition",
+                            Description = "Classic Printing Edition",
                             IsRemoved = false,
                             Price = 1444.9m,
                             Status = "Available",
@@ -331,7 +331,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             Currency = "UAH",
-                            Desciption = "Classic Printing Edition",
+                            Description = "Classic Printing Edition",
                             IsRemoved = false,
                             Price = 1200.9m,
                             Status = "Available",
@@ -342,7 +342,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 3L,
                             Currency = "UAH",
-                            Desciption = "Classic Printing Edition",
+                            Description = "Classic Printing Edition",
                             IsRemoved = false,
                             Price = 1300.9m,
                             Status = "Available",
@@ -353,7 +353,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 4L,
                             Currency = "UAH",
-                            Desciption = "Classic Printing Edition",
+                            Description = "Classic Printing Edition",
                             IsRemoved = false,
                             Price = 1140.6m,
                             Status = "NotAvailable",
@@ -364,7 +364,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 5L,
                             Currency = "EUR",
-                            Desciption = "Featuring Willy Shakespare",
+                            Description = "Featuring Willy Shakespare",
                             IsRemoved = false,
                             Price = 120.23m,
                             Status = "NotAvailable",
