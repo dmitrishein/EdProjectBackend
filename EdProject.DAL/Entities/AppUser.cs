@@ -10,5 +10,7 @@ namespace EdProject.DAL.Entities
         public string LastName { get; set; }
         public bool isRemoved { get; set; } = false;
 
+        public ICollection<Orders> Orders { get; set; }
+
     }
 }

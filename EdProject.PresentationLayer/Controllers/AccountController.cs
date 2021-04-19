@@ -39,7 +39,7 @@ namespace EdProject.PresentationLayer.Controllers
             await _accountService.SendEmail(confirmationLink, userModel.Email,"Confirm Account");
         }
         
-        [HttpGet]
+        [HttpPost]
         [Route("[action]")]
         public async Task ConfirmEmail(string token , string email)
         {
@@ -75,7 +75,7 @@ namespace EdProject.PresentationLayer.Controllers
             await _accountService.SendEmail(confirmationLink, email, "Reset Password");
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public RedirectToActionResult ResetPassword(string token, string email)
         {
             ResetPasswordModel resModel = new ResetPasswordModel
@@ -87,7 +87,7 @@ namespace EdProject.PresentationLayer.Controllers
             return RedirectToAction("PasswordUpdate","Account",resModel);
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public async Task PasswordUpdate(ResetPasswordModel resetModel)
         {   //-----
             //call ViewModel to enter and confirm new password

@@ -1,6 +1,6 @@
 ﻿namespace EdProject.DAL.Enums
 {
-    public enum OrderSatusTypes
+    public enum OrderStatusType
     {
         None = 0 ,
         Paid = 1,

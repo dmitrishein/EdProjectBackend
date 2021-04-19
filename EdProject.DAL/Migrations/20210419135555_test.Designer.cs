@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdProject.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210416135339_init")]
-    partial class init
+    [Migration("20210419135555_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,7 +59,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "80de3c86-7903-4c9d-8003-294a6f98ab19",
+                            ConcurrencyStamp = "d4ab38dd-219f-4306-8feb-d8391c525029",
                             Name = "admin",
                             NormalizedName = "admin",
                             RolesType = 1,
@@ -68,7 +68,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "ddb63c30-9f8a-43a8-87f0-93e8da629b38",
+                            ConcurrencyStamp = "e226b4c4-5501-48c1-a52d-d4043fc49493",
                             Name = "client-user",
                             NormalizedName = "client",
                             RolesType = 2,
@@ -156,7 +156,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2bcbcbab-6306-456c-adf1-7f8611279098",
+                            ConcurrencyStamp = "af5d15c9-4f54-4da2-be09-0bb155fbde5a",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -164,9 +164,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGhwTDihui7V7/c37FsM4sNqco0+WT2Xke+cixcdIllVK6MP9GSE8Biylwh2ELEPRQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOjRRdyy+oIBNcbrg1Euxti7F8b7oNtadjCWjtULxpOq6KH//Kw0i4PIbjPZQ0nk4A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5bfe2f7f-f3dd-4d9f-a095-1cfaa3a9fe08",
+                            SecurityStamp = "e09a9ffd-f779-41c4-9633-62aa249c3353",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             isRemoved = false
@@ -175,7 +175,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8d4b0879-85c1-43ba-a5cd-5915f10ea262",
+                            ConcurrencyStamp = "14b78e78-14cb-46cf-9ddd-dd8d17091c17",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
@@ -183,9 +183,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJEZK6AVMMtswt6AdLagmS2/MZHTTKbD4my/6T7P5crzXMV2jjZiixB18xNuthBSBQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELc9wUUFix9nB8O5yxosIo664lHJXpbWL0U/QDmNW1/U2Awnep+9+g9c+eF8GsCNHw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b5dbc8d9-b611-4bb7-b231-b236488e1947",
+                            SecurityStamp = "56fcc1f5-07be-45d2-9707-b29db40ecdf0",
                             TwoFactorEnabled = false,
                             UserName = "client",
                             isRemoved = false
@@ -395,9 +395,6 @@ namespace EdProject.DAL.Migrations
                     b.Property<long>("OrderId")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EditionId")
@@ -424,16 +421,21 @@ namespace EdProject.DAL.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MyProperty")
+                    b.Property<long>("PaymentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("StatusType")
                         .HasColumnType("int");
 
-                    b.Property<long>("PaymentId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentId")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -620,7 +622,15 @@ namespace EdProject.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EdProject.DAL.Entities.AppUser", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Payment");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -672,6 +682,11 @@ namespace EdProject.DAL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EdProject.DAL.Entities.AppUser", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("EdProject.DAL.Entities.Author", b =>

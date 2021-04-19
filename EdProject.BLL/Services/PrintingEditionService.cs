@@ -33,14 +33,7 @@ namespace EdProject.BLL.Services
         }
         public async Task DeletePrintEditionById(long id)
         {
-            var res =  await _printEditionRepos.FindByIdAsync(id);
-
-            if(res != null)
-            {
-                await _printEditionRepos.RemoveAsync(res);
-            }
-
-            return;
+            await _printEditionRepos.RemoveEditionById(id);
         }
         public async Task UpdatePrintEdition(PrintingEditionModel editionModel)
         {
@@ -60,7 +53,7 @@ namespace EdProject.BLL.Services
         }
         public IQueryable<Edition> GetEditionListByString(string searchString)
         {
-            return _printEditionRepos.FilteredEditionList(searchString);
+            return _printEditionRepos.FilterEditionList(searchString);
         }
 
     }

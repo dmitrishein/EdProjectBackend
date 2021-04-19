@@ -63,6 +63,12 @@ namespace EdProject.DAL.DataContext
                 .HasForeignKey(oi => oi.OrderId);
             #endregion
 
+            #region relations User and Orders(one-to-many)
+            modelBuilder.Entity<Orders>().HasOne(o => o.User)
+                .WithMany(oi => oi.Orders)
+                .HasForeignKey(oi => oi.UserId);
+            #endregion
+
             #region relations Payments and Orders(one-to-one)
             modelBuilder.Entity<Orders>()
                 .HasOne(p => p.Payment)

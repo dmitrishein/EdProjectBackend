@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EdProject.DAL.Migrations
 {
-    public partial class init : Migration
+    public partial class test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -240,12 +240,19 @@ namespace EdProject.DAL.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PaymentId = table.Column<long>(type: "bigint", nullable: false),
-                    MyProperty = table.Column<int>(type: "int", nullable: false),
+                    StatusType = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_Payments_PaymentId",
                         column: x => x.PaymentId,
@@ -264,7 +271,6 @@ namespace EdProject.DAL.Migrations
                     Currency = table.Column<int>(type: "int", nullable: false),
                     EditionId = table.Column<long>(type: "bigint", nullable: false),
                     OrderId = table.Column<long>(type: "bigint", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -289,8 +295,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RolesType", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, "80de3c86-7903-4c9d-8003-294a6f98ab19", "admin", "admin", 1, false },
-                    { 2L, "ddb63c30-9f8a-43a8-87f0-93e8da629b38", "client-user", "client", 2, false }
+                    { 1L, "d4ab38dd-219f-4306-8feb-d8391c525029", "admin", "admin", 1, false },
+                    { 2L, "e226b4c4-5501-48c1-a52d-d4043fc49493", "client-user", "client", 2, false }
                 });
 
             migrationBuilder.InsertData(
@@ -298,8 +304,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, 0, "2bcbcbab-6306-456c-adf1-7f8611279098", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEGhwTDihui7V7/c37FsM4sNqco0+WT2Xke+cixcdIllVK6MP9GSE8Biylwh2ELEPRQ==", null, false, "5bfe2f7f-f3dd-4d9f-a095-1cfaa3a9fe08", false, "admin", false },
-                    { 2L, 0, "8d4b0879-85c1-43ba-a5cd-5915f10ea262", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEJEZK6AVMMtswt6AdLagmS2/MZHTTKbD4my/6T7P5crzXMV2jjZiixB18xNuthBSBQ==", null, false, "b5dbc8d9-b611-4bb7-b231-b236488e1947", false, "client", false }
+                    { 1L, 0, "af5d15c9-4f54-4da2-be09-0bb155fbde5a", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEOjRRdyy+oIBNcbrg1Euxti7F8b7oNtadjCWjtULxpOq6KH//Kw0i4PIbjPZQ0nk4A==", null, false, "e09a9ffd-f779-41c4-9633-62aa249c3353", false, "admin", false },
+                    { 2L, 0, "14b78e78-14cb-46cf-9ddd-dd8d17091c17", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAELc9wUUFix9nB8O5yxosIo664lHJXpbWL0U/QDmNW1/U2Awnep+9+g9c+eF8GsCNHw==", null, false, "56fcc1f5-07be-45d2-9707-b29db40ecdf0", false, "client", false }
                 });
 
             migrationBuilder.InsertData(
@@ -406,6 +412,11 @@ namespace EdProject.DAL.Migrations
                 table: "Orders",
                 column: "PaymentId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_UserId",
+                table: "Orders",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -435,9 +446,6 @@ namespace EdProject.DAL.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Authors");
 
             migrationBuilder.DropTable(
@@ -445,6 +453,9 @@ namespace EdProject.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Payments");

@@ -18,7 +18,6 @@ namespace EdProject.DAL.Repositories.Base
 
         #endregion
 
-
         #region constructor
         public BaseRepository(AppDbContext appDbContext)
         {
@@ -36,7 +35,7 @@ namespace EdProject.DAL.Repositories.Base
             await _dbSet.AddAsync(item);
             await _dbContext.SaveChangesAsync();
         }
-        public async Task RemoveAsync(TEntity item)
+        public async Task DeleteAsync(TEntity item)
         {
             _dbSet.Remove(item);
           await _dbContext.SaveChangesAsync();
@@ -50,28 +49,7 @@ namespace EdProject.DAL.Repositories.Base
             _dbContext.Entry(item).State = EntityState.Modified;
              await _dbContext.SaveChangesAsync();
         }
-
-
-      
-        public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            return Include(includeProperties).ToList();
-        }
-
-        public IEnumerable<TEntity> GetWithInclude(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            var query = Include(includeProperties);
-            return query.Where(predicate).ToList();
-        }
-
-        private IQueryable<TEntity> Include(params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            IQueryable<TEntity> query = _dbSet.AsNoTracking();
-            return includeProperties
-                .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-        }
-
-       
+ 
     }
     
 }

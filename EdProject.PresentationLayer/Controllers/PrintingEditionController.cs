@@ -6,6 +6,7 @@ using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.PresentationLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -42,12 +43,14 @@ namespace EdProject.PresentationLayer.Controllers
             await _printEditionService.CreatePrintEdition(editionModel);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task DeleteById(long id)
         {
             await _printEditionService.DeletePrintEditionById(id);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UpdateEdition(PrintingEditionViewModel updateModel)
         {

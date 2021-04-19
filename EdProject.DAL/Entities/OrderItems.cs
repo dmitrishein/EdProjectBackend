@@ -9,7 +9,6 @@ namespace EdProject.DAL.Entities
         public CurrencyTypes Currency { get; set; }
         public long EditionId { get; set; }
         public long OrderId { get; set; }
-        public decimal Total { get; set; }
 
 
         public Edition Edition { get; set; }

@@ -58,6 +58,8 @@ namespace EdProject.PresentationLayer
             services.AddScoped<IPrintingEditionService, PrintingEditionService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             services.AddAutoMapper(typeof(Startup));
 
