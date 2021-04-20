@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Controllers
@@ -17,18 +18,15 @@ namespace EdProject.PresentationLayer.Controllers
     [Route("[controller]")]
     public class AccountController : Controller
     {
-        #region Private Members
         IAccountService _accountService;
         IConfiguration _config;
-        #endregion
 
-        #region Constructor
         public AccountController(IAccountService accountService, IConfiguration config)
         {
             _accountService = accountService;
             _config = config;
         }
-        #endregion
+      
 
         [HttpPost("[action]")]
         public async Task Registration(RegisterViewModel register)
@@ -39,18 +37,15 @@ namespace EdProject.PresentationLayer.Controllers
             await _accountService.SendEmail(confirmationLink, userModel.Email,"Confirm Account");
         }
         
-        [HttpPost]
-        [Route("[action]")]
+        [HttpPost("[action]")]
         public async Task ConfirmEmail(string token , string email)
         {
            await _accountService.ConfirmEmailAsync(token, email);
         }
 
-        [HttpPost]
-        [Route("[action]")]
+        [HttpPost("[action]")]
         public async Task<OkObjectResult> Login(LoginViewModel login)
         {
-
             JwtHelper jwt = new JwtHelper(_config);
             var tokenString="";
             var refreshTokenString = "";

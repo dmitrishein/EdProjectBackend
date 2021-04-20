@@ -13,8 +13,8 @@ namespace EdProject.BLL.Services.Interfaces
         public Task CreateAuthInEdAsync(AuthorInEditionModel authInEditModel);
         public Task DeleteAuthInEditionAsync(AuthorInEditionModel authInEditModel);
         public Task UpdateAuthInEditAsync(AuthorInEditionModel authInEditModel);
-        public IQueryable<AuthorInEditions> GetEditionsByAuthorId(long id);
-        public IQueryable<AuthorInEditions> GetEditionsByEditionId(long id);
-        public IEnumerable<AuthorInEditions> GetList();
+        public Task<IEnumerable<AuthorInEditions>> GetEditionsByAuthorId(long id);
+        public Task<IEnumerable<AuthorInEditions>> GetEditionsByEditionId(long id);
+        public Task<IEnumerable<AuthorInEditions>> GetList();
     }
 }

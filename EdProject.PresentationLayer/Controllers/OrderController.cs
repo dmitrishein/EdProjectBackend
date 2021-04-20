@@ -1,8 +1,10 @@
 ﻿using EdProject.BLL.Models.Orders;
+using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using EdProject.PresentationLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +15,8 @@ namespace EdProject.PresentationLayer.Controllers
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        IOrderService _orderService;
-        public OrderController(IOrderService orderService)
+        IOrdersService _orderService;
+        public OrderController(IOrdersService orderService)
         {
             _orderService = orderService;
         }
@@ -36,25 +38,35 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task CreateOrderItem(OrderItemViewModel newOrder)
+        public async Task CreatePayment(PaymentViewModel newPayment )
         {
+            StripeConfiguration.ApiKey = "sk_test_51IiJzdFHRC0nt9sgcxsXqaChnLHhiR1QJ2wMe2slbivpfEdGI7KMgYaOD2GUXrH3hJva9QdAqxBBNvoU5MUF4MFX00GVQiG0pp";
 
-            OrderItemModel orderItemModel = new()
+            // `source` is obtained with Stripe.js; see https://stripe.com/docs/payments/accept-a-payment-charges#web-create-token
+            var options = new ChargeCreateOptions
             {
-                EditionId = newOrder.EditionId,
-                Amount = newOrder.Amount,
-                Currency = newOrder.Currency,
-                OrderId = newOrder.OrderId
+                Amount = 200,
+                Currency = "eur",
+                Source = "tok_amex",
+                Description = "My Second Test Charge (created for API docs)",
+            };
+            var service = new ChargeService();
+            service.Create(options);
 
+
+            PaymentModel paymentModel = new()
+            {
+                Id = newPayment.Id,
+                TransactionId = options.Source,
             };
 
-            await _orderService.CreateOrderItemAsync(orderItemModel);
+            await _orderService.CreatePaymentAsync(paymentModel);
         }
 
         [HttpGet("[action]")]
-        public IQueryable<Orders> GetOrdersByUserId(long userId)
+        public async Task<IEnumerable<Orders>> GetOrdersByUserId(long userId)
         {
-            return _orderService.GetOrdersListByUserId(userId);
+            return  await _orderService.GetOrdersListByUserId(userId);
         }
 
 

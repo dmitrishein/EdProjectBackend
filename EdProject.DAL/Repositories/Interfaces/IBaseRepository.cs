@@ -10,7 +10,7 @@ namespace EdProject.DAL.Repositories.Interfaces
     {
         public Task CreateAsync(TEntity item);
         public Task<TEntity> FindByIdAsync(long id);
-        IEnumerable<TEntity> Get();
+        public Task<IEnumerable<TEntity>> GetAsync();
         public Task UpdateAsync(TEntity item);
         public Task DeleteAsync(TEntity item);
     }

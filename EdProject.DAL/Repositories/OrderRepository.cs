@@ -13,29 +13,25 @@ namespace EdProject.DAL.Repositories
 {
     public class OrderRepository : BaseRepository<Orders>, IOrderRepository
     {
-        private AppDbContext _dbContext;
-        protected DbSet<Orders> _order;
         public OrderRepository(AppDbContext appDbContext) : base(appDbContext)
         {
-            _dbContext = appDbContext;
-            _order = appDbContext.Set<Orders>();
         }
 
 
         public async Task RemoveOrderByIdAsync(long id)
         {
-            var res = await _order.FindAsync(id);
+            var res = await _dbSet.FindAsync(id);
 
             if (res != null)
             {
                 res.IsRemoved = true;
-                _dbContext.Entry(res).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
+                await UpdateAsync(res);
+                await SaveChangesAsync();
             }
         }
         public async Task RemoveOrderByPaymentIdAsync(long paymentId)
         {
-            IQueryable<Orders> ordersQuery = _dbContext.Orders;
+            IEnumerable<Orders> ordersQuery = await GetAsync();
             var editions = ordersQuery.Where(e => e.PaymentId == paymentId);
 
             var transaction = ordersQuery.FirstOrDefault();
@@ -43,14 +39,14 @@ namespace EdProject.DAL.Repositories
             if (transaction != null)
             {
                 transaction.IsRemoved = true;
-                _dbContext.Entry(transaction).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
+                await UpdateAsync(transaction);
+                await SaveChangesAsync();
             }
 
         }
-        public IQueryable<Orders> FilterOrderList(string searchString)
+        public async Task<IEnumerable<Orders>> FilterOrderList(string searchString)
         {
-            IQueryable<Orders> ordersQuery = _dbContext.Orders;
+            IEnumerable<Orders> ordersQuery = await GetAsync() ;
             var orders = ordersQuery.Where(e => e.Id.ToString() == searchString ||
                                                e.PaymentId.ToString() == searchString ||
                                                e.Date.ToString() == searchString ||
@@ -58,14 +54,23 @@ namespace EdProject.DAL.Repositories
                                                );
             return orders ;
         }
-        public IQueryable<Orders> GetOrderByUserId(long userId)
+        public async Task<IEnumerable<Orders>> GetOrderByUserId(long userId)
         {
-            IQueryable<Orders> ordersQuery = _dbContext.Orders;
+            IEnumerable<Orders> ordersQuery = await GetAsync();
             var orders = ordersQuery.Where(e => e.UserId == userId);
 
             return orders;
         }
+        public async Task<IEnumerable<Orders>> PagingOrders(int pageNumber, int pageSize)
+        {
+            IEnumerable<Orders> ordersPerPage = await GetAsync();
 
+            if (pageNumber >= 1 && pageSize >= 1)
+            {
+                return ordersPerPage.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            }
+            return ordersPerPage;
+        }
 
     }
 }

@@ -31,9 +31,9 @@ namespace EdProject.BLL.Services
         {
             return await _authorRepositroy.FindByIdAsync(id);
         }
-        public IEnumerable<Author> GetAuthorList()
+        public Task<IEnumerable<Author>> GetAuthorList()
         {
-            return _authorRepositroy.Get();
+            return _authorRepositroy.GetAsync();
         }
         public async Task UpdateAuthorAsync(AuthorModel authorModel)
         {

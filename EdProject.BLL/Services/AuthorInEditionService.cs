@@ -41,19 +41,19 @@ namespace EdProject.BLL.Services
 
         }
 
-        public IQueryable<AuthorInEditions> GetEditionsByAuthorId(long id)
+        public async Task<IEnumerable<AuthorInEditions>> GetEditionsByAuthorId(long id)
         {
-            return _authorInEditions.GetListByAuthorId(id);
+            return await _authorInEditions.GetListByAuthorId(id);
         }
 
-        public IQueryable<AuthorInEditions> GetEditionsByEditionId(long id)
+        public async Task<IEnumerable<AuthorInEditions>> GetEditionsByEditionId(long id)
         {
-            return _authorInEditions.GetListByEditionId(id);
+            return await _authorInEditions.GetListByEditionId(id);
         }
 
-        public IEnumerable<AuthorInEditions> GetList()
+        public Task<IEnumerable<AuthorInEditions>> GetList()
         {
-            return _authorInEditions.Get();
+            return _authorInEditions.GetAsync();
         }
 
         public async Task UpdateAuthInEditAsync(AuthorInEditionModel authInEditModel)

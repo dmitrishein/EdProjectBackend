@@ -31,7 +31,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<Author> GetAuthorList()
+        public Task<IEnumerable<Author>> GetAuthorList()
         {
             return _authorService.GetAuthorList();
         }

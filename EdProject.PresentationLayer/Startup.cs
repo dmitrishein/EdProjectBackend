@@ -6,6 +6,7 @@ using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
 using EdProject.DAL.Repositories.Interfaces;
+using EdProject.PresentationLayer.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +19,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Stripe;
+using System;
 using System.IO;
 using System.Text;
 
@@ -55,14 +58,15 @@ namespace EdProject.PresentationLayer
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<AppDbContext>()
                                                     .AddDefaultTokenProviders();
 
+            
+
             services.AddScoped<IPrintingEditionService, PrintingEditionService>();
-            services.AddScoped<IAccountService, AccountService>();
+            //services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
-            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrdersService, OrdersService>();
 
             services.AddAutoMapper(typeof(Startup));
-
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -91,12 +95,16 @@ namespace EdProject.PresentationLayer
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
             }
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+
+            app.UseExceptionMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
@@ -105,4 +113,5 @@ namespace EdProject.PresentationLayer
             });
         }
     }
+   
 }

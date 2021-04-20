@@ -68,7 +68,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<Edition> GetEditions()
+        public Task<IEnumerable<Edition>> GetEditions()
         {
            return _printEditionService.GetEditionList();
         }
@@ -80,7 +80,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpGet("[action]")]
-        public IQueryable<Edition> GetEditionByQuery(string searchString)
+        public Task<IEnumerable<Edition>> GetEditionByQuery(string searchString)
         {
             return _printEditionService.GetEditionListByString(searchString);
         }

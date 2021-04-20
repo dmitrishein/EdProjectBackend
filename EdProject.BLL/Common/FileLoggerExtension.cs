@@ -1,13 +1,20 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using EdProject.BLL.Common;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace EdProject.BLL.Common
+namespace EdProject.PresentationLayer
 {
     public static class FileLoggerExtension
     {
-        public static ILoggerFactory AddFile(this ILoggerFactory factory, string filePath)
+        public static ILoggingBuilder AddFileLogger(this ILoggingBuilder builder, Action<FileLoggerOptions> configure)
         {
-            factory.AddProvider(new FileLoggerProvider(filePath));
-            return factory;
+            builder.Services.AddSingleton<ILoggerProvider, FileLoggerProvider>();
+            builder.Services.Configure(configure);
+            return builder;
         }
     }
 }

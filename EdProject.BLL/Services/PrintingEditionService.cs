@@ -43,15 +43,15 @@ namespace EdProject.BLL.Services
 
             await _printEditionRepos.UpdateAsync(newEdition);
         }
-        public IEnumerable<Edition> GetEditionList()
+        public Task<IEnumerable<Edition>> GetEditionList()
         {
-            return _printEditionRepos.Get();
+            return _printEditionRepos.GetAsync();
         }
         public async Task<Edition> GetEditionById(long id)
         {
             return await _printEditionRepos.FindByIdAsync(id);
         }
-        public IQueryable<Edition> GetEditionListByString(string searchString)
+        public Task<IEnumerable<Edition>> GetEditionListByString(string searchString)
         {
             return _printEditionRepos.FilterEditionList(searchString);
         }

@@ -3,6 +3,7 @@ using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,27 +12,26 @@ namespace EdProject.DAL.Repositories
     public class AuthorInPrintingEditionRepository : BaseRepository<AuthorInEditions>, IAuthorInPrintingEditionRepository
     {
 
-        private AppDbContext _dbContext;
-        protected DbSet<AuthorInEditions> _authInEdition;
+        
         public AuthorInPrintingEditionRepository(AppDbContext appDbContext) : base (appDbContext)
         {
-            _dbContext = appDbContext;
-            _authInEdition = appDbContext.Set<AuthorInEditions>();
-
+          
         }
 
-        public IQueryable<AuthorInEditions> GetListByAuthorId(long authorId)
+        public async Task<IEnumerable<AuthorInEditions>> GetListByAuthorId(long authorId)
         {
-            IQueryable<AuthorInEditions> editionsQuery = _dbContext.AuthorInEditions;
+            IEnumerable<AuthorInEditions> editionsQuery = await GetAsync();
             var editions = editionsQuery.Where(e => e.AuthorId == authorId);
             return editions;
         }
-        public IQueryable<AuthorInEditions> GetListByEditionId(long editionId)
+        public async Task<IEnumerable<AuthorInEditions>> GetListByEditionId(long editionId)
         {
-            IQueryable<AuthorInEditions> editionsQuery = _dbContext.AuthorInEditions;
+            IEnumerable<AuthorInEditions> editionsQuery = await GetAsync();
             var editions = editionsQuery.Where(e => e.EditionId == editionId);
 
             return editions;
         }
+
+      
     }
 }

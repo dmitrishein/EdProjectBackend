@@ -57,7 +57,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "d4ab38dd-219f-4306-8feb-d8391c525029",
+                            ConcurrencyStamp = "d5fb3267-7488-46a1-85c9-67bcbcb2ac4c",
                             Name = "admin",
                             NormalizedName = "admin",
                             RolesType = 1,
@@ -66,7 +66,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "e226b4c4-5501-48c1-a52d-d4043fc49493",
+                            ConcurrencyStamp = "5268bf09-d2a8-4534-800c-029bf4dea8a8",
                             Name = "client-user",
                             NormalizedName = "client",
                             RolesType = 2,
@@ -154,7 +154,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "af5d15c9-4f54-4da2-be09-0bb155fbde5a",
+                            ConcurrencyStamp = "a0a9c50e-3f8e-45d0-8b9d-fc7aedfd3081",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -162,9 +162,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOjRRdyy+oIBNcbrg1Euxti7F8b7oNtadjCWjtULxpOq6KH//Kw0i4PIbjPZQ0nk4A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIt6lAUyqM6irOdO0OwhFg5ShiqqwAp+MkG57/tTwRRmQtaQd09v0v2xgksciUzStw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e09a9ffd-f779-41c4-9633-62aa249c3353",
+                            SecurityStamp = "a2091951-8a5e-4560-a502-9ba832ebaaa2",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             isRemoved = false
@@ -173,7 +173,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "14b78e78-14cb-46cf-9ddd-dd8d17091c17",
+                            ConcurrencyStamp = "1125e1b5-7a5a-4b38-b193-3fe85cd6e697",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
@@ -181,9 +181,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAELc9wUUFix9nB8O5yxosIo664lHJXpbWL0U/QDmNW1/U2Awnep+9+g9c+eF8GsCNHw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKOGZ6FWzU0vTEeU4Wttpvd2O/hLv2Nv6U/s03+Mw9TP+zRkIK5yd2Uim+m7HDzibQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "56fcc1f5-07be-45d2-9707-b29db40ecdf0",
+                            SecurityStamp = "f658e221-5c3b-4da9-bd66-c720d21990eb",
                             TwoFactorEnabled = false,
                             UserName = "client",
                             isRemoved = false
@@ -448,8 +448,8 @@ namespace EdProject.DAL.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<long>("TransactionId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

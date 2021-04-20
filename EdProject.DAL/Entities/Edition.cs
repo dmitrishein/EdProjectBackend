@@ -17,6 +17,7 @@ namespace EdProject.DAL.Entities
         public CurrencyTypes Currency { get; set; }
         public EditionTypes Type { get; set; }
 
+
         //relationships
         public ICollection<AuthorInEditions> Authors { get; set; }
         public OrderItems OrderItem { get; set; }

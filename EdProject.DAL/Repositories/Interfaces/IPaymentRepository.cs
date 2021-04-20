@@ -6,6 +6,6 @@ namespace EdProject.DAL.Repositories.Interfaces
     public interface IPaymentRepository : IBaseRepository<Payments>
     {
         public Task RemovePaymentByIdAsync(long id);
-        public Task RemovePaymentByTransactionIdAsync(long transactId);
+        public Task RemovePaymentByTransactionIdAsync(string transactId);
     }
 }

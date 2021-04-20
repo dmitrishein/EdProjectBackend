@@ -9,7 +9,7 @@ namespace EdProject.DAL.Repositories.Interfaces
 {
     public interface IAuthorInPrintingEditionRepository : IBaseRepository<AuthorInEditions>
     {
-        public IQueryable<AuthorInEditions> GetListByAuthorId(long authorId);
-        public IQueryable<AuthorInEditions> GetListByEditionId(long editionId);
+        Task<IEnumerable<AuthorInEditions>> GetListByAuthorId(long authorId);
+        Task<IEnumerable<AuthorInEditions>> GetListByEditionId(long editionId);
     }
 }

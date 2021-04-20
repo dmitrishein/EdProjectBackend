@@ -14,13 +14,13 @@ using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
 {
-    public class OrderService : IOrderService
+    public class OrdersService : IOrdersService
     {
         OrderRepository _orderRepository;
         OrderItemRepository _orderItemRepository;
         PaymentRepository _paymentRepository;
 
-        public OrderService(AppDbContext appDbContext)
+        public OrdersService(AppDbContext appDbContext)
         {
             _orderRepository = new OrderRepository(appDbContext);
             _orderItemRepository = new OrderItemRepository(appDbContext);
@@ -33,7 +33,6 @@ namespace EdProject.BLL.Services
             var _mapper = new Mapper(config);
             var newOrder = _mapper.Map<OrderModel, Orders>(orderModel);
            
-
             await _orderRepository.CreateAsync(newOrder);
         }
 
@@ -55,14 +54,14 @@ namespace EdProject.BLL.Services
             await _paymentRepository.CreateAsync(newPayment);
         }
 
-        public IQueryable<Orders> GetOrdersListByUserId(long userId)
+        public async Task<IEnumerable<Orders>> GetOrdersListByUserId(long userId)
         {
-            return _orderRepository.GetOrderByUserId(userId);
+            return await _orderRepository.GetOrderByUserId(userId);
         }
 
-        public IEnumerable<Orders> GetOrdersList()
+        public async Task<IEnumerable<Orders>> GetOrdersList()
         {
-            return _orderRepository.Get();
+            return await _orderRepository.GetAsync();
         }
     }
 }

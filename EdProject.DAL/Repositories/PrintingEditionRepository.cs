@@ -13,18 +13,14 @@ namespace EdProject.DAL.Repositories
 {
     public class PrintingEditionRepository : BaseRepository<Edition>, IPrintingEditionRepository
     {
-        private AppDbContext _dbContext;
-        protected DbSet<Edition> _edition;
         public PrintingEditionRepository(AppDbContext appDbContext) : base (appDbContext)
         {
-            _dbContext = appDbContext;
-            _edition = appDbContext.Set<Edition>();
+           
         }
-        
 
-        public IQueryable<Edition> FilterEditionList(string searchString)
+        public async Task<IEnumerable<Edition>> FilterEditionList(string searchString)
         {
-            IQueryable<Edition> editionsQuery = _dbContext.Editions;
+            IEnumerable<Edition> editionsQuery = await GetAsync(); 
             var editions = editionsQuery.Where(e => e.Id.ToString() == searchString ||
                                                e.Title == searchString ||
                                                e.Description.Contains(searchString)
@@ -33,13 +29,24 @@ namespace EdProject.DAL.Repositories
         }
         public async Task RemoveEditionById(long id)
         {
-            var res = await _edition.FindAsync(id);
+            var res = await _dbSet.FindAsync(id);
             if (res != null)
             {
                 res.IsRemoved = true;
                 _dbContext.Entry(res).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<Edition>> Paging(int pageNumber,int pageSize)
+        {
+            IEnumerable<Edition> editionsPerPage = await GetAsync();
+
+            if (pageNumber >= 1 && pageSize>=1)
+            {
+                return editionsPerPage.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            }
+            return editionsPerPage;
         }
     }
 }

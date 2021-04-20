@@ -9,6 +9,7 @@ namespace EdProject.DAL.Repositories.Interfaces
 {
     public interface IPrintingEditionRepository : IBaseRepository<Edition>
     {
-        IQueryable<Edition> FilterEditionList(string searchString);
+        public Task<IEnumerable<Edition>> FilterEditionList(string searchString);
+        public Task<IEnumerable<Edition>> Paging(int pageNumber, int pageSize);
     }
 }

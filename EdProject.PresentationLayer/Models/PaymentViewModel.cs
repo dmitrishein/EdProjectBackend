@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace EdProject.BLL.Models.Payment
+namespace EdProject.PresentationLayer.Models
 {
-    public class PaymentModel
+    public class PaymentViewModel
     {
         public long Id { get; set; }
         public string TransactionId { get; set; }

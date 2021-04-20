@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EdProject.DAL.Migrations
 {
-    public partial class test : Migration
+    public partial class test1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -92,7 +92,7 @@ namespace EdProject.DAL.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TransactionId = table.Column<long>(type: "bigint", nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -295,8 +295,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RolesType", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, "d4ab38dd-219f-4306-8feb-d8391c525029", "admin", "admin", 1, false },
-                    { 2L, "e226b4c4-5501-48c1-a52d-d4043fc49493", "client-user", "client", 2, false }
+                    { 1L, "d5fb3267-7488-46a1-85c9-67bcbcb2ac4c", "admin", "admin", 1, false },
+                    { 2L, "5268bf09-d2a8-4534-800c-029bf4dea8a8", "client-user", "client", 2, false }
                 });
 
             migrationBuilder.InsertData(
@@ -304,8 +304,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, 0, "af5d15c9-4f54-4da2-be09-0bb155fbde5a", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEOjRRdyy+oIBNcbrg1Euxti7F8b7oNtadjCWjtULxpOq6KH//Kw0i4PIbjPZQ0nk4A==", null, false, "e09a9ffd-f779-41c4-9633-62aa249c3353", false, "admin", false },
-                    { 2L, 0, "14b78e78-14cb-46cf-9ddd-dd8d17091c17", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAELc9wUUFix9nB8O5yxosIo664lHJXpbWL0U/QDmNW1/U2Awnep+9+g9c+eF8GsCNHw==", null, false, "56fcc1f5-07be-45d2-9707-b29db40ecdf0", false, "client", false }
+                    { 1L, 0, "a0a9c50e-3f8e-45d0-8b9d-fc7aedfd3081", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEIt6lAUyqM6irOdO0OwhFg5ShiqqwAp+MkG57/tTwRRmQtaQd09v0v2xgksciUzStw==", null, false, "a2091951-8a5e-4560-a502-9ba832ebaaa2", false, "admin", false },
+                    { 2L, 0, "1125e1b5-7a5a-4b38-b193-3fe85cd6e697", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEKOGZ6FWzU0vTEeU4Wttpvd2O/hLv2Nv6U/s03+Mw9TP+zRkIK5yd2Uim+m7HDzibQ==", null, false, "f658e221-5c3b-4da9-bd66-c720d21990eb", false, "client", false }
                 });
 
             migrationBuilder.InsertData(

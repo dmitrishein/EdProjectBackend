@@ -81,3 +81,5 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\MimeKit.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\BouncyCastle.Crypto.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Stripe.net.dll
