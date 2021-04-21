@@ -61,7 +61,7 @@ namespace EdProject.PresentationLayer
             
 
             services.AddScoped<IPrintingEditionService, PrintingEditionService>();
-            //services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountService, AccountsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IOrdersService, OrdersService>();

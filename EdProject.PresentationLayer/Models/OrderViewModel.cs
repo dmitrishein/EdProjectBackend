@@ -10,7 +10,6 @@ namespace EdProject.PresentationLayer.Models
     {
         public long UserId { get; set; }
         public string Description { get; set; }
-        public long PaymentId { get; set; }
         public OrderStatusType StatusType { get; set; }
     }
 }

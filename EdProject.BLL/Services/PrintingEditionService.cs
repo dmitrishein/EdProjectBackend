@@ -45,7 +45,7 @@ namespace EdProject.BLL.Services
         }
         public Task<IEnumerable<Edition>> GetEditionList()
         {
-            return _printEditionRepos.GetAsync();
+            return _printEditionRepos.GetAllAsync();
         }
         public async Task<Edition> GetEditionById(long id)
         {

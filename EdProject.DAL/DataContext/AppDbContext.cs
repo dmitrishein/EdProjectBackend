@@ -103,7 +103,12 @@ namespace EdProject.DAL.DataContext
             modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
         }
-  
+        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
         #region Tables
         public DbSet<Author> Authors { set; get; }
         public DbSet<AuthorInEditions> AuthorInEditions { get; set; }

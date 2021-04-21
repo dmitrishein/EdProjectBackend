@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
 {
-    public class AccountService : IAccountService
+    public class AccountsService : IAccountService
     {
         #region UserManager, SignInManager and constructor
 
         private UserManager<AppUser> _userManager;
         private SignInManager<AppUser> _signInManager;
         
-        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountsService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

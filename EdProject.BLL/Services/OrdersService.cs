@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
-using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -54,14 +50,15 @@ namespace EdProject.BLL.Services
             await _paymentRepository.CreateAsync(newPayment);
         }
 
-        public async Task<IEnumerable<Orders>> GetOrdersListByUserId(long userId)
+        public async Task<IEnumerable<Orders>> GetOrdersListByUserIdAsync(long userId)
         {
             return await _orderRepository.GetOrderByUserId(userId);
         }
 
-        public async Task<IEnumerable<Orders>> GetOrdersList()
+        public async Task<IEnumerable<Orders>> GetOrdersListAsync()
         {
-            return await _orderRepository.GetAsync();
+            var orders = _orderRepository.GetAllAsync();
+            return await _orderRepository.GetAllAsync();
         }
     }
 }

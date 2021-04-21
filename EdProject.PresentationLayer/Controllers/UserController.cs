@@ -1,13 +1,7 @@
-﻿using EdProject.BLL.Services;
-using EdProject.BLL.Services.Interfaces;
-using EdProject.DAL.DataContext;
+﻿using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

@@ -33,7 +33,7 @@ namespace EdProject.BLL.Services
         }
         public Task<IEnumerable<Author>> GetAuthorList()
         {
-            return _authorRepositroy.GetAsync();
+            return _authorRepositroy.GetAllAsync();
         }
         public async Task UpdateAuthorAsync(AuthorModel authorModel)
         {

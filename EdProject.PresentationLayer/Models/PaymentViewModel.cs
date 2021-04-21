@@ -7,7 +7,6 @@ namespace EdProject.PresentationLayer.Models
 {
     public class PaymentViewModel
     {
-        public long Id { get; set; }
         public string TransactionId { get; set; }
     }
 }

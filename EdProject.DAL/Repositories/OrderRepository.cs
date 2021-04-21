@@ -31,7 +31,7 @@ namespace EdProject.DAL.Repositories
         }
         public async Task RemoveOrderByPaymentIdAsync(long paymentId)
         {
-            IEnumerable<Orders> ordersQuery = await GetAsync();
+            IEnumerable<Orders> ordersQuery = await GetAllAsync();
             var editions = ordersQuery.Where(e => e.PaymentId == paymentId);
 
             var transaction = ordersQuery.FirstOrDefault();
@@ -46,7 +46,7 @@ namespace EdProject.DAL.Repositories
         }
         public async Task<IEnumerable<Orders>> FilterOrderList(string searchString)
         {
-            IEnumerable<Orders> ordersQuery = await GetAsync() ;
+            IEnumerable<Orders> ordersQuery = await GetAllAsync() ;
             var orders = ordersQuery.Where(e => e.Id.ToString() == searchString ||
                                                e.PaymentId.ToString() == searchString ||
                                                e.Date.ToString() == searchString ||
@@ -56,14 +56,14 @@ namespace EdProject.DAL.Repositories
         }
         public async Task<IEnumerable<Orders>> GetOrderByUserId(long userId)
         {
-            IEnumerable<Orders> ordersQuery = await GetAsync();
+            IEnumerable<Orders> ordersQuery = await GetAllAsync();
             var orders = ordersQuery.Where(e => e.UserId == userId);
 
             return orders;
         }
         public async Task<IEnumerable<Orders>> PagingOrders(int pageNumber, int pageSize)
         {
-            IEnumerable<Orders> ordersPerPage = await GetAsync();
+            IEnumerable<Orders> ordersPerPage = await GetAllAsync();
 
             if (pageNumber >= 1 && pageSize >= 1)
             {

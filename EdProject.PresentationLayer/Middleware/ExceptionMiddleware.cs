@@ -17,7 +17,6 @@ namespace EdProject.PresentationLayer.Middleware
             _next = next;
             _logger = logger;
         }
-
         public async Task Invoke(HttpContext httpContext)
         {
             try

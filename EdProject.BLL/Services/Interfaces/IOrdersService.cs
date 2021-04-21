@@ -12,6 +12,7 @@ namespace EdProject.BLL.Services.Interfaces
         public Task CreateOrderAsync(OrderModel orderModel);
         public Task CreateOrderItemAsync(OrderItemModel orderModel);
         public Task CreatePaymentAsync(PaymentModel paymentModel);
-        public Task<IEnumerable<Orders>> GetOrdersListByUserId(long userId);
+        public Task<IEnumerable<Orders>> GetOrdersListByUserIdAsync(long userId);
+        public Task<IEnumerable<Orders>> GetOrdersListAsync();
     }
 }

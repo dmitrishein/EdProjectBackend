@@ -9,13 +9,14 @@ namespace EdProject.DAL.Entities
     {
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public long PaymentId { get; set; }
         public OrderStatusType StatusType { get; set; }
+
         public long UserId { get; set; }
-
-
-        public AppUser User { get; set; }
-        public ICollection<OrderItems> OrderItems { get; set; }
-        public Payments Payment { get; set; }
+        public virtual AppUser User { get; set; }
+        public virtual ICollection<OrderItems> OrderItems { get; set; }
+#nullable enable
+        public long? PaymentId { get; set; }
+        public virtual Payments? Payment { get; set; }
+#nullable disable
     }
 }

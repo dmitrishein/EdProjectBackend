@@ -53,7 +53,7 @@ namespace EdProject.BLL.Services
 
         public Task<IEnumerable<AuthorInEditions>> GetList()
         {
-            return _authorInEditions.GetAsync();
+            return _authorInEditions.GetAllAsync();
         }
 
         public async Task UpdateAuthInEditAsync(AuthorInEditionModel authInEditModel)

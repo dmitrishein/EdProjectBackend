@@ -16,7 +16,7 @@ namespace EdProject.DAL.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("EdProject.DAL.Entities.AppRole", b =>
@@ -57,7 +57,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "d5fb3267-7488-46a1-85c9-67bcbcb2ac4c",
+                            ConcurrencyStamp = "771dcadc-bc69-42d7-9589-c80b5573a870",
                             Name = "admin",
                             NormalizedName = "admin",
                             RolesType = 1,
@@ -66,7 +66,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "5268bf09-d2a8-4534-800c-029bf4dea8a8",
+                            ConcurrencyStamp = "f9430f23-c87a-4e03-9260-247978569fbe",
                             Name = "client-user",
                             NormalizedName = "client",
                             RolesType = 2,
@@ -154,7 +154,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a0a9c50e-3f8e-45d0-8b9d-fc7aedfd3081",
+                            ConcurrencyStamp = "6425a4d8-1170-4398-a52b-992672274cea",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -162,9 +162,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIt6lAUyqM6irOdO0OwhFg5ShiqqwAp+MkG57/tTwRRmQtaQd09v0v2xgksciUzStw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIhfqUojSE6ItFiWR9qf09S1cOOs5deF/HpmE/SfYUbIR7U8/IVSNonVZMYB50Se8Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a2091951-8a5e-4560-a502-9ba832ebaaa2",
+                            SecurityStamp = "38da75ff-cf62-449d-ae10-03ae5ddf1114",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             isRemoved = false
@@ -173,7 +173,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1125e1b5-7a5a-4b38-b193-3fe85cd6e697",
+                            ConcurrencyStamp = "95acdebd-52c8-49c0-9a4a-5c194fe1c6f2",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
@@ -181,9 +181,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKOGZ6FWzU0vTEeU4Wttpvd2O/hLv2Nv6U/s03+Mw9TP+zRkIK5yd2Uim+m7HDzibQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKPdaGB5WZvG+DVT+H1GBWWNcNtE51jroFnsgKOvlDA0n98JQY9XqfBKyz5M1it+/w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f658e221-5c3b-4da9-bd66-c720d21990eb",
+                            SecurityStamp = "103d5d0a-d76f-4125-97c7-1961adf075b6",
                             TwoFactorEnabled = false,
                             UserName = "client",
                             isRemoved = false
@@ -419,7 +419,7 @@ namespace EdProject.DAL.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<long>("PaymentId")
+                    b.Property<long?>("PaymentId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("StatusType")
@@ -431,7 +431,8 @@ namespace EdProject.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[PaymentId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -616,9 +617,7 @@ namespace EdProject.DAL.Migrations
                 {
                     b.HasOne("EdProject.DAL.Entities.Payments", "Payment")
                         .WithOne("Order")
-                        .HasForeignKey("EdProject.DAL.Entities.Orders", "PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EdProject.DAL.Entities.Orders", "PaymentId");
 
                     b.HasOne("EdProject.DAL.Entities.AppUser", "User")
                         .WithMany("Orders")

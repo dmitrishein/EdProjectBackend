@@ -3,6 +3,7 @@ using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using EdProject.PresentationLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using System;
@@ -24,16 +25,13 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task CreateOrder(OrderViewModel newOrder)
         {
-
             OrderModel orderModel = new()
             {
                 UserId = newOrder.UserId,
                 Description = newOrder.Description,
                 Date = DateTime.Now,
-                PaymentId = newOrder.PaymentId,
                 StatusType = newOrder.StatusType
             };
-
             await _orderService.CreateOrderAsync(orderModel);
         }
 
@@ -45,18 +43,16 @@ namespace EdProject.PresentationLayer.Controllers
             // `source` is obtained with Stripe.js; see https://stripe.com/docs/payments/accept-a-payment-charges#web-create-token
             var options = new ChargeCreateOptions
             {
-                Amount = 200,
+                Amount = 12200,
                 Currency = "eur",
                 Source = "tok_amex",
-                Description = "My Second Test Charge (created for API docs)",
+                Description = "Test Charge (created for API docs)",
             };
             var service = new ChargeService();
             service.Create(options);
 
-
             PaymentModel paymentModel = new()
             {
-                Id = newPayment.Id,
                 TransactionId = options.Source,
             };
 
@@ -66,7 +62,20 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpGet("[action]")]
         public async Task<IEnumerable<Orders>> GetOrdersByUserId(long userId)
         {
-            return  await _orderService.GetOrdersListByUserId(userId);
+            return  await _orderService.GetOrdersListByUserIdAsync(userId);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<Orders>> GetOrders()
+        {
+            return await _orderService.GetOrdersListAsync();
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<Orders>> GetOrdersTest()
+        {
+            return await _orderService.GetOrdersListAsync();
         }
 
 

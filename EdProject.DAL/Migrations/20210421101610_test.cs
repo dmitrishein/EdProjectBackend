@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EdProject.DAL.Migrations
 {
-    public partial class test1 : Migration
+    public partial class test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -239,9 +239,9 @@ namespace EdProject.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentId = table.Column<long>(type: "bigint", nullable: false),
                     StatusType = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
+                    PaymentId = table.Column<long>(type: "bigint", nullable: true),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -258,7 +258,7 @@ namespace EdProject.DAL.Migrations
                         column: x => x.PaymentId,
                         principalTable: "Payments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -295,8 +295,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RolesType", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, "d5fb3267-7488-46a1-85c9-67bcbcb2ac4c", "admin", "admin", 1, false },
-                    { 2L, "5268bf09-d2a8-4534-800c-029bf4dea8a8", "client-user", "client", 2, false }
+                    { 1L, "771dcadc-bc69-42d7-9589-c80b5573a870", "admin", "admin", 1, false },
+                    { 2L, "f9430f23-c87a-4e03-9260-247978569fbe", "client-user", "client", 2, false }
                 });
 
             migrationBuilder.InsertData(
@@ -304,8 +304,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, 0, "a0a9c50e-3f8e-45d0-8b9d-fc7aedfd3081", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEIt6lAUyqM6irOdO0OwhFg5ShiqqwAp+MkG57/tTwRRmQtaQd09v0v2xgksciUzStw==", null, false, "a2091951-8a5e-4560-a502-9ba832ebaaa2", false, "admin", false },
-                    { 2L, 0, "1125e1b5-7a5a-4b38-b193-3fe85cd6e697", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEKOGZ6FWzU0vTEeU4Wttpvd2O/hLv2Nv6U/s03+Mw9TP+zRkIK5yd2Uim+m7HDzibQ==", null, false, "f658e221-5c3b-4da9-bd66-c720d21990eb", false, "client", false }
+                    { 1L, 0, "6425a4d8-1170-4398-a52b-992672274cea", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEIhfqUojSE6ItFiWR9qf09S1cOOs5deF/HpmE/SfYUbIR7U8/IVSNonVZMYB50Se8Q==", null, false, "38da75ff-cf62-449d-ae10-03ae5ddf1114", false, "admin", false },
+                    { 2L, 0, "95acdebd-52c8-49c0-9a4a-5c194fe1c6f2", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEKPdaGB5WZvG+DVT+H1GBWWNcNtE51jroFnsgKOvlDA0n98JQY9XqfBKyz5M1it+/w==", null, false, "103d5d0a-d76f-4125-97c7-1961adf075b6", false, "client", false }
                 });
 
             migrationBuilder.InsertData(
@@ -411,7 +411,8 @@ namespace EdProject.DAL.Migrations
                 name: "IX_Orders_PaymentId",
                 table: "Orders",
                 column: "PaymentId",
-                unique: true);
+                unique: true,
+                filter: "[PaymentId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",

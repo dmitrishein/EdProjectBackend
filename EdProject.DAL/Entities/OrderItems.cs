@@ -11,8 +11,8 @@ namespace EdProject.DAL.Entities
         public long OrderId { get; set; }
 
 
-        public Edition Edition { get; set; }
-        public Orders Order { get; set; }
+        public virtual Edition Edition { get; set; }
+        public virtual Orders Order { get; set; }
 
     }
 }

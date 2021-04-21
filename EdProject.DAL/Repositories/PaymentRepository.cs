@@ -28,7 +28,7 @@ namespace EdProject.DAL.Repositories
         }
         public async Task RemovePaymentByTransactionIdAsync(string transactId)
         {
-            IEnumerable<Payments> paymentsQuery = await GetAsync();
+            IEnumerable<Payments> paymentsQuery = await GetAllAsync();
             var editions = paymentsQuery.Where(e => e.TransactionId == transactId);
 
             var transaction = paymentsQuery.FirstOrDefault();
