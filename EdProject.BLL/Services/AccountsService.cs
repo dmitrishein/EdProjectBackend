@@ -3,6 +3,7 @@ using EdProject.BLL.EmailSender;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -108,6 +109,18 @@ namespace EdProject.BLL.Services
                     return true;
             }
             return false;
+        }
+
+
+        public async Task<AppUser> GetUserByEmailAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+        public async Task<IList<string>> GetUserRoleAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            return await _userManager.GetRolesAsync(user);
         }
 
     }

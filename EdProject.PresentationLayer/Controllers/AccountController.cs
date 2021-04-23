@@ -46,12 +46,13 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task<OkObjectResult> Login(LoginViewModel login)
         {
-            JwtHelper jwt = new JwtHelper(_config);
+            JwtProvider jwt = new JwtProvider(_config);
             var tokenString="";
             var refreshTokenString = "";
             if (await _accountService.SignInAsync(login.Password, login.Email, false))
             {
-                 tokenString = jwt.GenerateAccessToken(login);
+                 var user = await _accountService.GetUserByEmailAsync(login.Email);
+                 tokenString = await jwt.GenerateAccessToken(user,_accountService);
                  refreshTokenString = jwt.GenerateRefreshToken();
             }
 

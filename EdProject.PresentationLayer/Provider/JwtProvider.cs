@@ -1,10 +1,11 @@
-﻿using EdProject.PresentationLayer.Models;
+﻿using EdProject.BLL.Services.Interfaces;
+using EdProject.DAL.Entities;
+using EdProject.PresentationLayer.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,25 +13,31 @@ using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Helpers
 {
-    public class JwtHelper
+    public class JwtProvider
     {
         private IConfiguration _configuration;
-        public JwtHelper(IConfiguration configuration)
+        public JwtProvider(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         
-        public string GenerateAccessToken(LoginViewModel loginViewModel)
+        public async Task<string> GenerateAccessToken(AppUser appUser,IAccountService accountService)
         {
+
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>()
             {
-                new Claim(JwtRegisteredClaimNames.Email, loginViewModel.Email)
+                new Claim(JwtRegisteredClaimNames.Email, appUser.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, appUser.Id.ToString()),
             };
 
+            foreach(var role in await accountService.GetUserRoleAsync(appUser.Email))
+            {
+                claims.Add(new Claim("role", role.ToString()));
+            }
 
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                                              _configuration["Jwt:Issuer"],

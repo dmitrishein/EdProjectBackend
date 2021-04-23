@@ -1,11 +1,7 @@
-using AutoMapper;
-using EdProject.BLL.Common;
 using EdProject.BLL.Services;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
-using EdProject.DAL.Repositories;
-using EdProject.DAL.Repositories.Interfaces;
 using EdProject.PresentationLayer.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -15,14 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Stripe;
-using System;
-using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace EdProject.PresentationLayer
 {
@@ -38,6 +30,10 @@ namespace EdProject.PresentationLayer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                  .AddJwtBearer(options =>
                  {
@@ -79,10 +75,10 @@ namespace EdProject.PresentationLayer
 
             services.AddControllers();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
-            });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,9 +87,11 @@ namespace EdProject.PresentationLayer
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
+                //app.UseDeveloperExceptionPage();
+                //app.UseSwagger();
+                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
+
+                app.UseSpaStaticFiles();
             }
 
             app.UseHttpsRedirection();
@@ -108,9 +106,22 @@ namespace EdProject.PresentationLayer
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
-              
+                endpoints.MapControllers();   
             });
+
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
+
         }
     }
    

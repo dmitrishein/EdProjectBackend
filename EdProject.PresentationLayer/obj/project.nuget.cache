@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "YBN1QNWwE96BH0JlhjgIpgRROCR4Wr+lANMa/AXWtDcw9MnCU06h1EKpwxagiPEe/gN3Z0NZ+C65tobUv0hMAg==",
+  "dgSpecHash": "fFTZ7/exkdiS92UGVkCVBH6j/Y/kPpWuuKRKOGvla0bloF7wLJUgxxS4Tl44FmITgXV0wAjj25FisqyybmajTw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Anuitex-96\\source\\repos\\EdProject\\EdProject.PresentationLayer\\EdProject.PresentationLayer.csproj",
   "expectedPackageFiles": [
@@ -31,6 +31,7 @@
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.aspnetcore.identity\\2.2.0\\microsoft.aspnetcore.identity.2.2.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\5.0.4\\microsoft.aspnetcore.identity.entityframeworkcore.5.0.4.nupkg.sha512",
+    "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.aspnetcore.spaservices.extensions\\5.0.5\\microsoft.aspnetcore.spaservices.extensions.5.0.5.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.aspnetcore.webutilities\\2.2.0\\microsoft.aspnetcore.webutilities.2.2.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.0.0\\microsoft.bcl.asyncinterfaces.1.0.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
@@ -51,7 +52,9 @@
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\5.0.1\\microsoft.extensions.dependencyinjection.5.0.1.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\5.0.0\\microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
-    "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\2.2.0\\microsoft.extensions.fileproviders.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\5.0.0\\microsoft.extensions.fileproviders.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.fileproviders.physical\\5.0.0\\microsoft.extensions.fileproviders.physical.5.0.0.nupkg.sha512",
+    "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\5.0.0\\microsoft.extensions.filesystemglobbing.5.0.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\2.2.0\\microsoft.extensions.hosting.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.identity.core\\5.0.4\\microsoft.extensions.identity.core.5.0.4.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\microsoft.extensions.identity.stores\\5.0.4\\microsoft.extensions.identity.stores.5.0.4.nupkg.sha512",

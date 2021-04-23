@@ -1,4 +1,5 @@
 ﻿using EdProject.DAL.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services.Interfaces
@@ -12,6 +13,8 @@ namespace EdProject.BLL.Services.Interfaces
         Task<string> PasswordRecoveryAsync(string email);
         public Task<bool> ResetPasswordAsync(string token, string email, string newPasssword);
         public Task SendEmail(string confirmationLink, string email, string subject);
+        public Task<AppUser> GetUserByEmailAsync(string email);
+        public Task<IList<string>> GetUserRoleAsync(string email);
 
 
     }
