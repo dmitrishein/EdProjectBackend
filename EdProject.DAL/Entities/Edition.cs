@@ -1,10 +1,6 @@
 ﻿using EdProject.DAL.Entities.Base;
 using EdProject.DAL.Entities.Enums;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EdProject.DAL.Entities
 {
@@ -12,7 +8,8 @@ namespace EdProject.DAL.Entities
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public Decimal Price { get; set; }
+
+        public decimal Price { get; set; }
         public EditionStatusTypes Status { get; set; }
         public CurrencyTypes Currency { get; set; }
         public EditionTypes Type { get; set; }

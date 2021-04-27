@@ -5,6 +5,7 @@ using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,7 +32,6 @@ namespace EdProject.BLL.Services
            
             await _orderRepository.CreateAsync(newOrder);
         }
-
         public async Task CreateOrderItemAsync(OrderItemModel orderItemModel)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderItemModel, OrderItems>());
@@ -40,7 +40,6 @@ namespace EdProject.BLL.Services
 
             await _orderItemRepository.CreateAsync(newOrderItem);
         }
-
         public async Task CreatePaymentAsync(PaymentModel paymentModel)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<PaymentModel, Payments>());
@@ -49,16 +48,13 @@ namespace EdProject.BLL.Services
 
             await _paymentRepository.CreateAsync(newPayment);
         }
-
-        public async Task<IEnumerable<Orders>> GetOrdersListByUserIdAsync(long userId)
+        public async Task<List<Orders>> GetOrdersListByUserIdAsync(long userId)
         {
             return await _orderRepository.GetOrderByUserId(userId);
         }
-
-        public async Task<IEnumerable<Orders>> GetOrdersListAsync()
+        public async Task<List<Orders>> GetOrdersListAsync()
         {
-            var orders = _orderRepository.GetAllAsync();
-            return await _orderRepository.GetAllAsync();
+            return await _orderRepository.GetAll().ToListAsync();
         }
     }
 }

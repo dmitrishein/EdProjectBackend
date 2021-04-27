@@ -22,54 +22,50 @@ namespace EdProject.DAL.Repositories
         {
             var res = await _dbSet.FindAsync(id);
 
-            if (res != null)
+            if (res is not null)
             {
                 res.IsRemoved = true;
                 await UpdateAsync(res);
-                await SaveChangesAsync();
             }
         }
         public async Task RemoveOrderByPaymentIdAsync(long paymentId)
         {
-            IEnumerable<Orders> ordersQuery = await GetAllAsync();
-            var editions = ordersQuery.Where(e => e.PaymentId == paymentId);
+            IQueryable<Orders> ordersQuery =  GetAll().Where(e => e.PaymentId == paymentId);
 
-            var transaction = ordersQuery.FirstOrDefault();
+            var order = ordersQuery.FirstOrDefault();
 
-            if (transaction != null)
+            if (order is not null)
             {
-                transaction.IsRemoved = true;
-                await UpdateAsync(transaction);
-                await SaveChangesAsync();
+                order.IsRemoved = true;
+                await UpdateAsync(order);
             }
 
         }
-        public async Task<IEnumerable<Orders>> FilterOrderList(string searchString)
+        public async Task<List<Orders>> FilterOrderList(string searchString)
         {
-            IEnumerable<Orders> ordersQuery = await GetAllAsync() ;
-            var orders = ordersQuery.Where(e => e.Id.ToString() == searchString ||
+            IQueryable<Orders> ordersQuery =  GetAll().Where(e => e.Id.ToString() == searchString ||
                                                e.PaymentId.ToString() == searchString ||
                                                e.Date.ToString() == searchString ||
                                                e.Description.Contains(searchString)
                                                );
-            return orders ;
+            
+            return await ordersQuery.ToListAsync();
         }
-        public async Task<IEnumerable<Orders>> GetOrderByUserId(long userId)
+        public async Task<List<Orders>> GetOrderByUserId(long userId)
         {
-            IEnumerable<Orders> ordersQuery = await GetAllAsync();
-            var orders = ordersQuery.Where(e => e.UserId == userId);
+            IQueryable<Orders> ordersQuery =  GetAll().Where(e => e.UserId == userId);
 
-            return orders;
+            return await ordersQuery.ToListAsync();
         }
-        public async Task<IEnumerable<Orders>> PagingOrders(int pageNumber, int pageSize)
+        public async Task<List<Orders>> PagingOrders(int pageNumber, int pageSize)
         {
-            IEnumerable<Orders> ordersPerPage = await GetAllAsync();
+            const int skipZeroPage = 1;
+            if (pageNumber == 0 || pageSize == 0)
+                return null;
 
-            if (pageNumber >= 1 && pageSize >= 1)
-            {
-                return ordersPerPage.Skip((pageNumber - 1) * pageSize).Take(pageSize);
-            }
-            return ordersPerPage;
+            var editionsPerPage = GetAll().Skip((pageNumber - skipZeroPage) * pageSize).Take(pageSize);
+
+            return await editionsPerPage.ToListAsync();
         }
 
     }

@@ -19,27 +19,23 @@ namespace EdProject.DAL.Repositories
         {
             var res = await _dbSet.FindAsync(id);
 
-            if (res != null)
+            if (res is not null)
             {
                 res.IsRemoved = true;
                 await UpdateAsync(res);
-                await SaveChangesAsync();
             }
         }
         public async Task RemovePaymentByTransactionIdAsync(string transactId)
         {
-            IEnumerable<Payments> paymentsQuery = await GetAllAsync();
-            var editions = paymentsQuery.Where(e => e.TransactionId == transactId);
-
+            IQueryable<Payments> paymentsQuery =  GetAll().Where(e => e.TransactionId == transactId);
+           
             var transaction = paymentsQuery.FirstOrDefault();
 
-            if (transaction != null)
+            if (transaction is not null)
             {
                 transaction.IsRemoved = true;
                 await UpdateAsync(transaction);
-                await SaveChangesAsync();
             }
-
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace EdProject.PresentationLayer.Controllers
 {
     [Route("[controller]")]
+    [ApiController]
     public class UserController : Controller
     {
         #region Private Members

@@ -9,12 +9,13 @@ namespace EdProject.DAL.Entities
         public AppRole(string roleName) : base(roleName)
         {
             Name = roleName;
-        }
+        }  
         public AppRole()
         {
 
         }
+
         public UserRolesType RolesType { get; set; }
-        public bool isRemoved { get; set; } = false;
+        public bool isRemoved { get; set; } 
     }
 }

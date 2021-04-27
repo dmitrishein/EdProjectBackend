@@ -4,6 +4,7 @@ using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,6 @@ namespace EdProject.BLL.Services
             _printEditionRepos = new PrintingEditionRepository(appDbContext);
         }
 
-
         public async Task CreatePrintEdition(PrintingEditionModel editionModel)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<PrintingEditionModel, Edition>());
@@ -31,10 +31,7 @@ namespace EdProject.BLL.Services
 
             await _printEditionRepos.CreateAsync(newEdition);
         }
-        public async Task DeletePrintEditionById(long id)
-        {
-            await _printEditionRepos.RemoveEditionById(id);
-        }
+        
         public async Task UpdatePrintEdition(PrintingEditionModel editionModel)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<PrintingEditionModel, Edition>());
@@ -43,15 +40,15 @@ namespace EdProject.BLL.Services
 
             await _printEditionRepos.UpdateAsync(newEdition);
         }
-        public Task<IEnumerable<Edition>> GetEditionList()
+        public Task<List<Edition>> GetEditionList()
         {
-            return _printEditionRepos.GetAllAsync();
+            return _printEditionRepos.GetAll().ToListAsync();
         }
         public async Task<Edition> GetEditionById(long id)
         {
             return await _printEditionRepos.FindByIdAsync(id);
         }
-        public Task<IEnumerable<Edition>> GetEditionListByString(string searchString)
+        public Task<List<Edition>> GetEditionListByString(string searchString)
         {
             return _printEditionRepos.FilterEditionList(searchString);
         }

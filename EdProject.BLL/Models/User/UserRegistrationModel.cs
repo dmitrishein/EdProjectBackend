@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EdProject.BLL
 {
-    public class UserModel
+    public class UserRegistrationModel
     {
         public string UserName { get; set; }
         public string FirstName { get; set; }

@@ -33,21 +33,19 @@ namespace EdProject.BLL.Services
                await _userManager.AddToRoleAsync(user, role);
             }
         }
-        public async Task CreateUserAsync(UserModel userModel)
+        public async Task CreateUserAsync(UserRegistrationModel userModel)
         {     
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserModel, AppUser>());
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserRegistrationModel, AppUser>());
             var _mapper = new Mapper(config);
-            var newUser = _mapper.Map<UserModel, AppUser>(userModel);
+            var newUser = _mapper.Map<UserRegistrationModel, AppUser>(userModel);
 
             await _userManager.CreateAsync(newUser,userModel.Password);
         }
-
-
         public async Task<AppUser> GetUserByEmail(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            if (user != null)
+            if (user is not null)
                 return user;
 
             return null;
@@ -65,13 +63,7 @@ namespace EdProject.BLL.Services
         public async Task<AppUser> GetUserByUsername(string username)
         {
             var res = await _userManager.FindByNameAsync(username);
-
-            if (res != null)
-            {
-                return res;
-            }
-
-            return null;
+            return res;
         }
         public IQueryable GetAllUsers()
         {
@@ -96,27 +88,24 @@ namespace EdProject.BLL.Services
 
             return res;
         }
-
-
-
         public async Task RemoveUserAsync(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);
-
-            if(user != null)
-            {
-                await _userManager.DeleteAsync(user);
-            }
+            if (user is null)
+                throw new Exception("user not found");
+            
+            await _userManager.DeleteAsync(user);
+            
         }
-        public async Task UpdateUserAsync(UserModel userModel)
+        public async Task UpdateUserAsync(UserRegistrationModel userModel)
         {
             var user = await _userManager.FindByNameAsync(userModel.UserName);
+            if (user is null)
+                throw new Exception("user not found");
+           
+            user.FirstName = userModel.FirstName;
+            user.LastName = userModel.LastName;
             
-            if(user != null)
-            {
-                user.FirstName = userModel.FirstName;
-                user.LastName = userModel.LastName;
-            }
         }
         public async Task BlockUser(string userId)
         {
@@ -127,10 +116,11 @@ namespace EdProject.BLL.Services
         public async Task UnblockUser(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                await _userManager.SetLockoutEnabledAsync(user, false);
-            }
+            if (user is null)
+                throw new Exception("user not found");
+            
+            await _userManager.SetLockoutEnabledAsync(user, false);
+            
         }
 
     }

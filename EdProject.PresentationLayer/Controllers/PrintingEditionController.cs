@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 namespace EdProject.PresentationLayer.Controllers
 {
     [Route("[controller]")]
+    [ApiController]
     public class PrintingEditionController : ControllerBase
     {
         IPrintingEditionService _printEditionService;
@@ -45,13 +46,6 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task DeleteById(long id)
-        {
-            await _printEditionService.DeletePrintEditionById(id);
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
         public async Task UpdateEdition(PrintingEditionViewModel updateModel)
         {
             PrintingEditionModel editionModel = new PrintingEditionModel
@@ -68,7 +62,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpGet("[action]")]
-        public Task<IEnumerable<Edition>> GetEditions()
+        public Task<List<Edition>> GetEditions()
         {
            return _printEditionService.GetEditionList();
         }
@@ -80,7 +74,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpGet("[action]")]
-        public Task<IEnumerable<Edition>> GetEditionByQuery(string searchString)
+        public Task<List<Edition>> GetEditionByQuery(string searchString)
         {
             return _printEditionService.GetEditionListByString(searchString);
         }

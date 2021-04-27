@@ -11,10 +11,9 @@ namespace EdProject.BLL.Services.Interfaces
     public interface IPrintingEditionService
     {
         public Task CreatePrintEdition(PrintingEditionModel editionModel);
-        public Task DeletePrintEditionById(long id);
         public Task UpdatePrintEdition(PrintingEditionModel editionModel);
         public Task<Edition> GetEditionById(long id);
-        public Task<IEnumerable<Edition>> GetEditionList();
-        public Task<IEnumerable<Edition>> GetEditionListByString(string searchString);
+        public Task<List<Edition>> GetEditionList();
+        public Task<List<Edition>> GetEditionListByString(string searchString);
     }
 }

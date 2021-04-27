@@ -20,11 +20,10 @@ namespace EdProject.DAL.Repositories
         public async Task RemoveOrderItemByIdAsync(long id)
         {
             var res = await _dbSet.FindAsync(id);
-            if (res != null)
+            if (res is not null)
             {
                 res.IsRemoved = true;
                 await UpdateAsync(res);
-                await SaveChangesAsync();
             }
         }
     }

@@ -13,7 +13,7 @@ namespace EdProject.DAL.Repositories.Base
     {
         #region private members
 
-        protected AppDbContext _dbContext;
+        private AppDbContext _dbContext;
         protected DbSet<TEntity> _dbSet;
 
         #endregion
@@ -40,9 +40,9 @@ namespace EdProject.DAL.Repositories.Base
             _dbSet.Remove(item);
           await _dbContext.SaveChangesAsync();
         }
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public IQueryable<TEntity> GetAll()
         {
-            return await _dbSet.ToListAsync();
+            return _dbSet.AsQueryable();
         }
         public async Task UpdateAsync(TEntity item)
         {

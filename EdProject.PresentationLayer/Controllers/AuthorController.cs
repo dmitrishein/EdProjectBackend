@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Controllers
 {
+    [ApiController]
     public class AuthorController : Controller
     {
         IAuthorService _authorService;
@@ -31,7 +32,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpGet("[action]")]
-        public Task<IEnumerable<Author>> GetAuthorList()
+        public Task<List<Author>> GetAuthorList()
         {
             return _authorService.GetAuthorList();
         }

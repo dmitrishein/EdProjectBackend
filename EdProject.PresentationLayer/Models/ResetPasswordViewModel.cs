@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Models
 {
-    public class ResetPasswordModel
+    public class ResetPasswordViewModel
     {
         public string Email { get; set; }
 

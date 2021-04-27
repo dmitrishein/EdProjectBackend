@@ -1,21 +1,19 @@
-﻿using EdProject.BLL;
-using EdProject.BLL.Services;
+﻿using AutoMapper;
+using EdProject.BLL;
+using EdProject.BLL.Models.User;
 using EdProject.BLL.Services.Interfaces;
-using EdProject.DAL.DataContext;
-using EdProject.DAL.Entities;
 using EdProject.PresentationLayer.Helpers;
 using EdProject.PresentationLayer.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Controllers
 {
     [Route("[controller]")]
+    [ApiController]
     public class AccountController : Controller
     {
         IAccountService _accountService;
@@ -29,14 +27,24 @@ namespace EdProject.PresentationLayer.Controllers
       
 
         [HttpPost("[action]")]
-        public async Task Registration(RegisterViewModel register)
+        public async Task<IActionResult> Registration([FromBody] RegisterViewModel register)
         {
-            UserModel userModel = new UserModel {UserName = register.UserName, FirstName = register.FirstName, LastName = register.LastName, Password = register.Password, Email = register.Email};
-            var token =  await _accountService.RegisterUserAsync(userModel);
-            var confirmationLink = Url.Action("ConfirmEmail", "Account", new { token = token, email = userModel.Email }, Request.Scheme);
-            await _accountService.SendEmail(confirmationLink, userModel.Email,"Confirm Account");
+            //UserRegistrationModel userModel = new UserRegistrationModel 
+            //{
+            //    UserName = register.Username,
+            //    FirstName = register.FirstName,
+            //    LastName = register.LastName,
+            //    Password = register.Password, 
+            //    Email = register.Email
+            //};
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<RegisterViewModel, UserRegistrationModel>());
+            var _mapper = new Mapper(config);
+            var newUser = _mapper.Map<RegisterViewModel, UserRegistrationModel>(register);
+
+            var res =  await _accountService.RegisterUserAsync(newUser);
+            return StatusCode(200);
         }
-        
+
         [HttpPost("[action]")]
         public async Task ConfirmEmail(string token , string email)
         {
@@ -49,7 +57,14 @@ namespace EdProject.PresentationLayer.Controllers
             JwtProvider jwt = new JwtProvider(_config);
             var tokenString="";
             var refreshTokenString = "";
-            if (await _accountService.SignInAsync(login.Password, login.Email, false))
+            UserSignInModel userSignInModel = new()
+            {
+                Email = login.Email,
+                Password = login.Password,
+                RememberMe = login.RememberMe
+            };
+
+            if (await _accountService.SignInAsync(userSignInModel))
             {
                  var user = await _accountService.GetUserByEmailAsync(login.Email);
                  tokenString = await jwt.GenerateAccessToken(user,_accountService);
@@ -68,7 +83,13 @@ namespace EdProject.PresentationLayer.Controllers
         {
             var recoveryToken = await _accountService.PasswordRecoveryAsync(email);
             var confirmationLink = Url.Action("ResetPassword", "Account", new { token = recoveryToken, email = email }, Request.Scheme);
-            await _accountService.SendEmail(confirmationLink, email, "Reset Password");
+            EmailConfirmationModel emailConfirmModel = new()
+            {
+                Email= email,
+                ConfirmationLink = confirmationLink,
+                Subject = "Reset Password"
+            };
+            await _accountService.SendEmail(emailConfirmModel);
         }
 
         [HttpPost("[action]")]
@@ -85,10 +106,8 @@ namespace EdProject.PresentationLayer.Controllers
 
         [HttpPost("[action]")]
         public async Task PasswordUpdate(ResetPasswordModel resetModel)
-        {   //-----
-            //call ViewModel to enter and confirm new password
-            //-----
-            await _accountService.ResetPasswordAsync(resetModel.Token, resetModel.Email, resetModel.ConfirmPassword);
+        {   
+            await _accountService.ResetPasswordAsync(resetModel);
         }
 
     }

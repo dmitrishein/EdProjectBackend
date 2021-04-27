@@ -34,6 +34,7 @@ namespace EdProject.PresentationLayer
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                  .AddJwtBearer(options =>
                  {
@@ -48,6 +49,7 @@ namespace EdProject.PresentationLayer
                          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                      };
                  });
+
             services.AddDbContext<AppDbContext>(options =>
                                                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
           
@@ -75,15 +77,18 @@ namespace EdProject.PresentationLayer
 
             services.AddControllers();
 
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
-            //});
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(options =>
+            options.WithOrigins("http://localhost:4200/")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin()
+            );
 
             if (env.IsDevelopment())
             {
@@ -95,13 +100,9 @@ namespace EdProject.PresentationLayer
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.UseExceptionMiddleware();
 
             app.UseEndpoints(endpoints =>
@@ -111,9 +112,6 @@ namespace EdProject.PresentationLayer
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())

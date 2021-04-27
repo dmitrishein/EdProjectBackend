@@ -4,6 +4,7 @@ using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,6 @@ namespace EdProject.BLL.Services
 {
     public class AuthorInEditionService : IAuthorInEditionService
     {
-
         AuthorInPrintingEditionRepository _authorInEditions;
 
         public AuthorInEditionService(AppDbContext appDbContext)
@@ -40,22 +40,18 @@ namespace EdProject.BLL.Services
             await _authorInEditions.DeleteAsync(itemToRemove);
 
         }
-
-        public async Task<IEnumerable<AuthorInEditions>> GetEditionsByAuthorId(long id)
+        public async Task<List<AuthorInEditions>> GetEditionsByAuthorId(long id)
         {
             return await _authorInEditions.GetListByAuthorId(id);
         }
-
-        public async Task<IEnumerable<AuthorInEditions>> GetEditionsByEditionId(long id)
+        public async Task<List<AuthorInEditions>> GetEditionsByEditionId(long id)
         {
             return await _authorInEditions.GetListByEditionId(id);
         }
-
-        public Task<IEnumerable<AuthorInEditions>> GetList()
+        public Task<List<AuthorInEditions>> GetList()
         {
-            return _authorInEditions.GetAllAsync();
+            return _authorInEditions.GetAll().ToListAsync();
         }
-
         public async Task UpdateAuthInEditAsync(AuthorInEditionModel authInEditModel)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorInEditionModel, AuthorInEditions>());

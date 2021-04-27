@@ -18,18 +18,17 @@ namespace EdProject.DAL.Repositories
           
         }
 
-        public async Task<IEnumerable<AuthorInEditions>> GetListByAuthorId(long authorId)
+        public async Task<List<AuthorInEditions>> GetListByAuthorId(long authorId)
         {
-            IEnumerable<AuthorInEditions> editionsQuery = await GetAllAsync();
-            var editions = editionsQuery.Where(e => e.AuthorId == authorId);
-            return editions;
-        }
-        public async Task<IEnumerable<AuthorInEditions>> GetListByEditionId(long editionId)
-        {
-            IEnumerable<AuthorInEditions> editionsQuery = await GetAllAsync();
-            var editions = editionsQuery.Where(e => e.EditionId == editionId);
+            var editions = GetAll().Where(e => e.AuthorId == authorId);
 
-            return editions;
+            return await editions.ToListAsync();
+        }
+        public async Task<List<AuthorInEditions>> GetListByEditionId(long editionId)
+        {
+            var editions = GetAll().Where(e => e.EditionId == editionId);
+
+            return await editions.ToListAsync();
         }
 
       

@@ -5,6 +5,7 @@ using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
 using EdProject.DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,9 +32,9 @@ namespace EdProject.BLL.Services
         {
             return await _authorRepositroy.FindByIdAsync(id);
         }
-        public Task<IEnumerable<Author>> GetAuthorList()
+        public Task<List<Author>> GetAuthorList()
         {
-            return _authorRepositroy.GetAllAsync();
+            return _authorRepositroy.GetAll().ToListAsync();
         }
         public async Task UpdateAuthorAsync(AuthorModel authorModel)
         {

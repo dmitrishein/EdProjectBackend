@@ -8,9 +8,9 @@ namespace EdProject.BLL.Services.Interfaces
     public interface IUserService
     {
         public Task AddToRoleAsync(string userId, string role);
-        public Task UpdateUserAsync(UserModel userModel);
+        public Task UpdateUserAsync(UserRegistrationModel userModel);
         public Task RemoveUserAsync(string userName);
-        public Task CreateUserAsync(UserModel userModel);
+        public Task CreateUserAsync(UserRegistrationModel userModel);
         public Task<AppUser> GetUserByIdAsync(string userId);
         public Task<AppUser> GetUserByUsername(string username);
         public Task<AppUser> GetUserByEmail(string email);

@@ -60,6 +60,7 @@ namespace EdProject.DAL.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -75,10 +76,11 @@ namespace EdProject.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -93,6 +95,7 @@ namespace EdProject.DAL.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -242,6 +245,7 @@ namespace EdProject.DAL.Migrations
                     StatusType = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     PaymentId = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -271,6 +275,7 @@ namespace EdProject.DAL.Migrations
                     Currency = table.Column<int>(type: "int", nullable: false),
                     EditionId = table.Column<long>(type: "bigint", nullable: false),
                     OrderId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -295,8 +300,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RolesType", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, "771dcadc-bc69-42d7-9589-c80b5573a870", "admin", "admin", 1, false },
-                    { 2L, "f9430f23-c87a-4e03-9260-247978569fbe", "client-user", "client", 2, false }
+                    { 1L, "aaada3e2-f07a-461b-9700-3954a55a99a8", "admin", "admin", 1, false },
+                    { 2L, "aa1cc5ad-5eb3-4e06-aa9f-9f00c0b53618", "client-user", "client", 2, false }
                 });
 
             migrationBuilder.InsertData(
@@ -304,29 +309,29 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, 0, "6425a4d8-1170-4398-a52b-992672274cea", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEIhfqUojSE6ItFiWR9qf09S1cOOs5deF/HpmE/SfYUbIR7U8/IVSNonVZMYB50Se8Q==", null, false, "38da75ff-cf62-449d-ae10-03ae5ddf1114", false, "admin", false },
-                    { 2L, 0, "95acdebd-52c8-49c0-9a4a-5c194fe1c6f2", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEKPdaGB5WZvG+DVT+H1GBWWNcNtE51jroFnsgKOvlDA0n98JQY9XqfBKyz5M1it+/w==", null, false, "103d5d0a-d76f-4125-97c7-1961adf075b6", false, "client", false }
+                    { 1L, 0, "98dc0692-42c9-4767-87f3-a4618fb0394b", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEGIzYtGd6nifrge1emi6u+8AKj4738ptmalptOXNgy0oPTWWs2USTUaiSi6yCdN4fA==", null, false, "45e05340-b8c7-475d-97c4-0d4003d9f684", false, "admin", false },
+                    { 2L, 0, "8bb4f311-d2eb-472c-bdf9-e3330cde83f4", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEFbnV6kWeqxk1FslUVqcNCRAfFaUEQ+NsaKYuFxV7LvwuQ9lYbRvPEUn0FqWBJPgmg==", null, false, "96c2d851-479c-4069-921b-c056c8383f6f", false, "client", false }
                 });
 
             migrationBuilder.InsertData(
                 table: "Authors",
-                columns: new[] { "Id", "IsRemoved", "Name" },
+                columns: new[] { "Id", "CreatedAt", "IsRemoved", "Name" },
                 values: new object[,]
                 {
-                    { 1L, false, "William Shakespare" },
-                    { 2L, false, "Stephen King" }
+                    { 1L, new DateTime(2021, 4, 27, 12, 2, 9, 283, DateTimeKind.Local).AddTicks(7729), false, "William Shakespare" },
+                    { 2L, new DateTime(2021, 4, 27, 12, 2, 9, 286, DateTimeKind.Local).AddTicks(257), false, "Stephen King" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Editions",
-                columns: new[] { "Id", "Currency", "Description", "IsRemoved", "Price", "Status", "Title", "Type" },
+                columns: new[] { "Id", "CreatedAt", "Currency", "Description", "IsRemoved", "Price", "Status", "Title", "Type" },
                 values: new object[,]
                 {
-                    { 1L, "UAH", "Classic Printing Edition", false, 1444.9m, "Available", "Hamlet", "Book" },
-                    { 2L, "UAH", "Classic Printing Edition", false, 1200.9m, "Available", "Othello", "Book" },
-                    { 3L, "UAH", "Classic Printing Edition", false, 1300.9m, "Available", "Pet Graveyard", "Book" },
-                    { 4L, "UAH", "Classic Printing Edition", false, 1140.6m, "NotAvailable", "Confrontation", "Book" },
-                    { 5L, "EUR", "Featuring Willy Shakespare", false, 120.23m, "NotAvailable", "Something Weird", "Magazine" }
+                    { 1L, new DateTime(2021, 4, 27, 12, 2, 9, 286, DateTimeKind.Local).AddTicks(1056), "UAH", "Classic Printing Edition", false, 1444.9m, "Available", "Hamlet", "Book" },
+                    { 2L, new DateTime(2021, 4, 27, 12, 2, 9, 286, DateTimeKind.Local).AddTicks(3516), "UAH", "Classic Printing Edition", false, 1200.9m, "Available", "Othello", "Book" },
+                    { 3L, new DateTime(2021, 4, 27, 12, 2, 9, 286, DateTimeKind.Local).AddTicks(3530), "UAH", "Classic Printing Edition", false, 1300.9m, "Available", "Pet Graveyard", "Book" },
+                    { 4L, new DateTime(2021, 4, 27, 12, 2, 9, 286, DateTimeKind.Local).AddTicks(3534), "UAH", "Classic Printing Edition", false, 1140.6m, "NotAvailable", "Confrontation", "Book" },
+                    { 5L, new DateTime(2021, 4, 27, 12, 2, 9, 286, DateTimeKind.Local).AddTicks(3537), "EUR", "Featuring Willy Shakespare", false, 120.23m, "NotAvailable", "Something Weird", "Magazine" }
                 });
 
             migrationBuilder.InsertData(

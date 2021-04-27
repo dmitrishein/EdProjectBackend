@@ -14,9 +14,9 @@ namespace EdProject.DAL.Entities
         public long UserId { get; set; }
         public virtual AppUser User { get; set; }
         public virtual ICollection<OrderItems> OrderItems { get; set; }
-#nullable enable
+
         public long? PaymentId { get; set; }
-        public virtual Payments? Payment { get; set; }
-#nullable disable
+        public virtual Payments Payment { get; set; }
+
     }
 }

@@ -4,37 +4,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Configuration;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 
 namespace EdProject.DAL.DataContext
 {
     public class AppDbContext : IdentityDbContext<AppUser,AppRole,long>
     {
-       
-        #region Config Options
-        public class OptionsBuild
-        {
-            private AppConfig settings { get; set; }
-            public OptionsBuild()
-            {
-                settings = new AppConfig();
-                optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-                optionsBuilder.UseSqlServer(settings.sqlConnectionString);
-                dbOptions = optionsBuilder.Options;
-            }
-            public DbContextOptionsBuilder<AppDbContext> optionsBuilder { get; set; }
-            public DbContextOptions<AppDbContext> dbOptions { get; set; }
-          
-        }
-        public OptionsBuild ops = new OptionsBuild();
-        #endregion
-
-        #region Constructor
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         {
         }
-        #endregion
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region relations Author and Edition (many-to-many)
@@ -76,7 +56,7 @@ namespace EdProject.DAL.DataContext
                 .HasForeignKey<Orders>(o => o.PaymentId);
             #endregion
 
-            #region Настройка преобразователя значений enum.Currency в string
+            #region Convert enum.Currency into string
             modelBuilder
                 .Entity<Edition>()
                 .Property(e => e.Currency)
@@ -102,10 +82,14 @@ namespace EdProject.DAL.DataContext
 
             modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
-        }
-        
+            modelBuilder.Entity<Edition>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18,4)");
+        }     
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseSqlServer(
+                @"Data Source=(localdb)\ProjectsV13;Initial Catalog=EdProjectDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             optionsBuilder.UseLazyLoadingProxies();
         }
 
