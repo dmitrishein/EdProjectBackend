@@ -26,44 +26,48 @@ namespace EdProject.BLL.Services
         }
         #endregion
 
-        public async Task<bool> SignInAsync(UserSignInModel userSignInModel)
+        public async Task SignInAsync(UserSignInModel userSignInModel)
         {
-            var user = await _userManager.FindByEmailAsync(userSignInModel.Email);
-           
-           
-            if (user is not null)
-                return false;
+          var user = await _userManager.FindByEmailAsync(userSignInModel.Email);      
+            
+          if (user is null || user.EmailConfirmed is false)
+                throw new Exception("User not found");
+          
+          try
+          {
+             await _signInManager.PasswordSignInAsync(user.UserName, userSignInModel.Password, userSignInModel.RememberMe, false);
+          }
+          catch (Exception x)
+          {
+             throw new Exception($"Failed to login {x.Message}");
+          }
 
-            if (user.EmailConfirmed)
-            {
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, userSignInModel.Password, userSignInModel.RememberMe,false );
-
-                return result.Succeeded;
-            }
-
-            return false;
         }
         public async Task SignOutAsync()
-        {   
-            await _signInManager.SignOutAsync();
-        }
-        public async Task<IEnumerable<string>> RegisterUserAsync(UserRegistrationModel userModel)
         {
-            
+            try
+            {
+                await _signInManager.SignOutAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed logout",ex);
+            }
+        }
+        public async Task RegisterUserAsync(UserRegistrationModel userModel)
+        {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<UserRegistrationModel, AppUser>());
             var _mapper = new Mapper(config); 
             var newUser = _mapper.Map<UserRegistrationModel, AppUser>(userModel);
-
             var result = await _userManager.CreateAsync(newUser, userModel.Password);
 
             if (!result.Succeeded)
-                throw new Exception($"{result.ToString()}");
+                throw new Exception($"Registration failed. Possible reasons:{result.ToString()}");
             
             await _userManager.AddToRoleAsync(newUser,"Client");
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
 
             var confirmationLink = $"https://localhost:44366/Account/ConfirmEmail?token={code}&email={userModel.Email}";
-
             EmailConfirmationModel emailConfirmationModel = new()
             {
                 Email = userModel.Email,
@@ -71,11 +75,14 @@ namespace EdProject.BLL.Services
                 Subject = "Confirm Account"
             };
 
-            await SendEmail(emailConfirmationModel);
-
-            var errors = result.Errors.Select(e => e.Description);
-            return errors;
-    
+            try
+            {
+              await SendEmail(emailConfirmationModel);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Failed to confirm email in cause {ex.Message.ToString()}");
+            }
         }
         public async Task SendEmail(EmailConfirmationModel emailModel)
         {
@@ -84,38 +91,48 @@ namespace EdProject.BLL.Services
             await emailService.SendEmailAsync(emailModel.Email, $"{emailModel.Subject}",$"To confirm your account, follow the link : {emailModel.ConfirmationLink}");
             
         }
-        public async Task<bool> ConfirmEmailAsync(string token, string email)
+        public async Task ConfirmEmailAsync(string token, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            if (user == null)
-                return false;
+            if (user is null)
+                throw new Exception("User was not found while confirm email");
 
-            var result = await _userManager.ConfirmEmailAsync(user, token);
-
-            if (result.Succeeded)
-                return true;
-
-            return false;
+            try
+            {
+                await _userManager.ConfirmEmailAsync(user, token);
+            }
+            catch(Exception x)
+            {
+                throw new Exception($"Failed to confirm email {x.Message}");
+            }
 
         }
-        public async Task<string> PasswordRecoveryAsync(string email)
+        public async Task<string> PasswordRecoveryTokenAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
+            if(user is null)
+                throw new Exception("User with email wasn't found");
 
             var recoveryToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             return recoveryToken;
         }
-        public async Task<bool> ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
+        public async Task ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
         {
             var user = await _userManager.FindByEmailAsync(resetPasswordModel.Email);
             if (user is null)
-                return false;
+                throw new Exception("User wasn't found while reset password");
 
-            var result = await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.NewPassword);
-
-            return result.Succeeded;
+            try 
+            { 
+              await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.NewPassword);
+            }
+            catch(Exception x)
+            {
+                throw new Exception($"Password was not reset in cause {x.Message}");
+            }
+          
         }
         public async Task<AppUser> GetUserByEmailAsync(string email)
         {

@@ -1,5 +1,6 @@
 ﻿using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -26,22 +27,22 @@ namespace EdProject.PresentationLayer.Controllers
         #endregion
 
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public async Task<AppUser> GetUserByEmail(string email)
+        public async Task<AppUser> GetUser(long id)
         {
-            var res = await _userService.GetUserByEmail(email);
+            var res = await _userService.GetUserAsync(id);
 
             return res;
         }
-
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public async Task<AppUser> GetUserByUsername(string name)
+        public  Task<AppUser> UpdateUser(long id)
         {
-            var res = await _userService.GetUserByUsername(name);
-
-            return res;
+            //var res = await _userService.UpdateUserAsync();
+            return null;
+            //return res;
         }
 
         [Authorize(Roles = "admin")]

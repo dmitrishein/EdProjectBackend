@@ -2,7 +2,6 @@
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories
@@ -17,11 +16,11 @@ namespace EdProject.DAL.Repositories
         public async Task RemoveAuthorById(long id)
         {
             var res = await _dbSet.FindAsync(id);
-            if (res is not null)
-            {
-                res.IsRemoved = true;
-                await UpdateAsync(res);
-            }
+            if (res is null)
+                throw new System.Exception("Author wasn't found in database");
+
+             res.IsRemoved = true;
+             await UpdateAsync(res); 
         }
     }
 }

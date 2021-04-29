@@ -1,12 +1,8 @@
-﻿using EdProject.BLL.Common;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace EdProject.PresentationLayer.Middleware
 {
@@ -26,14 +22,17 @@ namespace EdProject.PresentationLayer.Middleware
             {
               await _next(httpContext);
             }
-            catch(Exception ex)
+            catch (CustomException ex)
+            {
+                httpContext.Response.StatusCode = ex.StatusCode;
+                await httpContext.Response.WriteAsync(ex.Message);
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
-                httpContext.Response.StatusCode = 400;
-                await httpContext.Response.WriteAsync($"{ex.Message}");
             }
+            
         }
-
     }
 
     public static class ExceptionMiddlewareExtension

@@ -5,6 +5,6 @@ namespace EdProject.DAL.Repositories.Interfaces
 {
     public interface IOrderItemRepository: IBaseRepository<OrderItems>
     {
-        public Task RemoveOrderItemByIdAsync(long id);
+        public Task RemoveOrderItemAsync(long id);
     }
 }

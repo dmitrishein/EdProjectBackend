@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -31,26 +30,83 @@ namespace EdProject.BLL.Services
 
             await _printEditionRepos.CreateAsync(newEdition);
         }
-        
         public async Task UpdatePrintEdition(PrintingEditionModel editionModel)
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<PrintingEditionModel, Edition>());
             var _mapper = new Mapper(config);
             var newEdition = _mapper.Map<PrintingEditionModel, Edition>(editionModel);
 
-            await _printEditionRepos.UpdateAsync(newEdition);
+            var editionCheck = await _printEditionRepos.FindByIdAsync(newEdition.Id);
+           
+            if (editionCheck is null)
+                throw new Exception("Edition is not found");
+            if (editionCheck.IsRemoved)
+                throw new Exception("Edition is removed");
+            try
+            {
+                await _printEditionRepos.UpdateAsync(editionCheck,newEdition);
+            }
+            catch(Exception x)
+            {
+                throw new Exception($"Couldn't update edition. Error: {x.Message}");
+            }
         }
-        public Task<List<Edition>> GetEditionList()
+        public async Task RemoveEditionAsync(long id)
         {
-            return _printEditionRepos.GetAll().ToListAsync();
+            try
+            {
+                await _printEditionRepos.RemoveEditionById(id);
+            }
+            catch (Exception x)
+            {
+                throw new Exception($"Error! Cannot remove Edition { x.Message}");
+            }
         }
-        public async Task<Edition> GetEditionById(long id)
+        public List<PrintingEditionModel> GetEditionList()
         {
-            return await _printEditionRepos.FindByIdAsync(id);
+            var query =  _printEditionRepos.GetAll().Where(x=> x.IsRemoved == false);
+            List<PrintingEditionModel> editions = new List<PrintingEditionModel>();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Edition, PrintingEditionModel>());
+            var _mapper = new Mapper(config);
+            
+            foreach (Edition edition in query)
+            {
+                var editionModel = _mapper.Map<Edition, PrintingEditionModel>(edition); 
+                editions.Add(editionModel);
+            }
+
+            return editions;
         }
-        public Task<List<Edition>> GetEditionListByString(string searchString)
+        public async Task<PrintingEditionModel> GetEditionAsync(long id)
         {
-            return _printEditionRepos.FilterEditionList(searchString);
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Edition, PrintingEditionModel>());
+            var _mapper = new Mapper(config);
+
+            var newUser = await _printEditionRepos.FindByIdAsync(id);
+            if (newUser.IsRemoved)
+                throw new Exception("Error! User was removed");
+
+            var userEdition = _mapper.Map<Edition, PrintingEditionModel>(newUser);
+            
+            return userEdition;
+        }
+        public async Task<List<PrintingEditionModel>> GetEditionListByString(string searchString)
+        {
+            var query = await _printEditionRepos.GetAll().Where(x => x.Id.ToString() == searchString || x.Title == searchString || x.Price.ToString() == searchString).ToListAsync();
+            List<PrintingEditionModel> editions = new List<PrintingEditionModel>();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Edition, PrintingEditionModel>());
+            var _mapper = new Mapper(config);
+
+            foreach (Edition edition in query)
+            {
+                var editionModel = _mapper.Map<Edition, PrintingEditionModel>(edition);
+                editions.Add(editionModel);
+            }
+
+            if (editions.Count == 0)
+                throw new Exception("Nothing found:(");
+
+            return editions;
         }
 
     }

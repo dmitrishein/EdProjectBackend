@@ -17,14 +17,16 @@ namespace EdProject.DAL.Repositories
         {
         }
 
-        public async Task RemoveOrderItemByIdAsync(long id)
+        public async Task RemoveOrderItemAsync(long id)
         {
             var res = await _dbSet.FindAsync(id);
-            if (res is not null)
-            {
-                res.IsRemoved = true;
-                await UpdateAsync(res);
-            }
+
+            if (res is null)
+                throw new Exception("Item wasn't found");
+
+            res.IsRemoved = true;
+            await UpdateAsync(res);
+            
         }
     }
 }

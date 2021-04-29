@@ -3,10 +3,8 @@ using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories
@@ -17,15 +15,14 @@ namespace EdProject.DAL.Repositories
         {
            
         }
-
-        public async Task<List<Edition>> FilterEditionList(string searchString)
+        public async Task RemoveEditionById(long id)
         {
-            var editions = GetAll().Where(e => e.Id.ToString() == searchString ||
-                                               e.Title == searchString ||
-                                               e.Description.Contains(searchString)
-                                               ); 
-            
-            return await editions.ToListAsync();
+            var res = await _dbSet.FindAsync(id);
+            if (res is null)
+                throw new System.Exception("Edition wasn't found in database");
+
+            res.IsRemoved = true;
+            await UpdateAsync(res);
         }
         public async Task<List<Edition>> Pagination(int pageNumber,int pageSize)
         {

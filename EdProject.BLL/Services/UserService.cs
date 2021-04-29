@@ -28,10 +28,14 @@ namespace EdProject.BLL.Services
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            if(user != null && await _roleManager.RoleExistsAsync(role))
+            if (user is null)
+                throw new Exception("User not exist");
+            if(!await _roleManager.RoleExistsAsync(role))
             {
-               await _userManager.AddToRoleAsync(user, role);
+                throw new Exception("Wrong role. Check the rolename");
             }
+
+            await _userManager.AddToRoleAsync(user, role);
         }
         public async Task CreateUserAsync(UserRegistrationModel userModel)
         {     
@@ -41,29 +45,16 @@ namespace EdProject.BLL.Services
 
             await _userManager.CreateAsync(newUser,userModel.Password);
         }
-        public async Task<AppUser> GetUserByEmail(string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
 
-            if (user is not null)
-                return user;
-
-            return null;
-        }
-        public async Task<AppUser> GetUserByIdAsync(string userId)
+        public async Task<AppUser> GetUserAsync(long userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if(user != null)
             {
                 return user;
             }
             return null;
-        }
-        public async Task<AppUser> GetUserByUsername(string username)
-        {
-            var res = await _userManager.FindByNameAsync(username);
-            return res;
         }
         public IQueryable GetAllUsers()
         {
@@ -99,12 +90,17 @@ namespace EdProject.BLL.Services
         }
         public async Task UpdateUserAsync(UserRegistrationModel userModel)
         {
-            var user = await _userManager.FindByNameAsync(userModel.UserName);
-            if (user is null)
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserRegistrationModel, AppUser>());
+            var _mapper = new Mapper(config);
+            var updatedUser = _mapper.Map<UserRegistrationModel, AppUser>(userModel);
+
+            var oldUser = await _userManager.FindByEmailAsync(userModel.Email);
+
+            if (!oldUser.EmailConfirmed)
                 throw new Exception("user not found");
+
+            await _userManager.UpdateAsync(updatedUser);
            
-            user.FirstName = userModel.FirstName;
-            user.LastName = userModel.LastName;
             
         }
         public async Task BlockUser(string userId)

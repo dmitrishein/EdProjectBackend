@@ -1,4 +1,5 @@
-﻿using AutoMapper.Configuration;
+﻿using AutoMapper;
+using AutoMapper.Configuration;
 using EdProject.BLL;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services;
@@ -48,33 +49,33 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task UpdateEdition(PrintingEditionViewModel updateModel)
         {
-            PrintingEditionModel editionModel = new PrintingEditionModel
-            {
-                Id = updateModel.Id,
-                Title = updateModel.Title,
-                Description = updateModel.Description,
-                Price = updateModel.Price,
-                Status = updateModel.Status,
-                Currency = updateModel.Currency,
-                Type = updateModel.Types
-            };
-            await _printEditionService.UpdatePrintEdition(editionModel);
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<PrintingEditionViewModel, PrintingEditionModel>());
+            var _mapper = new Mapper(config);
+            var updateEdition = _mapper.Map<PrintingEditionViewModel, PrintingEditionModel>(updateModel);
+           
+            await _printEditionService.UpdatePrintEdition(updateEdition);
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpPost("[action]")]
+        public async Task RemoveEditionAsync(long id)
+        {
+            await _printEditionService.RemoveEditionAsync(id);
+        }
         [HttpGet("[action]")]
-        public Task<List<Edition>> GetEditions()
+        public List<PrintingEditionModel> GetEditions()
         {
            return _printEditionService.GetEditionList();
         }
 
         [HttpGet("[action]")]
-        public async Task<Edition> GetEditionById(long id)
+        public async Task<PrintingEditionModel> GetEdition(long id)
         {
-            return await _printEditionService.GetEditionById(id);
+            return await _printEditionService.GetEditionAsync(id);
         }
 
         [HttpGet("[action]")]
-        public Task<List<Edition>> GetEditionByQuery(string searchString)
+        public Task<List<PrintingEditionModel>> GetEditionByQuery(string searchString)
         {
             return _printEditionService.GetEditionListByString(searchString);
         }

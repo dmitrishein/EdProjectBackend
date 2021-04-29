@@ -12,13 +12,9 @@ import { PasswordConfirmationValidatorService } from 'src/app/shared/services/pa
 
 
 export class RegisterUserComponent implements OnInit {
-
   public registerForm: FormGroup;
-  public errorMessage: string;
-  public showError: boolean;
-  constructor(private _authService: AuthenticationService, private _passConfValidator : PasswordConfirmationValidatorService) { }
-  
-  ngOnInit(): void { 
+  constructor(private _authService: AuthenticationService) { }
+  ngOnInit(): void {
     this.registerForm = new FormGroup({
       username: new FormControl(''),
       firstName: new FormControl(''),
@@ -27,21 +23,14 @@ export class RegisterUserComponent implements OnInit {
       password: new FormControl('', [Validators.required]),
       confirm: new FormControl('')
     });
-    this.registerForm.get('confirm').setValidators([Validators.required,
-      this._passConfValidator.validateConfirmPassword(this.registerForm.get('password'))]);
   }
-  
-
-
-  
   public validateControl = (controlName: string) => {
     return this.registerForm.controls[controlName].invalid && this.registerForm.controls[controlName].touched
   }
   public hasError = (controlName: string, errorName: string) => {
     return this.registerForm.controls[controlName].hasError(errorName)
   }
-  public registerUser = (registerFormValue: any) => {
-    this.showError = false;
+  public registerUser = (registerFormValue) => {
     const formValues = { ...registerFormValue };
     const user: UserForRegistration = {
       username: formValues.username,
@@ -51,16 +40,14 @@ export class RegisterUserComponent implements OnInit {
       password: formValues.password,
       confirmPassword: formValues.confirm
     };
-    
-  
     this._authService.registerUser("Account/Registration", user)
     .subscribe(_ => {
       console.log("Successful registration");
     },
     error => {
-      console.log(error.status);
+      console.log(error.error.errors);
     })
   }
-
 }
+
    

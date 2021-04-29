@@ -17,7 +17,6 @@ namespace EdProject.DAL.Repositories
         {
         }
 
-
         public async Task RemoveOrderByIdAsync(long id)
         {
             var res = await _dbSet.FindAsync(id);

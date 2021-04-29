@@ -11,9 +11,7 @@ namespace EdProject.BLL.Services.Interfaces
         public Task UpdateUserAsync(UserRegistrationModel userModel);
         public Task RemoveUserAsync(string userName);
         public Task CreateUserAsync(UserRegistrationModel userModel);
-        public Task<AppUser> GetUserByIdAsync(string userId);
-        public Task<AppUser> GetUserByUsername(string username);
-        public Task<AppUser> GetUserByEmail(string email);
+        public Task<AppUser> GetUserAsync(long userId);
         public IQueryable GetAllUsersByQuery(string searchString);
         public IQueryable GetAllUsers();
         public Task<IList<AppUser>> GetUserListByRole(string roleName);

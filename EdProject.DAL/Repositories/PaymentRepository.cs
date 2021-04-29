@@ -2,6 +2,7 @@
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,27 +16,30 @@ namespace EdProject.DAL.Repositories
         {
         }
 
-        public async Task RemovePaymentByIdAsync(long id)
+        public async Task RemovePaymentAsync(long id)
         {
             var res = await _dbSet.FindAsync(id);
 
-            if (res is not null)
+            if (res is null)
             {
-                res.IsRemoved = true;
-                await UpdateAsync(res);
+                throw new System.Exception("Payment wasn't found");
             }
+
+            res.IsRemoved = true;
+            await UpdateAsync(res);   
         }
         public async Task RemovePaymentByTransactionIdAsync(string transactId)
         {
-            IQueryable<Payments> paymentsQuery =  GetAll().Where(e => e.TransactionId == transactId);
+            IQueryable<Payments> paymentsQuery = GetAll().Where(e => e.TransactionId == transactId);
            
             var transaction = paymentsQuery.FirstOrDefault();
 
-            if (transaction is not null)
-            {
-                transaction.IsRemoved = true;
-                await UpdateAsync(transaction);
-            }
+            if (transaction is null)
+                throw new Exception("Transaction is incorrect");
+            
+            transaction.IsRemoved = true;
+             await UpdateAsync(transaction);
+            
         }
     }
 }

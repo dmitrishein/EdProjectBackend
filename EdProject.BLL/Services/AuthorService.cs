@@ -6,7 +6,9 @@ using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -28,26 +30,63 @@ namespace EdProject.BLL.Services
 
             await _authorRepositroy.CreateAsync(newAuthor);
         }
-        public async Task<Author> GetAuthorById(long id)
+        public async Task<AuthorModel> GetAuthorById(long id)
         {
-            return await _authorRepositroy.FindByIdAsync(id);
+            try
+            {
+                var authorIn = await _authorRepositroy.FindByIdAsync(id);
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<Author, AuthorModel>());
+                var _mapper = new Mapper(config);
+                var authorOut = _mapper.Map<Author, AuthorModel>(authorIn);
+
+                return authorOut;
+            }
+            catch(Exception x)
+            {
+                throw new Exception($"Author wasn't found. {x.Message}");
+            }
+ 
         }
-        public Task<List<Author>> GetAuthorList()
+        public List<AuthorModel> GetAuthorList()
         {
-            return _authorRepositroy.GetAll().ToListAsync();
+            List<Author> AuthorList = _authorRepositroy.GetAll().Where(x => x.IsRemoved == false).ToList();
+            List<AuthorModel> authorModels = new List<AuthorModel>();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Author, AuthorModel>());
+            var _mapper = new Mapper(config);
+
+            foreach (Author author in AuthorList)
+            {
+                var authorModel = _mapper.Map<Author, AuthorModel>(author);
+                authorModels.Add(authorModel);
+            }
+            return authorModels;
         }
         public async Task UpdateAuthorAsync(AuthorModel authorModel)
         {
-
             var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorModel, Author>());
             var _mapper = new Mapper(config);
-            var updateUser = _mapper.Map<AuthorModel, Author>(authorModel);
+            var updateAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
 
-            await _authorRepositroy.UpdateAsync(updateUser);
+            var oldAuthor = await _authorRepositroy.FindByIdAsync(updateAuthor.Id);
+
+            if (oldAuthor is null)
+                throw new Exception("Error! Author wasn't found");
+
+            if (oldAuthor.IsRemoved is true)
+                throw new Exception("Cannot update. Author was removed");
+
+            await _authorRepositroy.UpdateAsync(oldAuthor,updateAuthor);
         }
-        public async Task RemoveAuthorByIdAsync(long id)
+        public async Task RemoveAuthorAsync(long id)
         {
-            await _authorRepositroy.RemoveAuthorById(id);
+            try
+            {
+                await _authorRepositroy.RemoveAuthorById(id);
+            }
+            catch(Exception x)
+            {
+                throw new Exception($"Error! Cannot remove Author { x.Message}");
+            }
         }
 
     }

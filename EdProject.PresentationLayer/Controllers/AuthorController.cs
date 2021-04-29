@@ -1,14 +1,17 @@
 ﻿using EdProject.BLL.Models.Author;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
+using EdProject.PresentationLayer.Middleware;
 using EdProject.PresentationLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Controllers
 {
+    [Route("[controller]")]
     [ApiController]
     public class AuthorController : Controller
     {
@@ -20,47 +23,52 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task Create(AuthorViewModel createAuthor)
+        public async Task CreateAuthor(AuthorViewModel createAuthor)
         {
             AuthorModel author = new()
             {
-                Id = createAuthor.Id,
-                Name = createAuthor.Name
+                Name = createAuthor.FullName
             };
 
             await _authorService.CreateAuthorAsync(author);
         }
 
         [HttpGet("[action]")]
-        public Task<List<Author>> GetAuthorList()
+        public List<AuthorModel> GetAuthorList()
         {
             return _authorService.GetAuthorList();
         }
 
         [HttpGet("[action]")]
-        public async Task<Author> GetAuthorById(long id)
+        public async Task<AuthorModel> GetAuthor(long id)
         {
             return await _authorService.GetAuthorById(id);
         }
 
-
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task RemoveAuthorById(long id)
+        public async Task RemoveAuthorAsync(long id)
         {
-            await _authorService.RemoveAuthorByIdAsync(id);
+            await _authorService.RemoveAuthorAsync(id);
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task UpdateAuthor(AuthorViewModel newAuthor)
+        public async Task UpdateAuthorAsync(AuthorViewModel newAuthor)
         {
             AuthorModel authorModel = new()
             {
                 Id = newAuthor.Id,
-                Name = newAuthor.Name
+                Name = newAuthor.FullName
             };
-            await _authorService.UpdateAuthorAsync(authorModel);
+            try
+            {
+                await _authorService.UpdateAuthorAsync(authorModel);
+            }
+            catch (Exception x)
+            {
+                throw new CustomException($"Cannot update author. {x.Message}", 400);
+            }
         }
 
     }

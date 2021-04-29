@@ -1,4 +1,5 @@
 ﻿using EdProject.DAL.DataContext;
+using EdProject.DAL.Entities.Base;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -44,10 +45,17 @@ namespace EdProject.DAL.Repositories.Base
         {
             return _dbSet.AsQueryable();
         }
+        public async Task UpdateAsync(TEntity oldItem,TEntity newItem)
+        {
+
+            _dbContext.Entry(oldItem).CurrentValues.SetValues(newItem);
+            
+            await _dbContext.SaveChangesAsync();
+        }
         public async Task UpdateAsync(TEntity item)
         {
             _dbContext.Entry(item).State = EntityState.Modified;
-             await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
         public async Task SaveChangesAsync()
         {
