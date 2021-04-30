@@ -30,9 +30,9 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task Registration(RegisterViewModel register)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<RegisterViewModel, UserRegistrationModel>());
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<RegisterViewModel, BLL.UserCreateModel>());
             var _mapper = new Mapper(config);
-            var newUser = _mapper.Map<RegisterViewModel, UserRegistrationModel>(register);
+            var newUser = _mapper.Map<RegisterViewModel, BLL.UserCreateModel>(register);
             await _accountService.RegisterUserAsync(newUser);
         }
 

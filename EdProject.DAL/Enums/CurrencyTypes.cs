@@ -7,6 +7,6 @@
         USD = 2,
         EUR = 3,
         JPY = 4,
-        GBP= 5
+        GBP = 5
     }
 }

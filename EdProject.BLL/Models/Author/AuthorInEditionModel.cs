@@ -10,5 +10,7 @@ namespace EdProject.BLL.Models.Author
     {
         public long EditionId { get; set; }
         public long AuthorId { get; set; }
+        public string AuthorName { get; set; }
+        public string EditionTitle { get; set; }
     }
 }

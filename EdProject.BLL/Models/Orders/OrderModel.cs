@@ -9,6 +9,7 @@ namespace EdProject.BLL.Models.Orders
 {
     public class OrderModel
     {
+        public long Id { get; set; }
         public long UserId { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }

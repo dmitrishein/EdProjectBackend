@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdProject.BLL.Models.User;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +31,7 @@ namespace EdProject.BLL.Services
 
             if (user is null)
                 throw new Exception("User not exist");
+
             if(!await _roleManager.RoleExistsAsync(role))
             {
                 throw new Exception("Wrong role. Check the rolename");
@@ -37,81 +39,98 @@ namespace EdProject.BLL.Services
 
             await _userManager.AddToRoleAsync(user, role);
         }
-        public async Task CreateUserAsync(UserRegistrationModel userModel)
+        public async Task CreateUserAsync(UserCreateModel userModel)
         {     
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserRegistrationModel, AppUser>());
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserCreateModel, AppUser>());
             var _mapper = new Mapper(config);
-            var newUser = _mapper.Map<UserRegistrationModel, AppUser>(userModel);
+            var newUser = _mapper.Map<UserCreateModel, AppUser>(userModel);
+            newUser.EmailConfirmed = userModel.EmailConfirmed;
+            await _userManager.AddToRoleAsync(newUser, "client");
+            try
+            {
+                var res = await _userManager.FindByEmailAsync(userModel.Email);
+                if (res is not null)
+                    throw new Exception("User with this email already exist");
+            }
+            catch(Exception x)
+            {
+                throw new Exception($"{x.Message}");
+            }
 
-            await _userManager.CreateAsync(newUser,userModel.Password);
+             var result = await _userManager.CreateAsync(newUser, userModel.Password);
+             if (!result.Succeeded)
+                throw new Exception($"{result}");
         }
 
         public async Task<AppUser> GetUserAsync(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
-            if(user != null)
+            if(user is null)
             {
-                return user;
+                throw new Exception("Error! User not found");
             }
-            return null;
+
+            return user;
         }
         public IQueryable GetAllUsers()
         {
-            var users = _userManager.Users;
-
-            return users;
+            return _userManager.Users;
         }
         public IQueryable GetAllUsersByQuery(string searchString)
         {
-            var users = _userManager.Users.Where(u => u.Id.ToString() == searchString ||
+            var usersQuery = _userManager.Users.Where(u => u.Id.ToString() == searchString ||
                                                u.UserName == searchString ||
                                                u.FirstName == searchString ||
                                                u.LastName == searchString ||
                                                u.Email == searchString
                                                );
 
-            return users;
+            if (usersQuery.Count() == 0)
+                throw new Exception("No results! Check search parameters");
+
+            return usersQuery;
         }
         public async Task<IList<AppUser>> GetUserListByRole(string roleName)
         {
-            var res = await _userManager.GetUsersInRoleAsync(roleName);
+            var result = await _userManager.GetUsersInRoleAsync(roleName);
+            if (result is null)
+                throw new Exception("Nobody found:(");
 
-            return res;
+            return result;
         }
-        public async Task RemoveUserAsync(string userName)
+        public async Task RemoveUserAsync(long userId)
         {
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user is null)
                 throw new Exception("user not found");
-            
-            await _userManager.DeleteAsync(user);
-            
-        }
-        public async Task UpdateUserAsync(UserRegistrationModel userModel)
-        {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserRegistrationModel, AppUser>());
-            var _mapper = new Mapper(config);
-            var updatedUser = _mapper.Map<UserRegistrationModel, AppUser>(userModel);
-
-            var oldUser = await _userManager.FindByEmailAsync(userModel.Email);
-
-            if (!oldUser.EmailConfirmed)
-                throw new Exception("user not found");
-
-            await _userManager.UpdateAsync(updatedUser);
-           
+            user.isRemoved = true;
+            await _userManager.UpdateAsync(user);
             
         }
-        public async Task BlockUser(string userId)
+        public async Task UpdateUserAsync(UserUpdateModel userModel)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var checkUser = await _userManager.FindByIdAsync(userModel.Id.ToString());
+
+            if (!checkUser.EmailConfirmed)
+                throw new Exception("Cannot update user without confirmed email");
+            if (checkUser is null)
+                throw new Exception("Cannot update. User not found");
+            await _userManager.SetUserNameAsync(checkUser, userModel.Username);
+            checkUser.FirstName = userModel.FirstName;
+            checkUser.LastName = userModel.LastName;
+   
+            await _userManager.UpdateAsync(checkUser);    
+        }
+        public async Task BlockUser(long userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
             await _userManager.SetLockoutEnabledAsync(user, true);
             await _userManager.SetLockoutEndDateAsync(user, DateTime.Today.AddYears(100));
         }
-        public async Task UnblockUser(string userId)
+        public async Task UnblockUser(long userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user is null)
                 throw new Exception("user not found");
             

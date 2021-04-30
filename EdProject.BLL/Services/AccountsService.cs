@@ -54,11 +54,11 @@ namespace EdProject.BLL.Services
                 throw new Exception("Failed logout",ex);
             }
         }
-        public async Task RegisterUserAsync(UserRegistrationModel userModel)
+        public async Task RegisterUserAsync(UserCreateModel userModel)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserRegistrationModel, AppUser>());
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserCreateModel, AppUser>());
             var _mapper = new Mapper(config); 
-            var newUser = _mapper.Map<UserRegistrationModel, AppUser>(userModel);
+            var newUser = _mapper.Map<UserCreateModel, AppUser>(userModel);
             var result = await _userManager.CreateAsync(newUser, userModel.Password);
 
             if (!result.Succeeded)

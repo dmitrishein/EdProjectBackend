@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace EdProject.PresentationLayer.Models
+namespace EdProject.BLL.Models.User
 {
-    public class UserUpdViewModel
+    public class UserUpdateModel
     {
         public long Id { get; set; }
         public string FirstName { get; set; }

@@ -60,9 +60,10 @@ namespace EdProject.PresentationLayer
             services.AddScoped<IAccountService, AccountsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
-            services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<IOrdersService, OrderService>();
+            services.AddScoped<IAuthorInEditionService, AuthorInEditionService>();
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(Startup).Assembly);
 
             services.Configure<IdentityOptions>(options =>
             {

@@ -1,10 +1,14 @@
-﻿using EdProject.BLL.Models.Orders;
+﻿using AutoMapper;
+using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
+using EdProject.DAL.Entities.Enums;
+using EdProject.PresentationLayer.Middleware;
 using EdProject.PresentationLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Stripe;
 using System;
 using System.Collections.Generic;
@@ -15,12 +19,14 @@ namespace EdProject.PresentationLayer.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController : Controller
     {
+        IConfiguration _config;
         IOrdersService _orderService;
-        public OrderController(IOrdersService orderService)
+        public OrderController(IOrdersService orderService, IConfiguration configuration)
         {
             _orderService = orderService;
+            _config = configuration;
         }
 
         [HttpPost("[action]")]
@@ -33,51 +39,63 @@ namespace EdProject.PresentationLayer.Controllers
                 Date = DateTime.Now,
                 StatusType = newOrder.StatusType
             };
+           
             await _orderService.CreateOrderAsync(orderModel);
+        }
+        [HttpPost("[action]")]
+        public async Task CreateOrderItem(OrderItemViewModel newOrder)
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderItemViewModel, OrderItemModel>());
+            var _mapper = new Mapper(config);
+            var orderitemModel = _mapper.Map<OrderItemViewModel, OrderItemModel>(newOrder);
+
+            await _orderService.CreateOrderItemAsync(orderitemModel);
         }
 
         [HttpPost("[action]")]
-        public async Task CreatePayment(PaymentViewModel newPayment )
+        public async Task CreatePayment(PaymentViewModel newPayment)
         {
-            StripeConfiguration.ApiKey = "sk_test_51IiJzdFHRC0nt9sgcxsXqaChnLHhiR1QJ2wMe2slbivpfEdGI7KMgYaOD2GUXrH3hJva9QdAqxBBNvoU5MUF4MFX00GVQiG0pp";
-
-            // `source` is obtained with Stripe.js; see https://stripe.com/docs/payments/accept-a-payment-charges#web-create-token
-            var options = new ChargeCreateOptions
+            try
             {
-                Amount = 12200,
-                Currency = "eur",
+                StripeConfiguration.ApiKey =_config["Stripe:SecretKey"];
+
+                 var currency = (int)newPayment.currency;
+                 var options = new ChargeCreateOptions
+            {
+                Amount = newPayment.Amount,
+                Currency = newPayment.currency.ToString().ToLower(),
                 Source = "tok_amex",
                 Description = "Test Charge (created for API docs)",
             };
-            var service = new ChargeService();
-            service.Create(options);
-
-            PaymentModel paymentModel = new()
+                 var service = new ChargeService();
+                 service.Create(options);
+                 var config = new MapperConfiguration(cfg => cfg.CreateMap<PaymentViewModel, PaymentModel>());
+                 var _mapper = new Mapper(config);
+                 var newPaymentModel = _mapper.Map<PaymentViewModel, PaymentModel>(newPayment);
+                 newPaymentModel.TransactionId = options.Source;
+                 await _orderService.CreatePaymentAsync(newPaymentModel);
+            }
+            catch(CustomException x)
             {
-                TransactionId = options.Source,
-            };
-
-            await _orderService.CreatePaymentAsync(paymentModel);
-        }
-
-        [HttpGet("[action]")]
-        public async Task<IEnumerable<Orders>> GetOrdersByUserId(long userId)
-        {
-            return  await _orderService.GetOrdersListByUserIdAsync(userId);
+                throw new CustomException($"{x.Message}", 400);
+            }
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public async Task<IEnumerable<Orders>> GetOrders()
+        public List<OrderModel> GetOrdersByUserId(long userId)
         {
-            return await _orderService.GetOrdersListAsync();
+            return  _orderService.GetOrdersByUserId(userId);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public async Task<IEnumerable<Orders>> GetOrdersTest()
+        public List<OrderModel> GetOrders()
         {
-            return await _orderService.GetOrdersListAsync();
+            return  _orderService.GetOrdersList();
         }
+
+      
 
 
     }

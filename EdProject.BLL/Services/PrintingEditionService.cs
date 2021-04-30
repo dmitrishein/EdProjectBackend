@@ -16,10 +16,11 @@ namespace EdProject.BLL.Services
     {
         
         PrintingEditionRepository _printEditionRepos;
-
-        public PrintingEditionService(AppDbContext appDbContext)
+        IMapper _mapper;
+        public PrintingEditionService(AppDbContext appDbContext,IMapper mapper)
         {
             _printEditionRepos = new PrintingEditionRepository(appDbContext);
+            _mapper = mapper;
         }
 
         public async Task CreatePrintEdition(PrintingEditionModel editionModel)
@@ -27,8 +28,14 @@ namespace EdProject.BLL.Services
             var config = new MapperConfiguration(cfg => cfg.CreateMap<PrintingEditionModel, Edition>());
             var _mapper = new Mapper(config);
             var newEdition = _mapper.Map<PrintingEditionModel, Edition>(editionModel);
-
-            await _printEditionRepos.CreateAsync(newEdition);
+            try
+            {
+                await _printEditionRepos.CreateAsync(newEdition);
+            }
+            catch (Exception x)
+            {
+                throw new Exception($"Cannot create edition. {x.Message}");
+            }
         }
         public async Task UpdatePrintEdition(PrintingEditionModel editionModel)
         {
@@ -64,16 +71,19 @@ namespace EdProject.BLL.Services
         }
         public List<PrintingEditionModel> GetEditionList()
         {
-            var query =  _printEditionRepos.GetAll().Where(x=> x.IsRemoved == false);
-            List<PrintingEditionModel> editions = new List<PrintingEditionModel>();
+            var query =  _printEditionRepos.GetAllEditions();
+            if (!query.Any())
+                throw new Exception("Edition's list is empty");
             var config = new MapperConfiguration(cfg => cfg.CreateMap<Edition, PrintingEditionModel>());
-            var _mapper = new Mapper(config);
-            
-            foreach (Edition edition in query)
-            {
-                var editionModel = _mapper.Map<Edition, PrintingEditionModel>(edition); 
-                editions.Add(editionModel);
-            }
+            List<PrintingEditionModel> editions = _mapper.Map<List<Edition>,List<PrintingEditionModel>>(query);
+            //var _mapper = new Mapper(config);
+
+
+            //foreach (Edition edition in query)
+            //{
+            //    var editionModel = _mapper.Map<Edition, PrintingEditionModel>(edition); 
+            //    editions.Add(editionModel);
+            //}
 
             return editions;
         }

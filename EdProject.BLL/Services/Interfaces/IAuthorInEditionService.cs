@@ -12,9 +12,9 @@ namespace EdProject.BLL.Services.Interfaces
     {
         public Task CreateAuthInEdAsync(AuthorInEditionModel authInEditModel);
         public Task DeleteAuthInEditionAsync(AuthorInEditionModel authInEditModel);
-        public Task UpdateAuthInEditAsync(AuthorInEditionModel authInEditModel);
-        public Task<List<AuthorInEditions>> GetEditionsByAuthorId(long id);
-        public Task<List<AuthorInEditions>> GetEditionsByEditionId(long id);
-        public Task<List<AuthorInEditions>> GetList();
+        public Task UpdateAuthorInEditAsync(AuthorInEditionModel authInEditModel);
+        public List<AuthorInEditionModel> GetEditionsByAuthorId(long id);
+        public List<AuthorInEditionModel> GetAuthorsByEditionId(long id);
+        public List<AuthorInEditionModel> GetList();
     }
 }

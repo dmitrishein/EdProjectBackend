@@ -12,20 +12,15 @@ namespace EdProject.DAL.Repositories.Base
 {
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity:class
     {
-        #region private members
-
+       
         private AppDbContext _dbContext;
         protected DbSet<TEntity> _dbSet;
 
-        #endregion
-
-        #region constructor
         public BaseRepository(AppDbContext appDbContext)
         {
             _dbContext = appDbContext;
             _dbSet = appDbContext.Set<TEntity>();
         }
-        #endregion
 
         public async Task<TEntity> FindByIdAsync(long id)
         {
