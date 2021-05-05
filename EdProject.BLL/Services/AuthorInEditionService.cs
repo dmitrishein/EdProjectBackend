@@ -14,57 +14,33 @@ namespace EdProject.BLL.Services
     public class AuthorInEditionService : IAuthorInEditionService
     {
         AuthorInPrintingEditionRepository _authorInEditions;
-
-        public AuthorInEditionService(AppDbContext appDbContext)
+        IMapper _mapper;
+        public AuthorInEditionService(AppDbContext appDbContext,IMapper mapper)
         {
             _authorInEditions = new AuthorInPrintingEditionRepository(appDbContext);
+            _mapper = mapper;
         }
 
         public async Task CreateAuthInEdAsync(AuthorInEditionModel authInEditModel)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorInEditionModel, AuthorInEditions>());
-            var _mapper = new Mapper(config);
-            var newItem = _mapper.Map<AuthorInEditionModel, AuthorInEditions>(authInEditModel);
-
-            try
-            {
-                await _authorInEditions.CreateAsync(newItem);
-            }
-            catch(Exception x)
-            {
-                throw new Exception($"Can't add author to editon. {x.Message}");
-            }
+            await _authorInEditions.CreateAsync(_mapper.Map<AuthorInEditionModel, AuthorInEditions>(authInEditModel));
+ 
         }
         public async Task DeleteAuthInEditionAsync(AuthorInEditionModel authInEditModel)
-        {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorInEditionModel, AuthorInEditions>());
-            var _mapper = new Mapper(config);
+        {   
             var itemToRemove = _mapper.Map<AuthorInEditionModel, AuthorInEditions>(authInEditModel);
-
             await _authorInEditions.DeleteAsync(itemToRemove);
-
         }
         public List<AuthorInEditionModel> GetEditionsByAuthorId(long authorId)
         {
             try
             {
-                List<AuthorInEditionModel> outList = new List<AuthorInEditionModel>();
-                List<AuthorInEditions> queryList = _authorInEditions.GetAll().Where(x => x.AuthorId == authorId).ToList();
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorInEditions, AuthorInEditionModel>());
-                var _mapper = new Mapper(config);
+                List<AuthorInEditions> queryList = _authorInEditions.GetEditionsByAuthor(authorId);
 
-                if (queryList.Count() == 0)
+                if (!queryList.Any())
                     throw new Exception("This author hasn't edition's");
 
-                foreach(AuthorInEditions inEditions in queryList)
-                {
-                    var authorOut = _mapper.Map<AuthorInEditions, AuthorInEditionModel>(inEditions);
-                    authorOut.EditionTitle = inEditions.Edition.Title;
-                    authorOut.AuthorName = inEditions.Author.Name;
-                    outList.Add(authorOut);
-                }
-
-                return outList;
+                return _mapper.Map<List<AuthorInEditions>, List<AuthorInEditionModel>>(queryList);
             }
             catch (Exception x)
             {
@@ -75,23 +51,13 @@ namespace EdProject.BLL.Services
         {
             try
             {
-                List<AuthorInEditionModel> outList = new List<AuthorInEditionModel>();
-                List<AuthorInEditions> queryList = _authorInEditions.GetAll().Where(x => x.EditionId == editionId).ToList();
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorInEditions, AuthorInEditionModel>());
-                var _mapper = new Mapper(config);
+                List<AuthorInEditions> queryList = _authorInEditions.GetAuthorsByEdition(editionId);
 
-                if (queryList.Count() == 0)
-                    throw new Exception("This edition without authors!");
+                if (!queryList.Any())
+                    throw new Exception("Edition not found!");
 
-                foreach (AuthorInEditions inEditions in queryList)
-                {
-                    var authorOut = _mapper.Map<AuthorInEditions, AuthorInEditionModel>(inEditions);
-                    authorOut.EditionTitle = inEditions.Edition.Title;
-                    authorOut.AuthorName = inEditions.Author.Name;
-                    outList.Add(authorOut);
-                }
+                return _mapper.Map<List<AuthorInEditions>, List<AuthorInEditionModel>>(queryList);
 
-                return outList;
             }
             catch (Exception x)
             {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdProject.BLL;
 using EdProject.BLL.Models.Author;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
@@ -18,10 +19,13 @@ namespace EdProject.PresentationLayer.Controllers
     {
         IAuthorService _authorService;
         IAuthorInEditionService _authorInEditionService;
-        public AuthorController(IAuthorService authorService, IAuthorInEditionService authorInEditionService)
+        IMapper _mapper;
+     
+        public AuthorController(IAuthorService authorService, IAuthorInEditionService authorInEditionService,IMapper mapper)
         {
             _authorService = authorService;
             _authorInEditionService = authorInEditionService;
+            _mapper = mapper;
         }
 
         [Authorize(Roles = "admin")]
@@ -49,8 +53,19 @@ namespace EdProject.PresentationLayer.Controllers
         }
         [HttpGet("[action]")]
         public List<AuthorInEditionModel> GetAuthorByEditionId(long editionId)
-        {
+        {  
             return _authorInEditionService.GetAuthorsByEditionId(editionId);
+        }
+
+        [HttpPost("[action]")]
+        public async Task AddAuthorToEdition(AuthorInEditionViewModel authorIn)
+        {
+            await _authorInEditionService.CreateAuthInEdAsync(_mapper.Map<AuthorInEditionViewModel, AuthorInEditionModel>(authorIn));
+        }
+        [HttpPost("[action]")]
+        public async Task RemoveAuthorInEdition(AuthorInEditionViewModel authorIn)
+        {
+            await _authorInEditionService.DeleteAuthInEditionAsync(_mapper.Map<AuthorInEditionViewModel, AuthorInEditionModel>(authorIn));
         }
 
         [HttpGet("[action]")]
@@ -88,17 +103,8 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task UpdateEditionAuthor(AuthorInEditionViewModel updateInfo)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorInEditionViewModel, AuthorInEditionModel>());
-            var _mapper = new Mapper(config);
             var updatedModel = _mapper.Map<AuthorInEditionViewModel, AuthorInEditionModel>(updateInfo);
-            try
-            {
-                await _authorInEditionService.UpdateAuthorInEditAsync(updatedModel);
-            }
-            catch (Exception x)
-            {
-                throw new CustomException($"Cannot update author. {x.Message}", 400);
-            }
+            await _authorInEditionService.UpdateAuthorInEditAsync(updatedModel);
         }
 
     }

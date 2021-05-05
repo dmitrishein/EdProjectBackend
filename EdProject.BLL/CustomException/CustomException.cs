@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EdProject.PresentationLayer.Middleware
+namespace EdProject.BLL
 {
     [Serializable]
     public class CustomException : Exception

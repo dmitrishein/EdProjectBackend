@@ -13,8 +13,8 @@ namespace EdProject.BLL.Services.Interfaces
         public Task RemoveUserAsync(long userId);
         public Task CreateUserAsync(UserCreateModel userModel);
         public Task<AppUser> GetUserAsync(long userId);
-        public IQueryable GetAllUsersByQuery(string searchString);
-        public IQueryable GetAllUsers();
+        public List<AppUser> GetAllUsersByQuery(string searchString);
+        public List<AppUser> GetAllUsers();
         public Task<IList<AppUser>> GetUserListByRole(string roleName);
         public Task BlockUser(long userId);
         public Task UnblockUser(long userId);

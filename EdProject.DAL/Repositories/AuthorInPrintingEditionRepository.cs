@@ -18,6 +18,14 @@ namespace EdProject.DAL.Repositories
           
         }
 
+        public List<AuthorInEditions> GetAuthorsByEdition(long editionId)
+        {
+           return GetAll().Where(x => x.EditionId == editionId).ToList();
+        }
+        public List<AuthorInEditions> GetEditionsByAuthor(long authorId)
+        {
+            return GetAll().Where(x => x.AuthorId == authorId).ToList();
+        }
         public async Task<List<AuthorInEditions>> GetListByAuthorId(long authorId)
         {
             var editions = GetAll().Where(e => e.AuthorId == authorId);

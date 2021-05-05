@@ -75,7 +75,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpGet("[action]")]
-        public Task<List<PrintingEditionModel>> GetEditionByQuery(string searchString)
+        public List<PrintingEditionModel> GetEditionByQuery(string searchString)
         {
             return _printEditionService.GetEditionListByString(searchString);
         }

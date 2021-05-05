@@ -17,7 +17,7 @@ namespace EdProject.PresentationLayer.Models
         public string Password { get; set; }
 
         [Required]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Passwords doesn't match.")]
         public string ConfirmPassword { get; set; }
 
         [Required]

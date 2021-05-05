@@ -6,67 +6,50 @@ using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
 {
     public class AccountsService : IAccountService
     {
-        #region UserManager, SignInManager and constructor
-
+   
         private UserManager<AppUser> _userManager;
         private SignInManager<AppUser> _signInManager;
-        
-        public AccountsService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        IMapper _mapper;
+        public AccountsService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _mapper = mapper;
         }
-        #endregion
+        
 
         public async Task SignInAsync(UserSignInModel userSignInModel)
         {
           var user = await _userManager.FindByEmailAsync(userSignInModel.Email);      
             
-          if (user is null || user.EmailConfirmed is false)
+          if (user is null || !user.EmailConfirmed)
                 throw new Exception("User not found");
-          
-          try
-          {
-             await _signInManager.PasswordSignInAsync(user.UserName, userSignInModel.Password, userSignInModel.RememberMe, false);
-          }
-          catch (Exception x)
-          {
-             throw new Exception($"Failed to login {x.Message}");
-          }
 
+           
+          await _signInManager.PasswordSignInAsync(user.UserName, userSignInModel.Password, userSignInModel.RememberMe, false);
+                   
         }
         public async Task SignOutAsync()
-        {
-            try
-            {
-                await _signInManager.SignOutAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Failed logout",ex);
-            }
+        {          
+          await _signInManager.SignOutAsync();
         }
         public async Task RegisterUserAsync(UserCreateModel userModel)
-        {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserCreateModel, AppUser>());
-            var _mapper = new Mapper(config); 
+        {  
             var newUser = _mapper.Map<UserCreateModel, AppUser>(userModel);
             var result = await _userManager.CreateAsync(newUser, userModel.Password);
 
             if (!result.Succeeded)
-                throw new Exception($"Registration failed. Possible reasons:{result.ToString()}");
+                throw new CustomException($"Registration failed. Possible reasons:{result.ToString()}",400); 
             
             await _userManager.AddToRoleAsync(newUser,"Client");
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
 
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
             var confirmationLink = $"https://localhost:44366/Account/ConfirmEmail?token={code}&email={userModel.Email}";
             EmailConfirmationModel emailConfirmationModel = new()
             {
@@ -74,32 +57,25 @@ namespace EdProject.BLL.Services
                 ConfirmationLink = confirmationLink,
                 Subject = "Confirm Account"
             };
-
-            try
-            {
-              await SendEmail(emailConfirmationModel);
-            }
-            catch(Exception ex)
-            {
-                throw new Exception($"Failed to confirm email in cause {ex.Message.ToString()}");
-            }
+           
+            await SendEmail(emailConfirmationModel);
+              
         }
         public async Task SendEmail(EmailConfirmationModel emailModel)
         {
             EmailProvider emailService = new EmailProvider();
 
-            await emailService.SendEmailAsync(emailModel.Email, $"{emailModel.Subject}",$"To confirm your account, follow the link : {emailModel.ConfirmationLink}");
-            
+            await emailService.SendEmailAsync(emailModel.Email, $"{emailModel.Subject}",$"To confirm your account, follow the link : {emailModel.ConfirmationLink}");    
         }
         public async Task ConfirmEmailAsync(string token, string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user is null)
-                throw new Exception("User was not found while confirm email");
-
+        {       
             try
             {
+                var user = await _userManager.FindByEmailAsync(email);
+
+                if (user is null)
+                    throw new Exception("User was not found while confirm email");
+
                 await _userManager.ConfirmEmailAsync(user, token);
             }
             catch(Exception x)
@@ -111,28 +87,19 @@ namespace EdProject.BLL.Services
         public async Task<string> PasswordRecoveryTokenAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
+
             if(user is null)
                 throw new Exception("User with email wasn't found");
 
-            var recoveryToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            return recoveryToken;
+            return await _userManager.GeneratePasswordResetTokenAsync(user);      
         }
         public async Task ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
         {
-            var user = await _userManager.FindByEmailAsync(resetPasswordModel.Email);
-            if (user is null)
-                throw new Exception("User wasn't found while reset password");
-
-            try 
-            { 
-              await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.NewPassword);
-            }
-            catch(Exception x)
-            {
-                throw new Exception($"Password was not reset in cause {x.Message}");
-            }
-          
+             var user = await _userManager.FindByEmailAsync(resetPasswordModel.Email);
+             if (user is null)
+                throw new Exception("Cannot reset password! User wasn't found");
+             await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.NewPassword);
+           
         }
         public async Task<AppUser> GetUserByEmailAsync(string email)
         {
@@ -141,6 +108,9 @@ namespace EdProject.BLL.Services
         public async Task<IList<string>> GetUserRoleAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+                throw new Exception("Error! Cannot find a user!");
 
             return await _userManager.GetRolesAsync(user);
         }

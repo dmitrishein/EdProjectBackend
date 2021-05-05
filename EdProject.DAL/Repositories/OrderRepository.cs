@@ -40,6 +40,10 @@ namespace EdProject.DAL.Repositories
             }
 
         }
+        public List<Orders> GetAllOrders()
+        {
+            return base.GetAll().Where(x => !x.IsRemoved).ToList();
+        }
         public async Task<List<Orders>> FilterOrderList(string searchString)
         {
             IQueryable<Orders> ordersQuery =  GetAll().Where(e => e.Id.ToString() == searchString ||

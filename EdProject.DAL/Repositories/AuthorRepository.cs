@@ -2,6 +2,8 @@
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories
@@ -12,7 +14,10 @@ namespace EdProject.DAL.Repositories
         public AuthorRepository(AppDbContext dbContext): base(dbContext)
         {
         }
-
+        public List<Author> GetAllAuthors()
+        {
+            return base.GetAll().Where(x => !x.IsRemoved).ToList();
+        }
         public async Task RemoveAuthorById(long id)
         {
             var res = await _dbSet.FindAsync(id);

@@ -6,6 +6,7 @@ namespace EdProject.PresentationLayer.Models
     {
         public long Id { get; set; }
 
+
         [Required]
         public string FullName { get; set; }
     }

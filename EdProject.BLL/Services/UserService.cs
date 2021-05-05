@@ -15,13 +15,15 @@ namespace EdProject.BLL.Services
         #region Private Members
         private UserManager<AppUser> _userManager;
         private RoleManager<AppRole> _roleManager;
+        IMapper _mapper;
         #endregion
 
         #region Constructor
-        public UserService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+        public UserService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _mapper = mapper;
         }
         #endregion
 
@@ -41,11 +43,10 @@ namespace EdProject.BLL.Services
         }
         public async Task CreateUserAsync(UserCreateModel userModel)
         {     
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserCreateModel, AppUser>());
-            var _mapper = new Mapper(config);
             var newUser = _mapper.Map<UserCreateModel, AppUser>(userModel);
             newUser.EmailConfirmed = userModel.EmailConfirmed;
             await _userManager.AddToRoleAsync(newUser, "client");
+
             try
             {
                 var res = await _userManager.FindByEmailAsync(userModel.Email);
@@ -68,16 +69,16 @@ namespace EdProject.BLL.Services
 
             if(user is null)
             {
-                throw new Exception("Error! User not found");
+                throw new CustomException("Error! User not found",400);
             }
 
             return user;
         }
-        public IQueryable GetAllUsers()
+        public List<AppUser> GetAllUsers()
         {
-            return _userManager.Users;
+            return _userManager.Users.ToList();  
         }
-        public IQueryable GetAllUsersByQuery(string searchString)
+        public List<AppUser> GetAllUsersByQuery(string searchString)
         {
             var usersQuery = _userManager.Users.Where(u => u.Id.ToString() == searchString ||
                                                u.UserName == searchString ||
@@ -86,10 +87,10 @@ namespace EdProject.BLL.Services
                                                u.Email == searchString
                                                );
 
-            if (usersQuery.Count() == 0)
+            if (!usersQuery.Any())
                 throw new Exception("No results! Check search parameters");
 
-            return usersQuery;
+            return usersQuery.ToList();
         }
         public async Task<IList<AppUser>> GetUserListByRole(string roleName)
         {

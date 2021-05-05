@@ -97,7 +97,7 @@ namespace EdProject.PresentationLayer.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public IQueryable GetAllUsers()
+        public List<AppUser> GetAllUsers()
         {
             return _userService.GetAllUsers();
         }

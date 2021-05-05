@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace EdProject.PresentationLayer.Models
+﻿namespace EdProject.PresentationLayer.Models
 {
     public class UserUpdViewModel
     {

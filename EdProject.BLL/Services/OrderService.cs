@@ -18,58 +18,41 @@ namespace EdProject.BLL.Services
         OrderRepository _orderRepository;
         OrderItemRepository _orderItemRepository;
         PaymentRepository _paymentRepository;
+        IMapper _mapper;
 
-        public OrderService(AppDbContext appDbContext)
+        public OrderService(AppDbContext appDbContext,IMapper mapper)
         {
             _orderRepository = new OrderRepository(appDbContext);
             _orderItemRepository = new OrderItemRepository(appDbContext);
             _paymentRepository = new PaymentRepository(appDbContext);
+            _mapper = mapper;
         }
 
         public async Task CreateOrderAsync(OrderModel orderModel)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderModel, Orders>());
-            var _mapper = new Mapper(config);
             var newOrder = _mapper.Map<OrderModel, Orders>(orderModel);
-
             await _orderRepository.CreateAsync(newOrder);
         }
         public async Task CreateOrderItemAsync(OrderItemModel orderItemModel)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderItemModel, OrderItems>());
-            var _mapper = new Mapper(config);
             var newOrderItem = _mapper.Map<OrderItemModel, OrderItems>(orderItemModel);
-
             await _orderItemRepository.CreateAsync(newOrderItem);
         }
-
         public async Task CreatePaymentAsync(PaymentModel paymentModel)
-        {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<PaymentModel, Payments>());
-            var _mapper = new Mapper(config);
+        {  
             var newPayment = _mapper.Map<PaymentModel, Payments>(paymentModel);
-
             await _paymentRepository.CreateAsync(newPayment);
         }
         public List<OrderModel> GetOrdersByUserId(long userId)
         {
             try
-            {
-                List<OrderModel> outList = new List<OrderModel>();
-                List<Orders> queryList = _orderRepository.GetAll().Where(x => x.Id == userId).ToList();
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<Orders, OrderModel>());
-                var _mapper = new Mapper(config);
+            {     
+                List<Orders> queryList = _orderRepository.GetAllOrders().Where(x => x.Id == userId).ToList();        
 
-                if (queryList.Count() == 0)
+                if (!queryList.Any())
                     throw new Exception("No orders found");
 
-                foreach (Orders orders in queryList)
-                {
-                    var orderOut = _mapper.Map<Orders, OrderModel>(orders);
-                    outList.Add(orderOut);
-                }
-
-                return outList;
+                return _mapper.Map<List<Orders>, List<OrderModel>>(queryList);
             }
             catch (Exception x)
             {
@@ -81,21 +64,12 @@ namespace EdProject.BLL.Services
         {
             try
             {
-                List<OrderModel> outList = new List<OrderModel>();
-                List<Orders> queryList = _orderRepository.GetAll().ToList();
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<Orders, OrderModel>());
-                var _mapper = new Mapper(config);
 
-                if (queryList.Count() == 0)
+                if (!_orderRepository.GetAllOrders().Any())
                     throw new Exception("No orders found");
 
-                foreach (Orders orders in queryList)
-                {
-                    var orderOut = _mapper.Map<Orders, OrderModel>(orders);
-                    outList.Add(orderOut);
-                }
-
-                return outList;
+                return _mapper.Map<List<Orders>,List<OrderModel>>(_orderRepository.GetAllOrders());
+         
             }
             catch (Exception x)
             {

@@ -1,3 +1,4 @@
+using EdProject.BLL.Profiles;
 using EdProject.BLL.Services;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace EdProject.PresentationLayer
@@ -28,9 +30,13 @@ namespace EdProject.PresentationLayer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSpaStaticFiles(configuration =>
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "ClientApp/dist";
+            //});
+            services.AddSwaggerGen(c =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -64,7 +70,7 @@ namespace EdProject.PresentationLayer
             services.AddScoped<IAuthorInEditionService, AuthorInEditionService>();
 
             services.AddAutoMapper(typeof(Startup).Assembly);
-
+            services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), typeof(OrderItemProfile), typeof(PaymentProfile),typeof(AuthorProfile), typeof(AuthorInEditionProfile), typeof(AccountProfile));
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -91,11 +97,11 @@ namespace EdProject.PresentationLayer
 
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
-                //app.UseSwagger();
-                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
 
-                app.UseSpaStaticFiles();
+                //app.UseSpaStaticFiles();
             }
 
             app.UseHttpsRedirection();
@@ -109,15 +115,15 @@ namespace EdProject.PresentationLayer
                 endpoints.MapControllers();   
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseAngularCliServer(npmScript: "start");
+            //    }
+            //});
 
         }
     }

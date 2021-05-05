@@ -1,11 +1,7 @@
 ﻿using EdProject.DAL.DataContext;
-using EdProject.DAL.Entities.Base;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories.Base
@@ -22,6 +18,10 @@ namespace EdProject.DAL.Repositories.Base
             _dbSet = appDbContext.Set<TEntity>();
         }
 
+        public bool Exist(params object[] keys)
+        {
+            return (_dbSet.Find(keys) != null);
+        }
         public async Task<TEntity> FindByIdAsync(long id)
         {
             return await _dbSet.FindAsync(id);
@@ -42,9 +42,7 @@ namespace EdProject.DAL.Repositories.Base
         }
         public async Task UpdateAsync(TEntity oldItem,TEntity newItem)
         {
-
             _dbContext.Entry(oldItem).CurrentValues.SetValues(newItem);
-            
             await _dbContext.SaveChangesAsync();
         }
         public async Task UpdateAsync(TEntity item)

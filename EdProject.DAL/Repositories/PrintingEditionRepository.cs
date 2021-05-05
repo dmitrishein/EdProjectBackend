@@ -15,6 +15,7 @@ namespace EdProject.DAL.Repositories
         {
            
         }
+
         public async Task RemoveEditionById(long id)
         {
             var res = await _dbSet.FindAsync(id);
@@ -24,10 +25,8 @@ namespace EdProject.DAL.Repositories
             res.IsRemoved = true;
             await UpdateAsync(res);
         }
-
         public List<Edition> GetAllEditions()
         {
-            
             return base.GetAll().Where(x =>!x.IsRemoved).ToList();
         }
         public async Task<List<Edition>> Pagination(int pageNumber,int pageSize)

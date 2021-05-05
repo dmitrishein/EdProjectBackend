@@ -74,46 +74,27 @@ namespace EdProject.BLL.Services
             var query =  _printEditionRepos.GetAllEditions();
             if (!query.Any())
                 throw new Exception("Edition's list is empty");
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Edition, PrintingEditionModel>());
-            List<PrintingEditionModel> editions = _mapper.Map<List<Edition>,List<PrintingEditionModel>>(query);
-            //var _mapper = new Mapper(config);
-
-
-            //foreach (Edition edition in query)
-            //{
-            //    var editionModel = _mapper.Map<Edition, PrintingEditionModel>(edition); 
-            //    editions.Add(editionModel);
-            //}
+            
+            List<PrintingEditionModel> editions = _mapper.Map<List<Edition>, List<PrintingEditionModel>>(query);
 
             return editions;
         }
         public async Task<PrintingEditionModel> GetEditionAsync(long id)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Edition, PrintingEditionModel>());
-            var _mapper = new Mapper(config);
-
-            var newUser = await _printEditionRepos.FindByIdAsync(id);
-            if (newUser.IsRemoved)
+            var getEdition = await _printEditionRepos.FindByIdAsync(id);
+            if (getEdition.IsRemoved)
                 throw new Exception("Error! User was removed");
 
-            var userEdition = _mapper.Map<Edition, PrintingEditionModel>(newUser);
-            
+            var userEdition = _mapper.Map<Edition, PrintingEditionModel>(getEdition);
             return userEdition;
         }
-        public async Task<List<PrintingEditionModel>> GetEditionListByString(string searchString)
+        public List<PrintingEditionModel> GetEditionListByString(string searchString)
         {
-            var query = await _printEditionRepos.GetAll().Where(x => x.Id.ToString() == searchString || x.Title == searchString || x.Price.ToString() == searchString).ToListAsync();
-            List<PrintingEditionModel> editions = new List<PrintingEditionModel>();
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Edition, PrintingEditionModel>());
-            var _mapper = new Mapper(config);
+            var query = _printEditionRepos.GetAllEditions().Where(x => x.Id.ToString() == searchString || x.Title == searchString || x.Price.ToString() == searchString).ToList();
 
-            foreach (Edition edition in query)
-            {
-                var editionModel = _mapper.Map<Edition, PrintingEditionModel>(edition);
-                editions.Add(editionModel);
-            }
+            List<PrintingEditionModel> editions = _mapper.Map<List<Edition>, List<PrintingEditionModel>>(query);
 
-            if (editions.Count == 0)
+            if (!editions.Any())
                 throw new Exception("Nothing found:(");
 
             return editions;

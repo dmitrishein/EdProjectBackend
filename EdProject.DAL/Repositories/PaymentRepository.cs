@@ -15,7 +15,10 @@ namespace EdProject.DAL.Repositories
         public PaymentRepository(AppDbContext appDbContext) : base(appDbContext)
         {
         }
-
+        public List<Payments> GetAllPayments()
+        {
+           return GetAll().ToList();
+        }
         public async Task RemovePaymentAsync(long id)
         {
             var res = await _dbSet.FindAsync(id);

@@ -1,13 +1,11 @@
 ﻿using EdProject.DAL.Entities.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace EdProject.PresentationLayer.Models
 {
     public class PaymentViewModel
     {
+        [Required]
         public long Amount { get; set; }
         public CurrencyTypes currency { get; set; } 
     }
