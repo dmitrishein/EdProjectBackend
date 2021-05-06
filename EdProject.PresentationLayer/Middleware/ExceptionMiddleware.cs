@@ -31,6 +31,7 @@ namespace EdProject.PresentationLayer.Middleware
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
+                await httpContext.Response.WriteAsync("something went wrong! Connect with your administrator");
             }
             
         }

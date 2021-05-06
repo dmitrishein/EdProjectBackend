@@ -16,18 +16,19 @@ namespace EdProject.DAL.Repositories
            
         }
 
+        public bool IsExist(Edition edition)
+        {
+            return GetAll().Where(item => item.Title == edition.Title).Any();
+        }
         public async Task RemoveEditionById(long id)
         {
             var res = await _dbSet.FindAsync(id);
-            if (res is null)
-                throw new System.Exception("Edition wasn't found in database");
-
             res.IsRemoved = true;
             await UpdateAsync(res);
         }
-        public List<Edition> GetAllEditions()
+        public async Task<List<Edition>> GetAllEditionsAsync()
         {
-            return base.GetAll().Where(x =>!x.IsRemoved).ToList();
+            return await GetAll().Where(x =>!x.IsRemoved).ToListAsync();
         }
         public async Task<List<Edition>> Pagination(int pageNumber,int pageSize)
         {

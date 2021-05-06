@@ -6,6 +6,8 @@ using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -40,10 +42,11 @@ namespace EdProject.BLL.Services
           await _signInManager.SignOutAsync();
         }
         public async Task RegisterUserAsync(UserCreateModel userModel)
-        {  
+        {
+            RegistrationValidation(userModel);
+
             var newUser = _mapper.Map<UserCreateModel, AppUser>(userModel);
             var result = await _userManager.CreateAsync(newUser, userModel.Password);
-
             if (!result.Succeeded)
                 throw new CustomException($"Registration failed. Possible reasons:{result.ToString()}",400); 
             
@@ -51,6 +54,7 @@ namespace EdProject.BLL.Services
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
             var confirmationLink = $"https://localhost:44366/Account/ConfirmEmail?token={code}&email={userModel.Email}";
+
             EmailConfirmationModel emailConfirmationModel = new()
             {
                 Email = userModel.Email,
@@ -69,37 +73,31 @@ namespace EdProject.BLL.Services
         }
         public async Task ConfirmEmailAsync(string token, string email)
         {       
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(email);
+             var user = await _userManager.FindByEmailAsync(email);
 
-                if (user is null)
-                    throw new Exception("User was not found while confirm email");
+             if (user is null)
+                 throw new CustomException("User was not found while confirm email", 400);
 
-                await _userManager.ConfirmEmailAsync(user, token);
-            }
-            catch(Exception x)
-            {
-                throw new Exception($"Failed to confirm email {x.Message}");
-            }
-
+             await _userManager.ConfirmEmailAsync(user, token);
+           
         }
         public async Task<string> PasswordRecoveryTokenAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
             if(user is null)
-                throw new Exception("User with email wasn't found");
+                throw new CustomException("User with email wasn't found",400);
 
             return await _userManager.GeneratePasswordResetTokenAsync(user);      
         }
         public async Task ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
         {
              var user = await _userManager.FindByEmailAsync(resetPasswordModel.Email);
+
              if (user is null)
-                throw new Exception("Cannot reset password! User wasn't found");
+                throw new CustomException("Cannot reset password! User wasn't found",400);
+
              await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.NewPassword);
-           
         }
         public async Task<AppUser> GetUserByEmailAsync(string email)
         {
@@ -115,5 +113,22 @@ namespace EdProject.BLL.Services
             return await _userManager.GetRolesAsync(user);
         }
 
+        private void RegistrationValidation(UserCreateModel userModel)
+        {
+            //email validation pattern from msdn:)
+            string emailPattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                            @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
+
+            if (!userModel.UserName.Any(char.IsLetterOrDigit))
+                throw new CustomException($"Invalid username!", 400);
+            if (Regex.IsMatch(userModel.UserName, @"\W"))
+                throw new CustomException($"Invalid username! It must consist of only numbers and letters", 400);
+            if (Regex.IsMatch(userModel.FirstName, @"\W") || Regex.IsMatch(userModel.FirstName,@"\d") )
+                throw new CustomException($"Invalid firstname! It must consist of only letters", 400);
+            if (Regex.IsMatch(userModel.LastName, @"\W") || Regex.IsMatch(userModel.LastName, @"\d"))
+                throw new CustomException($"Invalid lastname! It must consist of only letters", 400);
+            if (!Regex.IsMatch(userModel.Email, emailPattern, RegexOptions.IgnoreCase))
+                throw new CustomException($"Invalid lastname! It must consist of only numbers and letters", 400);
+        }
     }
 }

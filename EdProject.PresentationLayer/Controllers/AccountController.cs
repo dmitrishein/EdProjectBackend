@@ -19,20 +19,20 @@ namespace EdProject.PresentationLayer.Controllers
     {
         IAccountService _accountService;
         IConfiguration _config;
+        IMapper _mapper;
 
-        public AccountController(IAccountService accountService, IConfiguration config)
+        public AccountController(IAccountService accountService, IConfiguration config, IMapper mapper)
         {
             _accountService = accountService;
             _config = config;
+            _mapper = mapper;
         }
       
 
         [HttpPost("[action]")]
         public async Task Registration(RegisterViewModel register)
-        {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<RegisterViewModel, BLL.UserCreateModel>());
-            var _mapper = new Mapper(config);
-            var newUser = _mapper.Map<RegisterViewModel, BLL.UserCreateModel>(register);
+        {        
+            var newUser = _mapper.Map<RegisterViewModel,UserCreateModel>(register);
             await _accountService.RegisterUserAsync(newUser);
         }
 
@@ -46,47 +46,25 @@ namespace EdProject.PresentationLayer.Controllers
         public async Task Login(LoginViewModel login)
         {
             JwtProvider jwt = new JwtProvider(_config);
-           
-            UserSignInModel userSignInModel = new()
-            {
-                Email = login.Email,
-                Password = login.Password,
-                RememberMe = login.RememberMe
-            };
 
-            try
-            {
-                await _accountService.SignInAsync(userSignInModel);
-                var user = await _accountService.GetUserByEmailAsync(login.Email);
-                var tokenString = await jwt.GenerateAccessToken(user, _accountService);
-                var refreshTokenString = jwt.GenerateRefreshToken();
-            }
-            catch (CustomException x)
-            {
-                throw new CustomException($"Failed to login. {x.Message}",400);
-            }
-
+            await _accountService.SignInAsync(_mapper.Map<LoginViewModel,UserSignInModel>(login));
+            var tokenString = await jwt.GenerateAccessToken(await _accountService.GetUserByEmailAsync(login.Email), _accountService);
+            var refreshTokenString = jwt.GenerateRefreshToken(); 
         }
 
         [HttpPost("[action]")]
         public async Task ForgotPassword(string email)
         {
-            try
-            {
-                var recoveryToken = await _accountService.PasswordRecoveryTokenAsync(email);
-                var confirmationLink = Url.Action("ResetPassword", "Account", new { token = recoveryToken, email = email }, Request.Scheme);
-                EmailConfirmationModel emailConfirmModel = new()
+            var recoveryToken = await _accountService.PasswordRecoveryTokenAsync(email);
+            var confirmationLink = Url.Action("ResetPassword", "Account", new { token = recoveryToken, email = email }, Request.Scheme);
+            EmailConfirmationModel emailConfirmModel = new()
                 {
                     Email = email,
                     ConfirmationLink = confirmationLink,
                     Subject = "Reset Password"
                 };
-                await _accountService.SendEmail(emailConfirmModel);
-            }
-            catch(CustomException x)
-            {
-                throw new CustomException($"Failed to recovery password {x.Message}",400);
-            }
+
+            await _accountService.SendEmail(emailConfirmModel);
         }
 
         [HttpPost("[action]")]

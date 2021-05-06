@@ -15,6 +15,7 @@ namespace EdProject.BLL.Services
     {
         AuthorInPrintingEditionRepository _authorInEditions;
         IMapper _mapper;
+
         public AuthorInEditionService(AppDbContext appDbContext,IMapper mapper)
         {
             _authorInEditions = new AuthorInPrintingEditionRepository(appDbContext);
@@ -23,92 +24,51 @@ namespace EdProject.BLL.Services
 
         public async Task CreateAuthInEdAsync(AuthorInEditionModel authInEditModel)
         {
-            await _authorInEditions.CreateAsync(_mapper.Map<AuthorInEditionModel, AuthorInEditions>(authInEditModel));
- 
+            var newAuthorInEdit = _mapper.Map<AuthorInEditionModel, AuthorInEditions>(authInEditModel);
+            if (_authorInEditions.AuthorInEdtionExist(newAuthorInEdit))
+                throw new CustomException("Author already exist in this edition!",400);
+            await _authorInEditions.CreateAsync(newAuthorInEdit);
         }
         public async Task DeleteAuthInEditionAsync(AuthorInEditionModel authInEditModel)
         {   
-            var itemToRemove = _mapper.Map<AuthorInEditionModel, AuthorInEditions>(authInEditModel);
-            await _authorInEditions.DeleteAsync(itemToRemove);
+            await _authorInEditions.DeleteAsync(_mapper.Map<AuthorInEditionModel, AuthorInEditions>(authInEditModel));
         }
-        public List<AuthorInEditionModel> GetEditionsByAuthorId(long authorId)
+        public async Task<List<AuthorInEditionModel>> GetEditionsByAuthorId(long authorId)
         {
-            try
-            {
-                List<AuthorInEditions> queryList = _authorInEditions.GetEditionsByAuthor(authorId);
+            List<AuthorInEditions> queryList = await _authorInEditions.GetEditionsByAuthorAsync(authorId);
 
-                if (!queryList.Any())
-                    throw new Exception("This author hasn't edition's");
+            if (!queryList.Any())
+                throw new CustomException("This author hasn't edition's",200);
 
-                return _mapper.Map<List<AuthorInEditions>, List<AuthorInEditionModel>>(queryList);
-            }
-            catch (Exception x)
-            {
-                throw new Exception($"Error!. {x.Message}");
-            }
+            return _mapper.Map<List<AuthorInEditions>, List<AuthorInEditionModel>>(queryList);
         }
-        public List<AuthorInEditionModel> GetAuthorsByEditionId(long editionId)
+        public async Task<List<AuthorInEditionModel>> GetAuthorsByEditionId(long editionId)
         {
-            try
-            {
-                List<AuthorInEditions> queryList = _authorInEditions.GetAuthorsByEdition(editionId);
 
-                if (!queryList.Any())
-                    throw new Exception("Edition not found!");
+            List<AuthorInEditions> queryList = await _authorInEditions.GetAuthorsByEditionAsync(editionId);
 
-                return _mapper.Map<List<AuthorInEditions>, List<AuthorInEditionModel>>(queryList);
+            if (!queryList.Any())
+                throw new CustomException("Edition was not found!",200);
 
-            }
-            catch (Exception x)
-            {
-                throw new Exception($"Error!. {x.Message}");
-            }
+            return _mapper.Map<List<AuthorInEditions>, List<AuthorInEditionModel>>(queryList);
+
         }
-        public List<AuthorInEditionModel> GetList()
+        public async Task<List<AuthorInEditionModel>> GetList()
         {
-            try
-            {
-                List<AuthorInEditionModel> outList = new List<AuthorInEditionModel>();
-                List<AuthorInEditions> queryList = _authorInEditions.GetAll().ToList();
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorInEditions, AuthorInEditionModel>());
-                var _mapper = new Mapper(config);
+            List<AuthorInEditions> queryList = await _authorInEditions.GetAllAuthorInEditionAsync();
 
-                if (queryList.Count() == 0)
-                    throw new Exception("List is empty!");
+            if (!queryList.Any())
+                throw new CustomException("List is empty!",200);
 
-                foreach (AuthorInEditions inEditions in queryList)
-                {
-                    var authorOut = _mapper.Map<AuthorInEditions, AuthorInEditionModel>(inEditions);
-                    authorOut.EditionTitle = inEditions.Edition.Title;
-                    authorOut.AuthorName = inEditions.Author.Name;
-                    outList.Add(authorOut);
-                }
-
-                return outList;
-            }
-            catch (Exception x)
-            {
-                throw new Exception($"Error!. {x.Message}");
-            }
+            return _mapper.Map<List<AuthorInEditions>, List<AuthorInEditionModel>>(queryList);   
         }
         public async Task UpdateAuthorInEditAsync(AuthorInEditionModel authInEditModel)
         {
-
-
-            var oldItem = _authorInEditions.GetAll().Where(x => x.EditionId == authInEditModel.EditionId).FirstOrDefault();
-            await _authorInEditions.DeleteAsync(oldItem);
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorInEditionModel, AuthorInEditions>());
-            var _mapper = new Mapper(config);
+            var oldItem =(await _authorInEditions.GetAllAuthorInEditionAsync()).Where(x => x.EditionId == authInEditModel.EditionId).FirstOrDefault();
             var newItem = _mapper.Map<AuthorInEditionModel, AuthorInEditions>(authInEditModel);
 
-            try
-            {
-                await _authorInEditions.CreateAsync(newItem);
-            }
-            catch(Exception x)
-            {
-                throw new Exception($"Failed to update. {x.Message}");
-            }
+            await _authorInEditions.UpdateAsync(oldItem,newItem);
+
         }
     }
 }

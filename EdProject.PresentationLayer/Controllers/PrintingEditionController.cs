@@ -1,18 +1,10 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration;
-using EdProject.BLL;
 using EdProject.BLL.Models.PrintingEditions;
-using EdProject.BLL.Services;
 using EdProject.BLL.Services.Interfaces;
-using EdProject.DAL.DataContext;
-using EdProject.DAL.Entities;
 using EdProject.PresentationLayer.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Controllers
@@ -22,38 +14,24 @@ namespace EdProject.PresentationLayer.Controllers
     public class PrintingEditionController : ControllerBase
     {
         IPrintingEditionService _printEditionService;
-        public PrintingEditionController(IPrintingEditionService printingEditionService)
+        IMapper _mapper;
+        public PrintingEditionController(IPrintingEditionService printingEditionService, IMapper mapper)
         {
             _printEditionService = printingEditionService;
+            _mapper = mapper;
         }
-     
-
 
         [HttpPost("[action]")]
         public  async Task Create(PrintingEditionViewModel register)
-        {
-            PrintingEditionModel editionModel = new PrintingEditionModel
-            {
-                Title = register.Title,
-                Description = register.Description,
-                Price = register.Price,
-                Status = register.Status,
-                Currency = register.Currency,
-                Type = register.Types
-            };
-
-            await _printEditionService.CreatePrintEdition(editionModel);
+        {        
+            await _printEditionService.CreatePrintEdition(_mapper.Map<PrintingEditionViewModel,PrintingEditionModel>(register));
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UpdateEdition(PrintingEditionViewModel updateModel)
-        {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<PrintingEditionViewModel, PrintingEditionModel>());
-            var _mapper = new Mapper(config);
-            var updateEdition = _mapper.Map<PrintingEditionViewModel, PrintingEditionModel>(updateModel);
-           
-            await _printEditionService.UpdatePrintEdition(updateEdition);
+        {        
+            await _printEditionService.UpdatePrintEdition(_mapper.Map<PrintingEditionViewModel, PrintingEditionModel>(updateModel));
         }
 
         [Authorize(Roles = "admin")]
@@ -62,10 +40,11 @@ namespace EdProject.PresentationLayer.Controllers
         {
             await _printEditionService.RemoveEditionAsync(id);
         }
+
         [HttpGet("[action]")]
-        public List<PrintingEditionModel> GetEditions()
+        public Task<List<PrintingEditionModel>> GetEditions()
         {
-           return _printEditionService.GetEditionList();
+           return _printEditionService.GetEditionListAsync();
         }
 
         [HttpGet("[action]")]
@@ -75,9 +54,9 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpGet("[action]")]
-        public List<PrintingEditionModel> GetEditionByQuery(string searchString)
+        public Task<List<PrintingEditionModel>> GetEditionByQuery(string searchString)
         {
-            return _printEditionService.GetEditionListByString(searchString);
+            return _printEditionService.GetEditionListByStringAsync(searchString);
         }
 
     }

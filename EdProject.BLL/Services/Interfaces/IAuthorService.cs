@@ -13,7 +13,7 @@ namespace EdProject.BLL.Services.Interfaces
         public Task UpdateAuthorAsync(AuthorModel authorModel);
         public Task CreateAuthorAsync(AuthorModel authorModel);
         public Task<AuthorModel> GetAuthorById(long id);
-        public List<AuthorModel> GetAuthorList();
+        public Task<List<AuthorModel>> GetAuthorList();
         public Task RemoveAuthorAsync(long id);
     }
 }

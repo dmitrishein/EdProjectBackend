@@ -4,59 +4,57 @@ using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
-using EdProject.DAL.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
 {
     public class AuthorService : IAuthorService
     {
-        AuthorRepository _authorRepositroy;
+        AuthorRepository _authorRepository;
         IMapper _mapper;
         public AuthorService(AppDbContext appDb,IMapper mapper)
         {
-            _authorRepositroy = new AuthorRepository(appDb);
+            _authorRepository = new AuthorRepository(appDb);
             _mapper = mapper;
         }
 
         public async Task CreateAuthorAsync(AuthorModel authorModel)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorModel, Author>());
-            var _mapper = new Mapper(config);
+            char[] anyCh = { '/', '@', '#', '_' };
+            if (Regex.IsMatch(authorModel.Name, @"[^0-9]") && authorModel.Name.IndexOfAny(anyCh) > 0)
+                throw new CustomException("Author's name must to be without numbers",400);
+           
             var newAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
 
-            await _authorRepositroy.CreateAsync(newAuthor);
+            if (_authorRepository.AuthorIsExist(newAuthor))
+                throw new CustomException("Error! Author already exist!", 400);
+
+            await _authorRepository.CreateAsync(newAuthor);
         }
         public async Task<AuthorModel> GetAuthorById(long id)
         {
-            try
-            {
-                var authorIn = await _authorRepositroy.FindByIdAsync(id);
-                
-                return _mapper.Map<Author, AuthorModel>(authorIn);          
-            }
-            catch(Exception x)
-            {
-                throw new Exception($"Author wasn't found. {x.Message}");
-            }
- 
-        }
-        public List<AuthorModel> GetAuthorList()
-        {
-            if (!_authorRepositroy.GetAllAuthors().Any())
-                throw new Exception("Author wasn't found");
+            var authorIn = await _authorRepository.FindByIdAsync(id);
 
-            return _mapper.Map<List<Author>, List<AuthorModel>>(_authorRepositroy.GetAllAuthors());          
+            if (authorIn is null)
+                throw new CustomException("Author wasn't found!", 400);
+
+            return _mapper.Map<Author, AuthorModel>(authorIn);
+        }
+        public async Task<List<AuthorModel>> GetAuthorList()
+        {
+            if (!(await _authorRepository.GetAllAuthorsAsync()).Any())
+                throw new CustomException("Author wasn't found",200);
+
+            return _mapper.Map<List<Author>, List<AuthorModel>>(await _authorRepository.GetAllAuthorsAsync());          
         }
         public async Task UpdateAuthorAsync(AuthorModel authorModel)
-        {
-          
+        {   
             var updatedAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
-            var oldAuthor = await _authorRepositroy.FindByIdAsync(updatedAuthor.Id);
+            var oldAuthor = await _authorRepository.FindByIdAsync(updatedAuthor.Id);
 
             if (oldAuthor is null)
                 throw new Exception("Error! Author wasn't found");
@@ -64,18 +62,14 @@ namespace EdProject.BLL.Services
             if (oldAuthor.IsRemoved is true)
                 throw new Exception("Cannot update. Author was removed");
 
-            await _authorRepositroy.UpdateAsync(oldAuthor,updatedAuthor);
+            await _authorRepository.UpdateAsync(oldAuthor,updatedAuthor);
         }
         public async Task RemoveAuthorAsync(long id)
         {
-            try
-            {
-                await _authorRepositroy.RemoveAuthorById(id);
-            }
-            catch(Exception x)
-            {
-                throw new Exception($"Error! Cannot remove Author { x.Message}");
-            }
+            var author = await _authorRepository.FindByIdAsync(id);
+            if (author.IsRemoved)
+                throw new CustomException("author is already removed", 400);
+            await _authorRepository.RemoveAuthorById(id);
         }
 
     }

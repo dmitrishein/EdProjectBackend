@@ -32,27 +32,23 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task CreateAuthor(AuthorViewModel createAuthor)
         {
-            AuthorModel author = new()
-            {
-                Name = createAuthor.FullName
-            };
-
-            await _authorService.CreateAuthorAsync(author);
+            await _authorService.CreateAuthorAsync(_mapper.Map<AuthorViewModel,AuthorModel>(createAuthor));
         }
 
         [HttpGet("[action]")]
-        public List<AuthorModel> GetAuthorList()
+        public Task<List<AuthorModel>> GetAuthorList()
         {
             return _authorService.GetAuthorList();
         }
 
         [HttpGet("[action]")]
-        public List<AuthorInEditionModel> GetEditionsByAuthorId(long authorId)
+        public Task<List<AuthorInEditionModel>> GetEditionsByAuthorId(long authorId)
         {
             return _authorInEditionService.GetEditionsByAuthorId(authorId);
         }
+
         [HttpGet("[action]")]
-        public List<AuthorInEditionModel> GetAuthorByEditionId(long editionId)
+        public Task<List<AuthorInEditionModel>> GetAuthorByEditionId(long editionId)
         {  
             return _authorInEditionService.GetAuthorsByEditionId(editionId);
         }
@@ -62,6 +58,7 @@ namespace EdProject.PresentationLayer.Controllers
         {
             await _authorInEditionService.CreateAuthInEdAsync(_mapper.Map<AuthorInEditionViewModel, AuthorInEditionModel>(authorIn));
         }
+
         [HttpPost("[action]")]
         public async Task RemoveAuthorInEdition(AuthorInEditionViewModel authorIn)
         {

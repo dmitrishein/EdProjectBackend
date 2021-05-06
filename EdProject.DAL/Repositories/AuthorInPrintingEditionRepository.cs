@@ -18,25 +18,31 @@ namespace EdProject.DAL.Repositories
           
         }
 
-        public List<AuthorInEditions> GetAuthorsByEdition(long editionId)
+        public bool AuthorInEdtionExist(AuthorInEditions author)
         {
-           return GetAll().Where(x => x.EditionId == editionId).ToList();
+            return GetAll().Where(item => item.AuthorId == author.AuthorId && item.EditionId == author.EditionId).Any();
         }
-        public List<AuthorInEditions> GetEditionsByAuthor(long authorId)
+        public async Task<List<AuthorInEditions>> GetAllAuthorInEditionAsync()
         {
-            return GetAll().Where(x => x.AuthorId == authorId).ToList();
+            return await GetAll().ToListAsync();
         }
-        public async Task<List<AuthorInEditions>> GetListByAuthorId(long authorId)
+        public async Task<List<AuthorInEditions>> GetAuthorsByEditionAsync(long editionId)
         {
-            var editions = GetAll().Where(e => e.AuthorId == authorId);
+           return await GetAll().Where(x => x.EditionId == editionId).ToListAsync();
+        }
+        public async Task<List<AuthorInEditions>> GetEditionsByAuthorAsync(long authorId)
+        {
+            return await GetAll().Where(x => x.AuthorId == authorId).ToListAsync();
+        }
+        public async Task<List<AuthorInEditions>> GetListByAuthorIdAsync(long authorId)
+        {
 
-            return await editions.ToListAsync();
+            return await GetAll().Where(e => e.AuthorId == authorId).ToListAsync();
         }
-        public async Task<List<AuthorInEditions>> GetListByEditionId(long editionId)
+        public async Task<List<AuthorInEditions>> GetListByEditionIdAsync(long editionId)
         {
-            var editions = GetAll().Where(e => e.EditionId == editionId);
 
-            return await editions.ToListAsync();
+            return await GetAll().Where(e => e.EditionId == editionId).ToListAsync();
         }
 
       

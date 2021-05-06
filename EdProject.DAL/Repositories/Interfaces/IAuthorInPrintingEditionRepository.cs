@@ -9,7 +9,10 @@ namespace EdProject.DAL.Repositories.Interfaces
 {
     public interface IAuthorInPrintingEditionRepository : IBaseRepository<AuthorInEditions>
     {
-        Task<List<AuthorInEditions>> GetListByAuthorId(long authorId);
-        Task<List<AuthorInEditions>> GetListByEditionId(long editionId);
+        Task<List<AuthorInEditions>> GetListByAuthorIdAsync(long authorId);
+        Task<List<AuthorInEditions>> GetListByEditionIdAsync(long editionId);
+        Task<List<AuthorInEditions>> GetEditionsByAuthorAsync(long authorId);
+        Task<List<AuthorInEditions>> GetAuthorsByEditionAsync(long editionId);
+        bool AuthorInEdtionExist(AuthorInEditions author);
     }
 }

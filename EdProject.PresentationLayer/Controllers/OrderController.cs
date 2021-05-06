@@ -84,14 +84,14 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public List<OrderModel> GetOrdersByUserId(long userId)
+        public Task<List<OrderModel>> GetOrdersByUserId(long userId)
         {
             return  _orderService.GetOrdersByUserId(userId);
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public List<OrderModel> GetOrders()
+        public Task<List<OrderModel>> GetOrders()
         {
             return  _orderService.GetOrdersList();
         }

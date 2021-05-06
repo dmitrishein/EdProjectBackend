@@ -18,10 +18,6 @@ namespace EdProject.DAL.Repositories.Base
             _dbSet = appDbContext.Set<TEntity>();
         }
 
-        public bool Exist(params object[] keys)
-        {
-            return (_dbSet.Find(keys) != null);
-        }
         public async Task<TEntity> FindByIdAsync(long id)
         {
             return await _dbSet.FindAsync(id);
@@ -36,10 +32,11 @@ namespace EdProject.DAL.Repositories.Base
             _dbSet.Remove(item);
           await _dbContext.SaveChangesAsync();
         }
-        public IQueryable<TEntity> GetAll()
+        protected IQueryable<TEntity> GetAll()
         {
             return _dbSet.AsQueryable();
         }
+       
         public async Task UpdateAsync(TEntity oldItem,TEntity newItem)
         {
             _dbContext.Entry(oldItem).CurrentValues.SetValues(newItem);
@@ -54,7 +51,11 @@ namespace EdProject.DAL.Repositories.Base
         {
             await _dbContext.SaveChangesAsync();
         }
- 
+
+        IQueryable<TEntity> IBaseRepository<TEntity>.GetAll()
+        {
+            throw new System.NotImplementedException();
+        }
     }
     
 }

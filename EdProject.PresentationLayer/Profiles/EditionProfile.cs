@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.DAL.Entities;
+using EdProject.PresentationLayer.Models;
 
 namespace EdProject.BLL.Profiles
 {
@@ -9,6 +10,8 @@ namespace EdProject.BLL.Profiles
         public EditionProfile()
         {
             CreateMap<Edition, PrintingEditionModel>();
+            CreateMap<PrintingEditionModel, Edition>();
+            CreateMap<PrintingEditionViewModel, PrintingEditionModel>();
         }
     }
 }

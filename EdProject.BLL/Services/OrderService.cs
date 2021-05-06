@@ -43,38 +43,21 @@ namespace EdProject.BLL.Services
             var newPayment = _mapper.Map<PaymentModel, Payments>(paymentModel);
             await _paymentRepository.CreateAsync(newPayment);
         }
-        public List<OrderModel> GetOrdersByUserId(long userId)
+        public async Task<List<OrderModel>> GetOrdersByUserId(long userId)
         {
-            try
-            {     
-                List<Orders> queryList = _orderRepository.GetAllOrders().Where(x => x.Id == userId).ToList();        
+            List<Orders> queryList = (await _orderRepository.GetAllOrders()).Where(x => x.Id == userId).ToList();
 
-                if (!queryList.Any())
-                    throw new Exception("No orders found");
+            if (!queryList.Any())
+                    throw new CustomException("No orders found",200);
 
-                return _mapper.Map<List<Orders>, List<OrderModel>>(queryList);
-            }
-            catch (Exception x)
-            {
-                throw new Exception($"Error!. {x.Message}");
-            }
-
+            return _mapper.Map<List<Orders>, List<OrderModel>>(queryList);
         }
-        public List<OrderModel> GetOrdersList()
+        public async Task<List<OrderModel>> GetOrdersList()
         {
-            try
-            {
+            if (!(await _orderRepository.GetAllOrders()).Any())
+                throw new CustomException("No orders found :(",200);
 
-                if (!_orderRepository.GetAllOrders().Any())
-                    throw new Exception("No orders found");
-
-                return _mapper.Map<List<Orders>,List<OrderModel>>(_orderRepository.GetAllOrders());
-         
-            }
-            catch (Exception x)
-            {
-                throw new Exception($"Error!. {x.Message}");
-            }
+            return _mapper.Map<List<Orders>, List<OrderModel>>(await _orderRepository.GetAllOrders());  
         }
 
     }

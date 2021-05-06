@@ -18,6 +18,6 @@ namespace EdProject.PresentationLayer.Models
         [Required]
         public CurrencyTypes Currency { get; set; }
         [Required]
-        public EditionStatusTypes Types { get; set; }
+        public EditionStatusTypes Type { get; set; }
     }
 }

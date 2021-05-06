@@ -2,6 +2,7 @@
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,9 +16,9 @@ namespace EdProject.DAL.Repositories
         public PaymentRepository(AppDbContext appDbContext) : base(appDbContext)
         {
         }
-        public List<Payments> GetAllPayments()
+        public async Task<List<Payments>> GetAllPayments()
         {
-           return GetAll().ToList();
+           return await GetAll().ToListAsync();
         }
         public async Task RemovePaymentAsync(long id)
         {

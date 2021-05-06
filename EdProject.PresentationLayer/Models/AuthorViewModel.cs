@@ -8,6 +8,6 @@ namespace EdProject.PresentationLayer.Models
 
 
         [Required]
-        public string FullName { get; set; }
+        public string Name { get; set; }
     }
 }

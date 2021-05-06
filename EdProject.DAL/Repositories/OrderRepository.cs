@@ -3,10 +3,8 @@ using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories
@@ -40,9 +38,9 @@ namespace EdProject.DAL.Repositories
             }
 
         }
-        public List<Orders> GetAllOrders()
+        public async Task<List<Orders>> GetAllOrders()
         {
-            return base.GetAll().Where(x => !x.IsRemoved).ToList();
+            return await GetAll().Where(x => !x.IsRemoved).ToListAsync();
         }
         public async Task<List<Orders>> FilterOrderList(string searchString)
         {
