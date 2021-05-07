@@ -4,14 +4,16 @@ using EdProject.DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EdProject.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210507095754_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +59,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "5fd2179b-2a9a-4271-8ebe-debddcc05c1a",
+                            ConcurrencyStamp = "c7c64ed8-404b-4cd4-8539-eaf19d4406b3",
                             Name = "admin",
                             NormalizedName = "admin",
                             RolesType = 1,
@@ -66,7 +68,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "bda8a2d0-c2fd-4873-a666-5adf015b1fa2",
+                            ConcurrencyStamp = "ced37510-a790-44b8-ae28-3d6f40661749",
                             Name = "client-user",
                             NormalizedName = "client",
                             RolesType = 2,
@@ -154,7 +156,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fa8ca22d-9d79-422c-8307-0684dcf0ce32",
+                            ConcurrencyStamp = "a4944149-577e-4df5-9834-ccf8c2c17c2d",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -162,9 +164,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDM7B5vKTAK/44rGJl5uk36briuIwgrVNeE5J87r2Q773OKioawbsqTUH6GgncU/UQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIKCEhthLNEN0wdkUqPqLXX43/d7qXMHFG7R7mWrvTs5PIAY/NUJATpP7sqsNygDwQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e3802aaf-5048-4a7b-9490-f6a9707bbf21",
+                            SecurityStamp = "cbb168bf-1355-4edd-8f5b-a0cddfda1558",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             isRemoved = false
@@ -173,7 +175,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "335f1da0-fa9d-418d-a168-a75bc6aa301d",
+                            ConcurrencyStamp = "d5258949-a7d0-4f32-874f-8e5665fdbb2d",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
@@ -181,9 +183,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFAJVGW3WNdSoth3tEBxdpZ5biWKea8PQ+1rVTMO5pPXB4GSyyok6pVU0NpqLeZPww==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECi+grLQhsTQdRgQj5H+eKmOKnjS6sYVqYFWmmvUTVOpcemteGkUqADfNba/a7+Gcw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "50ab4bf2-113d-4218-8de4-c3e17203616a",
+                            SecurityStamp = "1513d352-5544-4dd5-b274-ba85a02243c8",
                             TwoFactorEnabled = false,
                             UserName = "client",
                             isRemoved = false
@@ -214,14 +216,14 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 912, DateTimeKind.Local).AddTicks(3899),
+                            CreatedAt = new DateTime(2021, 5, 7, 12, 57, 53, 860, DateTimeKind.Local).AddTicks(5513),
                             IsRemoved = false,
                             Name = "William Shakespare"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(3079),
+                            CreatedAt = new DateTime(2021, 5, 7, 12, 57, 53, 862, DateTimeKind.Local).AddTicks(8402),
                             IsRemoved = false,
                             Name = "Stephen King"
                         });
@@ -325,7 +327,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(4307),
+                            CreatedAt = new DateTime(2021, 5, 7, 12, 57, 53, 862, DateTimeKind.Local).AddTicks(9169),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -337,7 +339,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(7077),
+                            CreatedAt = new DateTime(2021, 5, 7, 12, 57, 53, 863, DateTimeKind.Local).AddTicks(1623),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -349,7 +351,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(7092),
+                            CreatedAt = new DateTime(2021, 5, 7, 12, 57, 53, 863, DateTimeKind.Local).AddTicks(1636),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -361,7 +363,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(7095),
+                            CreatedAt = new DateTime(2021, 5, 7, 12, 57, 53, 863, DateTimeKind.Local).AddTicks(1640),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -373,7 +375,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 5L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(7098),
+                            CreatedAt = new DateTime(2021, 5, 7, 12, 57, 53, 863, DateTimeKind.Local).AddTicks(1644),
                             Currency = "EUR",
                             Description = "Featuring Willy Shakespare",
                             IsRemoved = false,
@@ -410,8 +412,6 @@ namespace EdProject.DAL.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EditionId");
 
                     b.HasIndex("OrderId");
 
@@ -476,6 +476,21 @@ namespace EdProject.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("EditionOrderItems", b =>
+                {
+                    b.Property<long>("EditionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("OrderItemId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("EditionId", "OrderItemId");
+
+                    b.HasIndex("OrderItemId");
+
+                    b.ToTable("EditionOrderItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -617,19 +632,11 @@ namespace EdProject.DAL.Migrations
 
             modelBuilder.Entity("EdProject.DAL.Entities.OrderItems", b =>
                 {
-                    b.HasOne("EdProject.DAL.Entities.Edition", "Edition")
-                        .WithMany("OrderItem")
-                        .HasForeignKey("EditionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EdProject.DAL.Entities.Orders", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Edition");
 
                     b.Navigation("Order");
                 });
@@ -649,6 +656,21 @@ namespace EdProject.DAL.Migrations
                     b.Navigation("Payment");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EditionOrderItems", b =>
+                {
+                    b.HasOne("EdProject.DAL.Entities.Edition", null)
+                        .WithMany()
+                        .HasForeignKey("EditionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EdProject.DAL.Entities.OrderItems", null)
+                        .WithMany()
+                        .HasForeignKey("OrderItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -715,8 +737,6 @@ namespace EdProject.DAL.Migrations
             modelBuilder.Entity("EdProject.DAL.Entities.Edition", b =>
                 {
                     b.Navigation("Authors");
-
-                    b.Navigation("OrderItem");
                 });
 
             modelBuilder.Entity("EdProject.DAL.Entities.Orders", b =>

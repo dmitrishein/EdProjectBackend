@@ -46,7 +46,7 @@ namespace EdProject.PresentationLayer.Controllers
         public async Task Login(LoginViewModel login)
         {
             JwtProvider jwt = new JwtProvider(_config);
-
+            
             await _accountService.SignInAsync(_mapper.Map<LoginViewModel,UserSignInModel>(login));
             var tokenString = await jwt.GenerateAccessToken(await _accountService.GetUserByEmailAsync(login.Email), _accountService);
             var refreshTokenString = jwt.GenerateRefreshToken(); 

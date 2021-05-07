@@ -30,14 +30,14 @@ namespace EdProject.PresentationLayer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSpaStaticFiles(configuration =>
-            //{
-            //    configuration.RootPath = "ClientApp/dist";
-            //});
-            services.AddSwaggerGen(c =>
+            services.AddSpaStaticFiles(configuration =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
+                configuration.RootPath = "ClientApp/dist";
             });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
+            //});
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                  .AddJwtBearer(options =>
@@ -98,10 +98,10 @@ namespace EdProject.PresentationLayer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
+                //app.UseSwagger();
+                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
 
-                //app.UseSpaStaticFiles();
+                app.UseSpaStaticFiles();
             }
 
             app.UseHttpsRedirection();
@@ -115,15 +115,15 @@ namespace EdProject.PresentationLayer
                 endpoints.MapControllers();   
             });
 
-            //app.UseSpa(spa =>
-            //{
-            //    spa.Options.SourcePath = "ClientApp";
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
 
-            //    if (env.IsDevelopment())
-            //    {
-            //        spa.UseAngularCliServer(npmScript: "start");
-            //    }
-            //});
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
 
         }
     }

@@ -82,7 +82,6 @@ namespace EdProject.BLL.Services
 
             return _mapper.Map<List<Edition>, List<PrintingEditionModel>>(query);      
         }
-
         private void EditionValidation(PrintingEditionModel editionModel)
         {        
             if (!editionModel.Title.Any())

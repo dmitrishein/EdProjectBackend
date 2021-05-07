@@ -21,14 +21,15 @@ namespace EdProject.PresentationLayer.Controllers
     {
         #region Private Members
         IUserService _userService;
+        IMapper _mapper;
        
         #endregion
 
         #region Constructor
-        public UserController(IUserService userService)
+        public UserController(IUserService userService,IMapper mapper)
         {
             _userService = userService;
-            
+            _mapper = mapper;
         }
         #endregion
 
@@ -37,17 +38,9 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task CreateUser(UserCreateViewModel createUserModel)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserCreateViewModel, UserCreateModel>());
-            var _mapper = new Mapper(config);
             var createdUser = _mapper.Map<UserCreateViewModel, UserCreateModel>(createUserModel);
-            try
-            {
-                await _userService.CreateUserAsync(createdUser);
-            }
-            catch(Exception x)
-            {
-                throw new CustomException($"Cannot create user : {x.Message}",400);
-            }
+
+            await _userService.CreateUserAsync(createdUser);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -58,17 +51,12 @@ namespace EdProject.PresentationLayer.Controllers
             await _userService.GetUserAsync(id);
         }
 
-
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UpdateUser(UserUpdViewModel userUpdViewModel)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserUpdViewModel, UserUpdateModel>());
-            var _mapper = new Mapper(config);
-            var updatedUser = _mapper.Map<UserUpdViewModel, UserUpdateModel>(userUpdViewModel);
-
-            await _userService.UpdateUserAsync(updatedUser);
+            await _userService.UpdateUserAsync(_mapper.Map<UserUpdViewModel, UserUpdateModel>(userUpdViewModel));
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -76,14 +64,7 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task RemoveUser(long userId)
         {
-            try
-            {
-                await _userService.RemoveUserAsync(userId);
-            }
-            catch(Exception x)
-            {
-                throw new CustomException($"Can't remove user {x.Message}",400);
-            }
+            await _userService.RemoveUserAsync(userId);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

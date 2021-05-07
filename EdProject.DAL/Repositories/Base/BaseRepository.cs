@@ -32,11 +32,10 @@ namespace EdProject.DAL.Repositories.Base
             _dbSet.Remove(item);
           await _dbContext.SaveChangesAsync();
         }
-        protected IQueryable<TEntity> GetAll()
+        public IQueryable<TEntity> GetAll()
         {
             return _dbSet.AsQueryable();
         }
-       
         public async Task UpdateAsync(TEntity oldItem,TEntity newItem)
         {
             _dbContext.Entry(oldItem).CurrentValues.SetValues(newItem);
@@ -52,10 +51,6 @@ namespace EdProject.DAL.Repositories.Base
             await _dbContext.SaveChangesAsync();
         }
 
-        IQueryable<TEntity> IBaseRepository<TEntity>.GetAll()
-        {
-            throw new System.NotImplementedException();
-        }
     }
     
 }

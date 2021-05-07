@@ -93,7 +93,6 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\tsconfig.spec.json
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\tslint.json
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Microsoft.AspNetCore.SpaServices.Extensions.dll
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\src\proxy.conf.json
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\System.Net.Http.Formatting.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\System.Web.Http.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll

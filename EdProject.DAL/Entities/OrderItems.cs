@@ -1,5 +1,6 @@
 ﻿using EdProject.DAL.Entities.Base;
 using EdProject.DAL.Entities.Enums;
+using System.Collections.Generic;
 
 namespace EdProject.DAL.Entities
 {

@@ -24,9 +24,8 @@ namespace EdProject.BLL.Services
 
         public async Task CreateAuthorAsync(AuthorModel authorModel)
         {
-            char[] anyCh = { '/', '@', '#', '_' };
-            if (Regex.IsMatch(authorModel.Name, @"[^0-9]") && authorModel.Name.IndexOfAny(anyCh) > 0)
-                throw new CustomException("Author's name must to be without numbers",400);
+            if (Regex.IsMatch(authorModel.Name, @"\d", RegexOptions.IgnoreCase) || Regex.IsMatch(authorModel.Name, @"\W", RegexOptions.IgnoreCase))
+                throw new CustomException("Invalid Author's name! Name consist of letter only! ",400);
            
             var newAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
 
@@ -58,7 +57,6 @@ namespace EdProject.BLL.Services
 
             if (oldAuthor is null)
                 throw new Exception("Error! Author wasn't found");
-
             if (oldAuthor.IsRemoved is true)
                 throw new Exception("Cannot update. Author was removed");
 

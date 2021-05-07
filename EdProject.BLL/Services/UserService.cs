@@ -138,7 +138,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException($"Invalid username! It must consist of only numbers and letters", 400);
             if (Regex.IsMatch(userModel.FirstName, @"\W") || Regex.IsMatch(userModel.FirstName, @"\d"))
                 throw new CustomException($"Invalid firstname! It must consist of only numbers and letters", 400);
-            if (Regex.IsMatch(userModel.LastName, @"\-\W") || Regex.IsMatch(userModel.LastName, @"\d"))
+            if (Regex.IsMatch(userModel.LastName, @"\W") || Regex.IsMatch(userModel.LastName, @"\d"))
                 throw new CustomException($"Invalid lastname! It must consist of only numbers and letters", 400);
         }
     }

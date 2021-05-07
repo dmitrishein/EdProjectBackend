@@ -16,7 +16,11 @@ namespace EdProject.DAL.Repositories
         public OrderItemRepository(AppDbContext appDbContext) : base (appDbContext)
         {
         }
-
+        public bool IsExist(OrderItems item)
+        {
+            var query = GetAll().Where(oi => oi.EditionId == item.EditionId && oi.OrderId == item.OrderId);
+            return query.Any();
+        }
         public async Task RemoveOrderItemAsync(long id)
         {
             var res = await _dbSet.FindAsync(id);

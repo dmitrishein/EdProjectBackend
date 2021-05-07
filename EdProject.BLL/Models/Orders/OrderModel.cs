@@ -1,4 +1,5 @@
-﻿using EdProject.DAL.Enums;
+﻿using EdProject.DAL.Entities;
+using EdProject.DAL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

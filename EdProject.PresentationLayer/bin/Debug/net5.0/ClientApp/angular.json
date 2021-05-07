@@ -5,11 +5,7 @@
   "projects": {
     "ClientApp": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:application": {
-          "strict": false
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -50,13 +46,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ]
             }
@@ -65,15 +61,13 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ClientApp:build",
-            "proxyConfig": "src/proxy.conf.json"
+            "browserTarget": "ClientApp:build"
           },
           "configurations": {
             "production": {
               "browserTarget": "ClientApp:build:production"
             }
           }
-          
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

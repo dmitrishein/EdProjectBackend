@@ -14,5 +14,6 @@ namespace EdProject.BLL.Services.Interfaces
         public Task CreatePaymentAsync(PaymentModel paymentModel);
         public Task<List<OrderModel>> GetOrdersByUserId(long userId);
         public Task<List<OrderModel>> GetOrdersList();
+        public Task<OrderModel> GetOrderById(long orderId);
     }
 }

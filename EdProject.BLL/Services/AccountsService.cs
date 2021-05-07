@@ -28,14 +28,14 @@ namespace EdProject.BLL.Services
 
         public async Task SignInAsync(UserSignInModel userSignInModel)
         {
-          var user = await _userManager.FindByEmailAsync(userSignInModel.Email);      
-            
-          if (user is null || !user.EmailConfirmed)
-                throw new Exception("User not found");
+            var user = await _userManager.FindByEmailAsync(userSignInModel.Email);
 
-           
+            if (user is null)
+                throw new CustomException("User not found",400);
+            if (!user.EmailConfirmed)
+                throw new CustomException("Email not confirm! Check your email", 200);
+
           await _signInManager.PasswordSignInAsync(user.UserName, userSignInModel.Password, userSignInModel.RememberMe, false);
-                   
         }
         public async Task SignOutAsync()
         {          

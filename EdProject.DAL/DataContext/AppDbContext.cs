@@ -30,11 +30,11 @@ namespace EdProject.DAL.DataContext
                 .HasForeignKey(ba => ba.AuthorId);
             #endregion
 
-            #region relations Edition and OrderItems(one-to-one) 
+            #region relations Edition and OrderItems(one-to-many) 
             modelBuilder.Entity<OrderItems>()
-                .HasOne(e => e.Edition)
-                .WithOne(o => o.OrderItem)
-                .HasForeignKey<OrderItems>(o => o.EditionId);
+                .HasOne(o => o.Edition)
+                .WithMany(e => e.OrderItem)
+                .HasForeignKey(oi => oi.EditionId);
             #endregion
 
             #region relations orders and ordersItems(one-to-many)

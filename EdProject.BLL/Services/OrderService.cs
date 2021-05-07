@@ -36,11 +36,15 @@ namespace EdProject.BLL.Services
         public async Task CreateOrderItemAsync(OrderItemModel orderItemModel)
         {
             var newOrderItem = _mapper.Map<OrderItemModel, OrderItems>(orderItemModel);
+            if (_orderItemRepository.IsExist(newOrderItem))
+                throw new CustomException("Cannot create item, because it already exist");
+
             await _orderItemRepository.CreateAsync(newOrderItem);
         }
         public async Task CreatePaymentAsync(PaymentModel paymentModel)
         {  
             var newPayment = _mapper.Map<PaymentModel, Payments>(paymentModel);
+
             await _paymentRepository.CreateAsync(newPayment);
         }
         public async Task<List<OrderModel>> GetOrdersByUserId(long userId)
@@ -58,6 +62,14 @@ namespace EdProject.BLL.Services
                 throw new CustomException("No orders found :(",200);
 
             return _mapper.Map<List<Orders>, List<OrderModel>>(await _orderRepository.GetAllOrders());  
+        }
+        public async Task <OrderModel> GetOrderById(long orderId)
+        {
+            var query = (await _orderRepository.GetAllOrders()).Where(o => o.Id == orderId);
+            if (!query.Any())
+                throw new CustomException("No orders found :(", 200);
+            
+            return _mapper.Map<Orders, OrderModel>(query.FirstOrDefault());
         }
 
     }
