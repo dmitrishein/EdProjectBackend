@@ -8,11 +8,11 @@ namespace EdProject.DAL.Entities.Base
     {
         [Key]
         public long Id { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public string CreatedAt { get; set; }
         public bool IsRemoved { get; set; }
         public BaseEntity()
         {
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.Now.ToString("u");
         }
     }
 }

@@ -11,7 +11,6 @@ namespace EdProject.DAL.Repositories
 {
     public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
     {
-       
         public AuthorRepository(AppDbContext dbContext): base(dbContext)
         {
         }
@@ -21,7 +20,7 @@ namespace EdProject.DAL.Repositories
         }
         public bool AuthorIsExist(Author author)
         {
-            return GetAll().Where(item => item.Name == author.Name).Any();
+            return GetAll().Any(item => item.Name == author.Name);
         }
         public async Task RemoveAuthorById(long id)
         {

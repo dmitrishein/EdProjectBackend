@@ -3,6 +3,8 @@ using EdProject.BLL.Services;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
+using EdProject.DAL.Repositories;
+using EdProject.DAL.Repositories.Interfaces;
 using EdProject.PresentationLayer.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -30,14 +32,14 @@ namespace EdProject.PresentationLayer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
-            //services.AddSwaggerGen(c =>
+            //services.AddSpaStaticFiles(configuration =>
             //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
+            //    configuration.RootPath = "ClientApp/dist";
             //});
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
+            });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                  .AddJwtBearer(options =>
@@ -53,21 +55,21 @@ namespace EdProject.PresentationLayer
                          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                      };
                  });
+  
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>()
+                                                  .AddDefaultTokenProviders();
 
-            services.AddDbContext<AppDbContext>(options =>
-                                                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options => options
+                                                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                                                .UseLazyLoadingProxies());
           
-            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<AppDbContext>()
-                                                    .AddDefaultTokenProviders();
-
-            
-
-            services.AddScoped<IPrintingEditionService, PrintingEditionService>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IPrintingEditionService, EditionService>();
             services.AddScoped<IAccountService, AccountsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
-            services.AddScoped<IOrdersService, OrderService>();
-            services.AddScoped<IAuthorInEditionService, AuthorInEditionService>();
+            //services.AddScoped<IOrdersService, OrderService>();
+            //services.AddScoped<IAuthorInEditionService, AuthorInEditionService>();
 
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), typeof(OrderItemProfile), typeof(PaymentProfile),typeof(AuthorProfile), typeof(AuthorInEditionProfile), typeof(AccountProfile));
@@ -98,10 +100,10 @@ namespace EdProject.PresentationLayer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseSwagger();
-                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
 
-                app.UseSpaStaticFiles();
+                //app.UseSpaStaticFiles();
             }
 
             app.UseHttpsRedirection();
@@ -115,15 +117,15 @@ namespace EdProject.PresentationLayer
                 endpoints.MapControllers();   
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseAngularCliServer(npmScript: "start");
+            //    }
+            //});
 
         }
     }

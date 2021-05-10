@@ -1,0 +1,8 @@
+[2021-05-10 10:30:55+00:00] [Error] - Generating browser application bundles...
+ 
+[2021-05-10 10:30:58+00:00] [Error] ΓêÜ Browser application bundle generation complete.
+ 
+[2021-05-10 11:00:11+00:00] [Error] Failed executing DbCommand (39ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_OrderItems_EditionId] ON [OrderItems] ([EditionId]); 
+[2021-05-10 12:27:23+00:00] [Error] Failed executing DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_OrderItems_EditionId] ON [OrderItems] ([EditionId]); 

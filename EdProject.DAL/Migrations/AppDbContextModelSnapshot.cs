@@ -19,7 +19,252 @@ namespace EdProject.DAL.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("EdProject.DAL.Entities.AppRole", b =>
+            modelBuilder.Entity("AuthorEdition", b =>
+                {
+                    b.Property<long>("AuthorsId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("EditionsId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("AuthorsId", "EditionsId");
+
+                    b.HasIndex("EditionsId");
+
+                    b.ToTable("AuthorInEditions");
+
+                    b.HasData(
+                        new
+                        {
+                            AuthorsId = 1L,
+                            EditionsId = 1L
+                        },
+                        new
+                        {
+                            AuthorsId = 1L,
+                            EditionsId = 2L
+                        },
+                        new
+                        {
+                            AuthorsId = 2L,
+                            EditionsId = 3L
+                        },
+                        new
+                        {
+                            AuthorsId = 2L,
+                            EditionsId = 4L
+                        },
+                        new
+                        {
+                            AuthorsId = 1L,
+                            EditionsId = 5L
+                        },
+                        new
+                        {
+                            AuthorsId = 2L,
+                            EditionsId = 5L
+                        });
+                });
+
+            modelBuilder.Entity("EdProject.DAL.Entities.Author", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedAt")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedAt = "2021-05-10 15:47:33Z",
+                            IsRemoved = false,
+                            Name = "William Shakespare"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CreatedAt = "2021-05-10 15:47:33Z",
+                            IsRemoved = false,
+                            Name = "Stephen King"
+                        });
+                });
+
+            modelBuilder.Entity("EdProject.DAL.Entities.Edition", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedAt")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Editions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedAt = "2021-05-10 15:47:33Z",
+                            Currency = "UAH",
+                            Description = "Classic Printing Edition",
+                            IsRemoved = false,
+                            Price = 1444.9m,
+                            Status = "Available",
+                            Title = "Hamlet",
+                            Type = "Book"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CreatedAt = "2021-05-10 15:47:33Z",
+                            Currency = "UAH",
+                            Description = "Classic Printing Edition",
+                            IsRemoved = false,
+                            Price = 1200.9m,
+                            Status = "Available",
+                            Title = "Othello",
+                            Type = "Book"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            CreatedAt = "2021-05-10 15:47:33Z",
+                            Currency = "UAH",
+                            Description = "Classic Printing Edition",
+                            IsRemoved = false,
+                            Price = 1300.9m,
+                            Status = "Available",
+                            Title = "Pet Graveyard",
+                            Type = "Book"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            CreatedAt = "2021-05-10 15:47:33Z",
+                            Currency = "UAH",
+                            Description = "Classic Printing Edition",
+                            IsRemoved = false,
+                            Price = 1140.6m,
+                            Status = "NotAvailable",
+                            Title = "Confrontation",
+                            Type = "Book"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            CreatedAt = "2021-05-10 15:47:33Z",
+                            Currency = "EUR",
+                            Description = "Featuring Willy Shakespare",
+                            IsRemoved = false,
+                            Price = 120.23m,
+                            Status = "NotAvailable",
+                            Title = "Something Weird",
+                            Type = "Magazine"
+                        });
+                });
+
+            modelBuilder.Entity("EdProject.DAL.Entities.Orders", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedAt")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<long?>("PaymentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("StatusType")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId")
+                        .IsUnique()
+                        .HasFilter("[PaymentId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("EdProject.DAL.Entities.Payments", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedAt")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("EdProject.DAL.Entities.Role", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,7 +302,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "5fd2179b-2a9a-4271-8ebe-debddcc05c1a",
+                            ConcurrencyStamp = "74146a6f-77ea-4b3a-8e88-bfa96f8f0cf1",
                             Name = "admin",
                             NormalizedName = "admin",
                             RolesType = 1,
@@ -66,15 +311,15 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "bda8a2d0-c2fd-4873-a666-5adf015b1fa2",
-                            Name = "client-user",
+                            ConcurrencyStamp = "f50b57a1-617c-4d57-8dba-e0bbd93b1f91",
+                            Name = "client",
                             NormalizedName = "client",
                             RolesType = 2,
                             isRemoved = false
                         });
                 });
 
-            modelBuilder.Entity("EdProject.DAL.Entities.AppUser", b =>
+            modelBuilder.Entity("EdProject.DAL.Entities.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -154,7 +399,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fa8ca22d-9d79-422c-8307-0684dcf0ce32",
+                            ConcurrencyStamp = "bd01a517-2176-4d01-b13a-7b9c41d187dc",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -162,9 +407,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDM7B5vKTAK/44rGJl5uk36briuIwgrVNeE5J87r2Q773OKioawbsqTUH6GgncU/UQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEED/zAVUHBmCF4yKuMTzPk23MNfzjoyo36eh40aDiHxhPxytIlXMUVuKQRx/oe7gxQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e3802aaf-5048-4a7b-9490-f6a9707bbf21",
+                            SecurityStamp = "c80d1c5a-2cb0-418c-87f3-51e620f9335c",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             isRemoved = false
@@ -173,7 +418,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "335f1da0-fa9d-418d-a168-a75bc6aa301d",
+                            ConcurrencyStamp = "277ee3a1-0f78-421f-bcdd-7b6013732525",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
@@ -181,301 +426,28 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFAJVGW3WNdSoth3tEBxdpZ5biWKea8PQ+1rVTMO5pPXB4GSyyok6pVU0NpqLeZPww==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENRq8BhvJkhAWqPIkSXYrE3zoBy2cA7JI2dnzMjVFeO3yTElZe//QQbU8NmG5NNRFw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "50ab4bf2-113d-4218-8de4-c3e17203616a",
+                            SecurityStamp = "3dfeae9c-077d-48bb-94d7-ec5b6b7b3e41",
                             TwoFactorEnabled = false,
                             UserName = "client",
                             isRemoved = false
                         });
                 });
 
-            modelBuilder.Entity("EdProject.DAL.Entities.Author", b =>
+            modelBuilder.Entity("EditionOrders", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRemoved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Authors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 912, DateTimeKind.Local).AddTicks(3899),
-                            IsRemoved = false,
-                            Name = "William Shakespare"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(3079),
-                            IsRemoved = false,
-                            Name = "Stephen King"
-                        });
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.AuthorInEditions", b =>
-                {
-                    b.Property<long>("EditionId")
+                    b.Property<long>("EditionsId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("AuthorId")
+                    b.Property<long>("OrdersId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.HasKey("EditionsId", "OrdersId");
 
-                    b.HasKey("EditionId", "AuthorId");
-
-                    b.HasIndex("AuthorId");
-
-                    b.ToTable("AuthorInEditions");
-
-                    b.HasData(
-                        new
-                        {
-                            EditionId = 1L,
-                            AuthorId = 1L,
-                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            EditionId = 2L,
-                            AuthorId = 1L,
-                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            EditionId = 3L,
-                            AuthorId = 2L,
-                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            EditionId = 4L,
-                            AuthorId = 2L,
-                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            EditionId = 5L,
-                            AuthorId = 1L,
-                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            EditionId = 5L,
-                            AuthorId = 2L,
-                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.Edition", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsRemoved")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Editions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(4307),
-                            Currency = "UAH",
-                            Description = "Classic Printing Edition",
-                            IsRemoved = false,
-                            Price = 1444.9m,
-                            Status = "Available",
-                            Title = "Hamlet",
-                            Type = "Book"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(7077),
-                            Currency = "UAH",
-                            Description = "Classic Printing Edition",
-                            IsRemoved = false,
-                            Price = 1200.9m,
-                            Status = "Available",
-                            Title = "Othello",
-                            Type = "Book"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(7092),
-                            Currency = "UAH",
-                            Description = "Classic Printing Edition",
-                            IsRemoved = false,
-                            Price = 1300.9m,
-                            Status = "Available",
-                            Title = "Pet Graveyard",
-                            Type = "Book"
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(7095),
-                            Currency = "UAH",
-                            Description = "Classic Printing Edition",
-                            IsRemoved = false,
-                            Price = 1140.6m,
-                            Status = "NotAvailable",
-                            Title = "Confrontation",
-                            Type = "Book"
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            CreatedAt = new DateTime(2021, 5, 7, 13, 17, 59, 915, DateTimeKind.Local).AddTicks(7098),
-                            Currency = "EUR",
-                            Description = "Featuring Willy Shakespare",
-                            IsRemoved = false,
-                            Price = 120.23m,
-                            Status = "NotAvailable",
-                            Title = "Something Weird",
-                            Type = "Magazine"
-                        });
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.OrderItems", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Currency")
-                        .HasColumnType("int");
-
-                    b.Property<long>("EditionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsRemoved")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EditionId");
-
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrdersId");
 
                     b.ToTable("OrderItems");
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.Orders", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsRemoved")
-                        .HasColumnType("bit");
-
-                    b.Property<long?>("PaymentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("StatusType")
-                        .HasColumnType("int");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PaymentId")
-                        .IsUnique()
-                        .HasFilter("[PaymentId] IS NOT NULL");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.Payments", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRemoved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -596,42 +568,19 @@ namespace EdProject.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("EdProject.DAL.Entities.AuthorInEditions", b =>
+            modelBuilder.Entity("AuthorEdition", b =>
                 {
-                    b.HasOne("EdProject.DAL.Entities.Author", "Author")
-                        .WithMany("Editions")
-                        .HasForeignKey("AuthorId")
+                    b.HasOne("EdProject.DAL.Entities.Author", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EdProject.DAL.Entities.Edition", "Edition")
-                        .WithMany("Authors")
-                        .HasForeignKey("EditionId")
+                    b.HasOne("EdProject.DAL.Entities.Edition", null)
+                        .WithMany()
+                        .HasForeignKey("EditionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Edition");
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.OrderItems", b =>
-                {
-                    b.HasOne("EdProject.DAL.Entities.Edition", "Edition")
-                        .WithMany("OrderItem")
-                        .HasForeignKey("EditionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EdProject.DAL.Entities.Orders", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Edition");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("EdProject.DAL.Entities.Orders", b =>
@@ -640,7 +589,7 @@ namespace EdProject.DAL.Migrations
                         .WithOne("Order")
                         .HasForeignKey("EdProject.DAL.Entities.Orders", "PaymentId");
 
-                    b.HasOne("EdProject.DAL.Entities.AppUser", "User")
+                    b.HasOne("EdProject.DAL.Entities.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -651,9 +600,24 @@ namespace EdProject.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EditionOrders", b =>
+                {
+                    b.HasOne("EdProject.DAL.Entities.Edition", null)
+                        .WithMany()
+                        .HasForeignKey("EditionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EdProject.DAL.Entities.Orders", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
-                    b.HasOne("EdProject.DAL.Entities.AppRole", null)
+                    b.HasOne("EdProject.DAL.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -662,7 +626,7 @@ namespace EdProject.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
-                    b.HasOne("EdProject.DAL.Entities.AppUser", null)
+                    b.HasOne("EdProject.DAL.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -671,7 +635,7 @@ namespace EdProject.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
-                    b.HasOne("EdProject.DAL.Entities.AppUser", null)
+                    b.HasOne("EdProject.DAL.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -680,13 +644,13 @@ namespace EdProject.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
                 {
-                    b.HasOne("EdProject.DAL.Entities.AppRole", null)
+                    b.HasOne("EdProject.DAL.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EdProject.DAL.Entities.AppUser", null)
+                    b.HasOne("EdProject.DAL.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -695,38 +659,21 @@ namespace EdProject.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
-                    b.HasOne("EdProject.DAL.Entities.AppUser", null)
+                    b.HasOne("EdProject.DAL.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EdProject.DAL.Entities.AppUser", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.Author", b =>
-                {
-                    b.Navigation("Editions");
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.Edition", b =>
-                {
-                    b.Navigation("Authors");
-
-                    b.Navigation("OrderItem");
-                });
-
-            modelBuilder.Entity("EdProject.DAL.Entities.Orders", b =>
-                {
-                    b.Navigation("OrderItems");
-                });
-
             modelBuilder.Entity("EdProject.DAL.Entities.Payments", b =>
                 {
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("EdProject.DAL.Entities.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

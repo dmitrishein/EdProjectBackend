@@ -13,6 +13,5 @@ namespace EdProject.BLL.Models.Orders
         public CurrencyTypes Currency { get; set; }
         public long EditionId { get; set; }
         public long OrderId { get; set; }
-        
     }
 }

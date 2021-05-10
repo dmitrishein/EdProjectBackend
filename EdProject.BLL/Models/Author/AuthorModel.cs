@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace EdProject.BLL.Models.Author
 {
-    public class AuthorModel
+    public class AuthorModel:BaseModel
     {
-        public long Id { get; set; }
         public string Name { get; set; }
     }
 }

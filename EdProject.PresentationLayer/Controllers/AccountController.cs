@@ -3,10 +3,6 @@ using EdProject.BLL;
 using EdProject.BLL.Models.User;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.PresentationLayer.Helpers;
-using EdProject.PresentationLayer.Middleware;
-using EdProject.PresentationLayer.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
@@ -30,10 +26,9 @@ namespace EdProject.PresentationLayer.Controllers
       
 
         [HttpPost("[action]")]
-        public async Task Registration(RegisterViewModel register)
+        public async Task Registration(UserCreateModel register)
         {        
-            var newUser = _mapper.Map<RegisterViewModel,UserCreateModel>(register);
-            await _accountService.RegisterUserAsync(newUser);
+            await _accountService.RegisterUserAsync(register);
         }
 
         [HttpPost("[action]")]
@@ -43,11 +38,11 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task Login(LoginViewModel login)
+        public async Task Login(LoginModel login)
         {
             JwtProvider jwt = new JwtProvider(_config);
             
-            await _accountService.SignInAsync(_mapper.Map<LoginViewModel,UserSignInModel>(login));
+            await _accountService.SignInAsync(login);
             var tokenString = await jwt.GenerateAccessToken(await _accountService.GetUserByEmailAsync(login.Email), _accountService);
             var refreshTokenString = jwt.GenerateRefreshToken(); 
         }
@@ -57,10 +52,10 @@ namespace EdProject.PresentationLayer.Controllers
         {
             var recoveryToken = await _accountService.PasswordRecoveryTokenAsync(email);
             var confirmationLink = Url.Action("ResetPassword", "Account", new { token = recoveryToken, email = email }, Request.Scheme);
-            EmailConfirmationModel emailConfirmModel = new()
+            EmailModel emailConfirmModel = new()
                 {
                     Email = email,
-                    ConfirmationLink = confirmationLink,
+                    Message = confirmationLink,
                     Subject = "Reset Password"
                 };
 

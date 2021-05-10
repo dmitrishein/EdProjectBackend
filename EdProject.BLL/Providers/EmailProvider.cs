@@ -1,5 +1,7 @@
-﻿using EdProject.BLL.Providers;
+﻿using EdProject.BLL.Models.User;
+using EdProject.BLL.Providers;
 using MailKit.Net.Smtp;
+using Microsoft.Extensions.Configuration;
 using MimeKit;
 using System.Threading.Tasks;
 
@@ -7,17 +9,22 @@ namespace EdProject.BLL.EmailSender
 {
     public class EmailProvider : IEmailProvider
     {
-        public async Task SendEmailAsync(string email, string subject, string message)
+        IConfiguration _config;
+        public EmailProvider(IConfiguration configuration)
+        {
+            _config = configuration;
+        }
+        public async Task SendEmailAsync(EmailModel emailModel )
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("Website Master", "drghost9899@gmail.com"));
-            emailMessage.To.Add(new MailboxAddress("", email));
-            emailMessage.Subject = subject;
+            emailMessage.From.Add(new MailboxAddress(_config["EmailProvider:Owner"], _config["EmailProvider:Login"]));
+            emailMessage.To.Add(new MailboxAddress(emailModel.RecipientName, emailModel.Email));
+            emailMessage.Subject = emailModel.Subject;
 
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
-                Text = message
+                Text = emailModel.Message
             };
 
             using (var client = new SmtpClient())
@@ -26,7 +33,7 @@ namespace EdProject.BLL.EmailSender
 
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                client.Authenticate("drghost9899@gmail.com", "Dimitrius989");
+                client.Authenticate(_config["EmailProvider:Login"], _config["EmailProvider:Password"]);
 
                 await client.SendAsync(emailMessage);
 

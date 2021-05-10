@@ -25,7 +25,7 @@ namespace EdProject.PresentationLayer.Middleware
             }
             catch (CustomException ex)
             {
-                httpContext.Response.StatusCode = ex.StatusCode;
+                httpContext.Response.StatusCode = (int)ex.StatusCode;
                 await httpContext.Response.WriteAsync(ex.Message);
             }
             catch (Exception ex)

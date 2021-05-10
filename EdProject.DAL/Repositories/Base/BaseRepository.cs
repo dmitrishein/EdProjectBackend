@@ -32,7 +32,7 @@ namespace EdProject.DAL.Repositories.Base
             _dbSet.Remove(item);
           await _dbContext.SaveChangesAsync();
         }
-        public IQueryable<TEntity> GetAll()
+        protected IQueryable<TEntity> GetAll()
         {
             return _dbSet.AsQueryable();
         }

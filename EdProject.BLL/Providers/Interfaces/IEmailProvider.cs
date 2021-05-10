@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EdProject.BLL.Models.User;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,6 @@ namespace EdProject.BLL.Providers
 {
     interface IEmailProvider
     {
-        Task SendEmailAsync(string email, string subject, string message);
-
+        Task SendEmailAsync(EmailModel emailModel);
     }
 }

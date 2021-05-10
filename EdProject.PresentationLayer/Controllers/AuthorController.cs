@@ -2,9 +2,6 @@
 using EdProject.BLL;
 using EdProject.BLL.Models.Author;
 using EdProject.BLL.Services.Interfaces;
-using EdProject.DAL.Entities;
-using EdProject.PresentationLayer.Middleware;
-using EdProject.PresentationLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -30,9 +27,9 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task CreateAuthor(AuthorViewModel createAuthor)
+        public async Task CreateAuthor(AuthorModel createAuthor)
         {
-            await _authorService.CreateAuthorAsync(_mapper.Map<AuthorViewModel,AuthorModel>(createAuthor));
+            await _authorService.CreateAuthorAsync(createAuthor);
         }
 
         [HttpGet("[action]")]
@@ -41,28 +38,28 @@ namespace EdProject.PresentationLayer.Controllers
             return _authorService.GetAuthorList();
         }
 
-        [HttpGet("[action]")]
-        public Task<List<AuthorInEditionModel>> GetEditionsByAuthorId(long authorId)
-        {
-            return _authorInEditionService.GetEditionsByAuthorId(authorId);
-        }
+        //[HttpGet("[action]")]
+        //public Task<List<AuthorInEditionModel>> GetEditionsByAuthorId(long authorId)
+        //{
+        //    return _authorInEditionService.GetEditionsByAuthorId(authorId);
+        //}
 
-        [HttpGet("[action]")]
-        public Task<List<AuthorInEditionModel>> GetAuthorByEditionId(long editionId)
-        {  
-            return _authorInEditionService.GetAuthorsByEditionId(editionId);
+        //[HttpGet("[action]")]
+        //public Task<List<AuthorInEditionModel>> GetAuthorByEditionId(long editionId)
+        //{  
+        //    //return _authorInEditionService.GetAuthorsByEditionId(editionId);
+        //}
+
+        [HttpPost("[action]")]
+        public async Task AddAuthorToEdition(AuthorInEditionModel authorIn)
+        {
+            //await _authorInEditionService.CreateAuthInEdAsync(authorIn);
         }
 
         [HttpPost("[action]")]
-        public async Task AddAuthorToEdition(AuthorInEditionViewModel authorIn)
+        public async Task RemoveAuthorInEdition(AuthorInEditionModel authorIn)
         {
-            await _authorInEditionService.CreateAuthInEdAsync(_mapper.Map<AuthorInEditionViewModel, AuthorInEditionModel>(authorIn));
-        }
-
-        [HttpPost("[action]")]
-        public async Task RemoveAuthorInEdition(AuthorInEditionViewModel authorIn)
-        {
-            await _authorInEditionService.DeleteAuthInEditionAsync(_mapper.Map<AuthorInEditionViewModel, AuthorInEditionModel>(authorIn));
+            //await _authorInEditionService.DeleteAuthInEditionAsync(authorIn);
         }
 
         [HttpGet("[action]")]
@@ -80,28 +77,16 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task UpdateAuthorAsync(AuthorViewModel newAuthor)
+        public async Task UpdateAuthorAsync(AuthorModel newAuthor)
         {
-
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AuthorViewModel, AuthorModel>());
-            var _mapper = new Mapper(config);
-            var newModel = _mapper.Map<AuthorViewModel, AuthorModel>(newAuthor);
-            try
-            {
-                await _authorService.UpdateAuthorAsync(newModel);
-            }
-            catch (Exception x)
-            {
-                throw new CustomException($"Cannot update author. {x.Message}", 400);
-            }
+           await _authorService.UpdateAuthorAsync(newAuthor);
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task UpdateEditionAuthor(AuthorInEditionViewModel updateInfo)
+        public async Task UpdateEditionAuthor(AuthorInEditionModel updateInfo)
         {
-            var updatedModel = _mapper.Map<AuthorInEditionViewModel, AuthorInEditionModel>(updateInfo);
-            await _authorInEditionService.UpdateAuthorInEditAsync(updatedModel);
+            //await _authorInEditionService.UpdateAuthorInEditAsync(updateInfo);
         }
 
     }

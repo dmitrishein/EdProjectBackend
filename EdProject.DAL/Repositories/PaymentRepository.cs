@@ -23,27 +23,14 @@ namespace EdProject.DAL.Repositories
         public async Task RemovePaymentAsync(long id)
         {
             var res = await _dbSet.FindAsync(id);
-
-            if (res is null)
-            {
-                throw new System.Exception("Payment wasn't found");
-            }
-
             res.IsRemoved = true;
             await UpdateAsync(res);   
         }
         public async Task RemovePaymentByTransactionIdAsync(string transactId)
-        {
-            IQueryable<Payments> paymentsQuery = GetAll().Where(e => e.TransactionId == transactId);
-           
-            var transaction = paymentsQuery.FirstOrDefault();
-
-            if (transaction is null)
-                throw new Exception("Transaction is incorrect");
-            
+        {    
+            var transaction = GetAll().Where(e => e.TransactionId == transactId).FirstOrDefault();
             transaction.IsRemoved = true;
-             await UpdateAsync(transaction);
-            
+            await UpdateAsync(transaction);
         }
     }
 }

@@ -1,19 +1,13 @@
 ﻿using AutoMapper;
-using EdProject.BLL;
 using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Services.Interfaces;
-using EdProject.DAL.Entities;
-using EdProject.DAL.Entities.Enums;
-using EdProject.PresentationLayer.Middleware;
-using EdProject.PresentationLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Stripe;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Controllers
@@ -33,33 +27,32 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task CreateOrder(OrderViewModel newOrder)
+        public async Task CreateOrder(OrderModel newOrder)
         {
-            await _orderService.CreateOrderAsync(_mapper.Map<OrderViewModel,OrderModel>(newOrder));
+            await _orderService.CreateOrderAsync(newOrder);
         }
         [HttpPost("[action]")]
-        public async Task CreateOrderItem(OrderItemViewModel newOrder)
+        public async Task CreateOrderItem(OrderItemModel newOrder)
         {
-            await _orderService.CreateOrderItemAsync(_mapper.Map<OrderItemViewModel, OrderItemModel>(newOrder));
+            await _orderService.CreateOrderItemAsync(newOrder);
         }
 
         [HttpPost("[action]")]
-        public async Task CreatePayment(PaymentViewModel newPayment)
+        public async Task CreatePayment(PaymentModel newPayment)
         {
              StripeConfiguration.ApiKey =_config["Stripe:SecretKey"];
              var options = new ChargeCreateOptions
              {
                  Amount = newPayment.Amount,
-                 Currency = newPayment.currency.ToString().ToLower(),
+                 Currency = newPayment.Currency.ToString().ToLower(),
                  Source = "tok_amex",
                  Description = "Test Charge (created for API docs)",
              };
              var service = new ChargeService();
              service.Create(options);
              
-             var newPaymentModel = _mapper.Map<PaymentViewModel, PaymentModel>(newPayment);
-             newPaymentModel.TransactionId = options.Source;
-             await _orderService.CreatePaymentAsync(newPaymentModel);        
+             newPayment.TransactionId = options.Source;
+             await _orderService.CreatePaymentAsync(newPayment);        
         }
 
         [Authorize(Roles = "admin")]

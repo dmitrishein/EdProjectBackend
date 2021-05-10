@@ -15,13 +15,13 @@ namespace EdProject.BLL.Services
     public class UserService : IUserService
     {
         #region Private Members
-        private UserManager<AppUser> _userManager;
-        private RoleManager<AppRole> _roleManager;
+        private UserManager<User> _userManager;
+        private RoleManager<Role> _roleManager;
         IMapper _mapper;
         #endregion
 
         #region Constructor
-        public UserService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper)
+        public UserService(UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -34,11 +34,11 @@ namespace EdProject.BLL.Services
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user is null)
-                throw new CustomException("User not exist",400);
+                throw new CustomException("User not exist", System.Net.HttpStatusCode.BadRequest);
 
             if(!await _roleManager.RoleExistsAsync(role))
             {
-                throw new CustomException("Wrong role! Check the rolename",400);
+                throw new CustomException("Wrong role! Check the rolename", System.Net.HttpStatusCode.BadRequest);
             }
 
             await _userManager.AddToRoleAsync(user, role);
@@ -46,31 +46,31 @@ namespace EdProject.BLL.Services
         public async Task CreateUserAsync(UserCreateModel userModel)
         {
             if (await _userManager.FindByEmailAsync(userModel.Email) is not null)
-                throw new CustomException($"User with this email already exist", 400);
+                throw new CustomException($"User with this email already exist", System.Net.HttpStatusCode.BadRequest);
             UserValidation(userModel);
-            var newUser = _mapper.Map<UserCreateModel, AppUser>(userModel);
-            newUser.EmailConfirmed = userModel.EmailConfirmed;
+            var newUser = _mapper.Map<UserCreateModel, User>(userModel);
+            newUser.EmailConfirmed = true;
             await _userManager.AddToRoleAsync(newUser, "client");
 
             var result = await _userManager.CreateAsync(newUser, userModel.Password);
             if (!result.Succeeded)
-                throw new CustomException($"User wasn't created! {result}", 400);
+                throw new CustomException($"User wasn't created! {result}", System.Net.HttpStatusCode.BadRequest);
         }
 
-        public async Task<AppUser> GetUserAsync(long userId)
+        public async Task<User> GetUserAsync(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if(user is null)
-               throw new CustomException("Error! User not found",400);
+               throw new CustomException("Error! User not found", System.Net.HttpStatusCode.BadRequest);
 
             return user;
         }
-        public async Task<List<AppUser>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsersAsync()
         {
             return await _userManager.Users.ToListAsync();  
         }
-        public async Task<List<AppUser>> GetAllUsersByQuery(string searchString)
+        public async Task<List<User>> GetAllUsersByQuery(string searchString)
         {
             var usersQuery = _userManager.Users.Where(u => u.Id.ToString() == searchString ||
                                                u.UserName == searchString ||
@@ -80,15 +80,15 @@ namespace EdProject.BLL.Services
                                                );
 
             if (!usersQuery.Any())
-                throw new CustomException("No results! Check search parameters",200);
+                throw new CustomException("No results! Check search parameters", System.Net.HttpStatusCode.OK);
 
             return await usersQuery.ToListAsync();
         }
-        public async Task<IList<AppUser>> GetUserListByRole(string roleName)
+        public async Task<IList<User>> GetUserListByRole(string roleName)
         {
             var result = await _userManager.GetUsersInRoleAsync(roleName);
             if (result is null)
-                throw new CustomException("Nobody found:(",200);
+                throw new CustomException("Nobody found:(", System.Net.HttpStatusCode.OK);
 
             return result;
         }
@@ -133,13 +133,13 @@ namespace EdProject.BLL.Services
         private void UserValidation(UserCreateModel userModel)
         {
             if (!userModel.UserName.Any())
-                throw new CustomException($"Username is empty!", 400);
+                throw new CustomException($"Username is empty!", System.Net.HttpStatusCode.BadRequest);
             if (Regex.IsMatch(userModel.UserName, @"\W"))
-                throw new CustomException($"Invalid username! It must consist of only numbers and letters", 400);
+                throw new CustomException($"Invalid username! It must consist of only numbers and letters", System.Net.HttpStatusCode.BadRequest);
             if (Regex.IsMatch(userModel.FirstName, @"\W") || Regex.IsMatch(userModel.FirstName, @"\d"))
-                throw new CustomException($"Invalid firstname! It must consist of only numbers and letters", 400);
+                throw new CustomException($"Invalid firstname! It must consist of only numbers and letters", System.Net.HttpStatusCode.BadRequest);
             if (Regex.IsMatch(userModel.LastName, @"\W") || Regex.IsMatch(userModel.LastName, @"\d"))
-                throw new CustomException($"Invalid lastname! It must consist of only numbers and letters", 400);
+                throw new CustomException($"Invalid lastname! It must consist of only numbers and letters", System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

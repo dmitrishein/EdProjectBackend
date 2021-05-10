@@ -25,12 +25,12 @@ namespace EdProject.BLL.Services
         public async Task CreateAuthorAsync(AuthorModel authorModel)
         {
             if (Regex.IsMatch(authorModel.Name, @"\d", RegexOptions.IgnoreCase) || Regex.IsMatch(authorModel.Name, @"\W", RegexOptions.IgnoreCase))
-                throw new CustomException("Invalid Author's name! Name consist of letter only! ",400);
+                throw new CustomException("Invalid Author's name! Name consist of letter only! ", System.Net.HttpStatusCode.BadRequest);
            
             var newAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
 
             if (_authorRepository.AuthorIsExist(newAuthor))
-                throw new CustomException("Error! Author already exist!", 400);
+                throw new CustomException("Error! Author already exist!", System.Net.HttpStatusCode.BadRequest);
 
             await _authorRepository.CreateAsync(newAuthor);
         }
@@ -39,14 +39,14 @@ namespace EdProject.BLL.Services
             var authorIn = await _authorRepository.FindByIdAsync(id);
 
             if (authorIn is null)
-                throw new CustomException("Author wasn't found!", 400);
+                throw new CustomException("Author wasn't found!", System.Net.HttpStatusCode.BadRequest);
 
             return _mapper.Map<Author, AuthorModel>(authorIn);
         }
         public async Task<List<AuthorModel>> GetAuthorList()
         {
             if (!(await _authorRepository.GetAllAuthorsAsync()).Any())
-                throw new CustomException("Author wasn't found",200);
+                throw new CustomException("Author wasn't found", System.Net.HttpStatusCode.OK);
 
             return _mapper.Map<List<Author>, List<AuthorModel>>(await _authorRepository.GetAllAuthorsAsync());          
         }
@@ -66,7 +66,7 @@ namespace EdProject.BLL.Services
         {
             var author = await _authorRepository.FindByIdAsync(id);
             if (author.IsRemoved)
-                throw new CustomException("author is already removed", 400);
+                throw new CustomException("author is already removed", System.Net.HttpStatusCode.BadRequest);
             await _authorRepository.RemoveAuthorById(id);
         }
 
