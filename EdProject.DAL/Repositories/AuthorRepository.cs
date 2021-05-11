@@ -28,5 +28,15 @@ namespace EdProject.DAL.Repositories
             res.IsRemoved = true;
             await UpdateAsync(res); 
         }
+        public async Task AddEditionToAuthor(Author author,Edition edition)
+        {
+            author.Editions.Add(edition);
+            await UpdateAsync(author);
+        }
+        public async Task RemoveAuthorInEdition(Author author, Edition edition)
+        {
+            author.Editions.Remove(edition);
+            await UpdateAsync(author);
+        }
     }
 }

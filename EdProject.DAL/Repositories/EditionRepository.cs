@@ -30,7 +30,6 @@ namespace EdProject.DAL.Repositories
         {
             return await GetAll().Where(x =>!x.IsRemoved).ToListAsync();
         }
-
         public async Task<List<Edition>> Pagination(int pageNumber,int pageSize)
         {
             

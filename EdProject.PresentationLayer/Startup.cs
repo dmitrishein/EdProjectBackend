@@ -68,8 +68,7 @@ namespace EdProject.PresentationLayer
             services.AddScoped<IAccountService, AccountsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
-            //services.AddScoped<IOrdersService, OrderService>();
-            //services.AddScoped<IAuthorInEditionService, AuthorInEditionService>();
+            services.AddScoped<IOrdersService, OrderService>();
 
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), typeof(OrderItemProfile), typeof(PaymentProfile),typeof(AuthorProfile), typeof(AuthorInEditionProfile), typeof(AccountProfile));

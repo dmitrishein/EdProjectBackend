@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
+using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Stripe;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,7 +34,7 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task CreateOrderItem(OrderItemModel newOrder)
         {
-            await _orderService.CreateOrderItemAsync(newOrder);
+            await _orderService.CreateItemInOrderAsync(newOrder);
         }
 
         [HttpPost("[action]")]
@@ -55,25 +55,35 @@ namespace EdProject.PresentationLayer.Controllers
              await _orderService.CreatePaymentAsync(newPayment);        
         }
 
+
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<List<OrderModel>> GetOrdersByUserId(long userId)
         {
-            return  _orderService.GetOrdersByUserId(userId);
+            return  _orderService.GetOrdersByUserIdAsync(userId);
         }
-
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<List<OrderModel>> GetOrders()
         {
-            return _orderService.GetOrdersList();
+            return _orderService.GetOrdersListAsync();
         }
-
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<OrderModel> GetOrderById(long orderId)
         {
-            return _orderService.GetOrderById(orderId);
+            return _orderService.GetOrderByIdAsync(orderId);
+        }
+        [Authorize(Roles = "admin")]
+        [HttpGet("[action]")]
+        public async Task<List<EditionModel>> GetOrderedItemsByOrder(long orderId)
+        {
+            return await _orderService.GetItemsInOrderAsync(orderId);
+        }
+        [HttpPost("[action]")]
+        public async Task RemoveItemFromOrder(OrderItemModel orderItemModel)
+        {
+           await _orderService.RemoveItemFromOrderAsync(orderItemModel);
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EdProject.BLL;
 using EdProject.BLL.Models.Author;
+using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +16,10 @@ namespace EdProject.PresentationLayer.Controllers
     public class AuthorController : Controller
     {
         IAuthorService _authorService;
-        IAuthorInEditionService _authorInEditionService;
-        IMapper _mapper;
      
-        public AuthorController(IAuthorService authorService, IAuthorInEditionService authorInEditionService,IMapper mapper)
+        public AuthorController(IAuthorService authorService,IMapper mapper)
         {
             _authorService = authorService;
-            _authorInEditionService = authorInEditionService;
-            _mapper = mapper;
         }
 
         [Authorize(Roles = "admin")]
@@ -31,6 +28,19 @@ namespace EdProject.PresentationLayer.Controllers
         {
             await _authorService.CreateAuthorAsync(createAuthor);
         }
+        [HttpPost("[action]")]
+        public async Task AddAuthorToEdition(AuthorInEditionModel authorIn)
+        {
+            await _authorService.CreateAuthorInEditionAsync(authorIn);
+        }
+
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("[action]")]
+        public async Task UpdateAuthorAsync(AuthorModel newAuthor)
+        {
+            await _authorService.UpdateAuthorAsync(newAuthor);
+        }
 
         [HttpGet("[action]")]
         public Task<List<AuthorModel>> GetAuthorList()
@@ -38,36 +48,34 @@ namespace EdProject.PresentationLayer.Controllers
             return _authorService.GetAuthorList();
         }
 
-        //[HttpGet("[action]")]
-        //public Task<List<AuthorInEditionModel>> GetEditionsByAuthorId(long authorId)
-        //{
-        //    return _authorInEditionService.GetEditionsByAuthorId(authorId);
-        //}
-
-        //[HttpGet("[action]")]
-        //public Task<List<AuthorInEditionModel>> GetAuthorByEditionId(long editionId)
-        //{  
-        //    //return _authorInEditionService.GetAuthorsByEditionId(editionId);
-        //}
-
-        [HttpPost("[action]")]
-        public async Task AddAuthorToEdition(AuthorInEditionModel authorIn)
+        [HttpGet("[action]")]
+        public async Task<List<EditionModel>> GetEditionsByAuthorId(long authorId)
         {
-            //await _authorInEditionService.CreateAuthInEdAsync(authorIn);
+            return await _authorService.GetEditionsByAuthorIdAsync(authorId);
+        }
+        [HttpGet("[action]")]
+        public async Task<List<AuthorModel>> GetAuthorsByEditionId(long editionId)
+        {
+            return await _authorService.GetAuthorsByEditionIdAsync(editionId);
         }
 
-        [HttpPost("[action]")]
-        public async Task RemoveAuthorInEdition(AuthorInEditionModel authorIn)
-        {
-            //await _authorInEditionService.DeleteAuthInEditionAsync(authorIn);
-        }
+
+
+
+
 
         [HttpGet("[action]")]
-        public async Task<AuthorModel> GetAuthor(long id)
+        public async Task<AuthorModel> GetAuthorAsync(long id)
         {
             return await _authorService.GetAuthorById(id);
         }
 
+
+        [HttpPost("[action]")]
+        public async Task RemoveAuthorInEdition(AuthorInEditionModel authorIn)
+        {
+            await _authorService.RemoveAuthorInEditionAsync(authorIn);
+        }
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task RemoveAuthorAsync(long id)
@@ -75,19 +83,6 @@ namespace EdProject.PresentationLayer.Controllers
             await _authorService.RemoveAuthorAsync(id);
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
-        public async Task UpdateAuthorAsync(AuthorModel newAuthor)
-        {
-           await _authorService.UpdateAuthorAsync(newAuthor);
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
-        public async Task UpdateEditionAuthor(AuthorInEditionModel updateInfo)
-        {
-            //await _authorInEditionService.UpdateAuthorInEditAsync(updateInfo);
-        }
 
     }
 }

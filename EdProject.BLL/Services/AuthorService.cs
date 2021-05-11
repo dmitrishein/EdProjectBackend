@@ -5,70 +5,117 @@ using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
 using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using EdProject.BLL.Models.PrintingEditions;
 
 namespace EdProject.BLL.Services
 {
     public class AuthorService : IAuthorService
     {
         AuthorRepository _authorRepository;
+        EditionRepository _editionRepository;
         IMapper _mapper;
         public AuthorService(AppDbContext appDb,IMapper mapper)
         {
             _authorRepository = new AuthorRepository(appDb);
+            _editionRepository = new EditionRepository(appDb);
             _mapper = mapper;
         }
 
         public async Task CreateAuthorAsync(AuthorModel authorModel)
         {
-            if (Regex.IsMatch(authorModel.Name, @"\d", RegexOptions.IgnoreCase) || Regex.IsMatch(authorModel.Name, @"\W", RegexOptions.IgnoreCase))
-                throw new CustomException("Invalid Author's name! Name consist of letter only! ", System.Net.HttpStatusCode.BadRequest);
-           
+            AuthorValidation(authorModel);
             var newAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
 
             if (_authorRepository.AuthorIsExist(newAuthor))
-                throw new CustomException("Error! Author already exist!", System.Net.HttpStatusCode.BadRequest);
+                throw new CustomException("Error! Author already exist!", HttpStatusCode.BadRequest);
 
             await _authorRepository.CreateAsync(newAuthor);
+        }
+        public async Task CreateAuthorInEditionAsync(AuthorInEditionModel authorModel)
+        {
+            var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
+            var edition = await _editionRepository.FindByIdAsync(authorModel.EditionId);
+            await _authorRepository.AddEditionToAuthor(author,edition);
+        }
+
+        public async Task<List<AuthorModel>> GetAuthorList()
+        {
+            if (!(await _authorRepository.GetAllAuthorsAsync()).Any())
+                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.OK);
+
+            return _mapper.Map<List<Author>, List<AuthorModel>>(await _authorRepository.GetAllAuthorsAsync());          
         }
         public async Task<AuthorModel> GetAuthorById(long id)
         {
             var authorIn = await _authorRepository.FindByIdAsync(id);
-
-            if (authorIn is null)
-                throw new CustomException("Author wasn't found!", System.Net.HttpStatusCode.BadRequest);
-
+            AuthorExist(authorIn);
             return _mapper.Map<Author, AuthorModel>(authorIn);
         }
-        public async Task<List<AuthorModel>> GetAuthorList()
+        public async Task<List<EditionModel>> GetEditionsByAuthorIdAsync(long authorId)
         {
-            if (!(await _authorRepository.GetAllAuthorsAsync()).Any())
-                throw new CustomException("Author wasn't found", System.Net.HttpStatusCode.OK);
+            var author = await _authorRepository.FindByIdAsync(authorId);
+            AuthorExist(author);
 
-            return _mapper.Map<List<Author>, List<AuthorModel>>(await _authorRepository.GetAllAuthorsAsync());          
+            List<Edition> editionsList = author.Editions.Where(e => !e.IsRemoved).ToList();
+            return _mapper.Map<List<Edition>, List<EditionModel>>(editionsList);
         }
+        public async Task<List<AuthorModel>> GetAuthorsByEditionIdAsync(long editionId)
+        {
+            var edition = await _editionRepository.FindByIdAsync(editionId);
+
+            if (edition is null || edition.IsRemoved)
+                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.BadRequest);
+
+            List<Author> authorsList = edition.Authors.Where(a => !a.IsRemoved).ToList();
+            return _mapper.Map<List<Author>, List<AuthorModel>>(authorsList);
+        }
+
         public async Task UpdateAuthorAsync(AuthorModel authorModel)
         {   
             var updatedAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
             var oldAuthor = await _authorRepository.FindByIdAsync(updatedAuthor.Id);
 
             if (oldAuthor is null)
-                throw new Exception("Error! Author wasn't found");
+                throw new CustomException("Error! Author wasn't found",HttpStatusCode.NoContent);
             if (oldAuthor.IsRemoved is true)
-                throw new Exception("Cannot update. Author was removed");
+                throw new CustomException("Cannot update. Author was removed", HttpStatusCode.BadRequest);
 
             await _authorRepository.UpdateAsync(oldAuthor,updatedAuthor);
         }
+
         public async Task RemoveAuthorAsync(long id)
         {
             var author = await _authorRepository.FindByIdAsync(id);
-            if (author.IsRemoved)
-                throw new CustomException("author is already removed", System.Net.HttpStatusCode.BadRequest);
+            AuthorExist(author);
             await _authorRepository.RemoveAuthorById(id);
         }
+        public async Task RemoveAuthorInEditionAsync(AuthorInEditionModel authorInEditionModel)
+        {
+            var author = await _authorRepository.FindByIdAsync(authorInEditionModel.AuthorId);
+            AuthorExist(author);
+            var edition = await _editionRepository.FindByIdAsync(authorInEditionModel.EditionId);
 
+            await _authorRepository.RemoveAuthorInEdition(author,edition);
+        }
+
+        private void AuthorValidation(AuthorModel authorModel)
+        {
+            if (authorModel.Name.Any(char.IsDigit) || authorModel.Name.Any(char.IsPunctuation))
+                throw new CustomException("Invalid Author's name! Name consist of letter only! ", HttpStatusCode.BadRequest);
+            if (!authorModel.Name.Trim().Any(char.IsLetter)) 
+                throw new CustomException("Invalid Author's name!", HttpStatusCode.BadRequest);
+        }
+        private void AuthorExist(Author author)
+        {
+            if (author is null)
+                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.NoContent);
+            if (author.IsRemoved)
+                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.NoContent);
+        }
     }
 }

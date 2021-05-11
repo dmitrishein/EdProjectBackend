@@ -1,4 +1,5 @@
 ﻿using EdProject.BLL.Models.Author;
+using EdProject.BLL.Models.PrintingEditions;
 using EdProject.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,9 @@ namespace EdProject.BLL.Services.Interfaces
         public Task<AuthorModel> GetAuthorById(long id);
         public Task<List<AuthorModel>> GetAuthorList();
         public Task RemoveAuthorAsync(long id);
+        public Task CreateAuthorInEditionAsync (AuthorInEditionModel authorModel);
+        public Task<List<EditionModel>> GetEditionsByAuthorIdAsync(long authorId);
+        public Task RemoveAuthorInEditionAsync(AuthorInEditionModel authorInEditionModel);
+        public Task<List<AuthorModel>> GetAuthorsByEditionIdAsync(long editionId);
     }
 }

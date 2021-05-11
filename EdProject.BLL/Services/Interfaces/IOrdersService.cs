@@ -1,8 +1,7 @@
 ﻿using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
-using EdProject.DAL.Entities;
+using EdProject.BLL.Models.PrintingEditions;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services.Interfaces
@@ -10,10 +9,13 @@ namespace EdProject.BLL.Services.Interfaces
     public interface IOrdersService 
     {
         public Task CreateOrderAsync(OrderModel orderModel);
-        public Task CreateOrderItemAsync(OrderItemModel orderModel);
+        public Task CreateItemInOrderAsync(OrderItemModel orderModel);
         public Task CreatePaymentAsync(PaymentModel paymentModel);
-        public Task<List<OrderModel>> GetOrdersByUserId(long userId);
-        public Task<List<OrderModel>> GetOrdersList();
-        public Task<OrderModel> GetOrderById(long orderId);
+        public Task<List<OrderModel>> GetOrdersByUserIdAsync(long userId);
+        public Task<List<OrderModel>> GetOrdersListAsync();
+        public Task<OrderModel> GetOrderByIdAsync(long orderId);
+        public Task<List<EditionModel>> GetItemsInOrderAsync(long orderId);
+        public Task<PaymentModel> GetPaymentInOrderAsync(long orderId);
+        public Task RemoveItemFromOrderAsync(OrderItemModel orderItemModel);
     }
 }

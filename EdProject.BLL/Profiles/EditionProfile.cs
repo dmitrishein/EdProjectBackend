@@ -8,8 +8,8 @@ namespace EdProject.BLL.Profiles
     {
         public EditionProfile()
         {
-            CreateMap<Edition, PrintingEditionModel>();
-            CreateMap<PrintingEditionModel, Edition>();
+            CreateMap<Edition, EditionModel>();
+            CreateMap<EditionModel, Edition>();
         }
     }
 }

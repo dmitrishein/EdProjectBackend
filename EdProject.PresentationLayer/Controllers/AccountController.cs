@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using EdProject.BLL;
+﻿using EdProject.BLL;
 using EdProject.BLL.Models.User;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.PresentationLayer.Helpers;
@@ -15,62 +14,66 @@ namespace EdProject.PresentationLayer.Controllers
     {
         IAccountService _accountService;
         IConfiguration _config;
-        IMapper _mapper;
 
-        public AccountController(IAccountService accountService, IConfiguration config, IMapper mapper)
+        public AccountController(IAccountService accountService, IConfiguration config)
         {
             _accountService = accountService;
             _config = config;
-            _mapper = mapper;
         }
       
 
         [HttpPost("[action]")]
         public async Task Registration(UserCreateModel register)
         {        
-            await _accountService.RegisterUserAsync(register);
+            var emailValidationToken = await _accountService.RegisterUserAsync(register);
+            EmailModel emailConfirmationModel = new()
+            {
+                RecipientName = register.FirstName,
+                Email = register.Email,
+                Message = Url.Action("ChangePassword", "Account", new {token = emailValidationToken, email = register.Email}, Request.Scheme),
+                Subject = "Account Confirmation"
+            };
+            await _accountService.SendEmail(emailConfirmationModel);
         }
 
         [HttpPost("[action]")]
-        public async Task ConfirmEmail(string token , string email)
+        public async Task ConfirmEmail(EmailValidationModel validationModel)
         {
-           await _accountService.ConfirmEmailAsync(token, email);
+           await _accountService.ConfirmEmailAsync(validationModel);
         }
 
         [HttpPost("[action]")]
         public async Task Login(LoginModel login)
         {
             JwtProvider jwt = new JwtProvider(_config);
-            
             await _accountService.SignInAsync(login);
             var tokenString = await jwt.GenerateAccessToken(await _accountService.GetUserByEmailAsync(login.Email), _accountService);
             var refreshTokenString = jwt.GenerateRefreshToken(); 
         }
 
         [HttpPost("[action]")]
-        public async Task ForgotPassword(string email)
+        public async Task Logout()
         {
-            var recoveryToken = await _accountService.PasswordRecoveryTokenAsync(email);
-            var confirmationLink = Url.Action("ResetPassword", "Account", new { token = recoveryToken, email = email }, Request.Scheme);
-            EmailModel emailConfirmModel = new()
-                {
-                    Email = email,
-                    Message = confirmationLink,
-                    Subject = "Reset Password"
-                };
-
-            await _accountService.SendEmail(emailConfirmModel);
+            await _accountService.SignOutAsync();
         }
 
         [HttpPost("[action]")]
-        public async Task ResetPassword(string token, string email)
+        public async Task ResetPassword(string email)
         {
-            ResetPasswordModel resetModel = new ResetPasswordModel
+            var recoveryToken = await _accountService.ResetPasswordTokenAsync(email);
+            EmailModel emailMessage = new()
             {
-                Email = email,
-                Token = token
+                    Email = email,
+                    Message = $"https://localhost:44386/Account/ChangePassword?token={recoveryToken}&email={email}",
+                    Subject = "Reset Password"
             };
-            await _accountService.ResetPasswordAsync(resetModel);
+            await _accountService.SendEmail(emailMessage);
+        }
+
+        [HttpPost("[action]")]
+        public async Task ChangePassword(ChangePasswordModel resetPasswordModel)
+        {
+            await _accountService.ChangePasswordAsync(resetPasswordModel);
         }
 
     }

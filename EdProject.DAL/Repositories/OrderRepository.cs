@@ -15,6 +15,21 @@ namespace EdProject.DAL.Repositories
         {
         }
 
+        public async Task AddPaymentToOrderAsync(Orders order, Payments payments)
+        {
+            order.Payment = payments;
+            await UpdateAsync(order);
+        }
+        public async Task AddItemToOrderAsync(Orders order, Edition edition)
+        {
+            order.Editions.Add(edition);
+            await UpdateAsync(order);
+        }
+        public async Task RemoveItemToOrderAsync(Orders order, Edition edition)
+        {
+            order.Editions.Remove(edition);
+            await UpdateAsync(order);
+        }
         public async Task RemoveOrderByIdAsync(long id)
         {
             var res = await _dbSet.FindAsync(id);
@@ -27,21 +42,24 @@ namespace EdProject.DAL.Repositories
             order.IsRemoved = true;
             await UpdateAsync(order);
         }
-        public async Task<List<Orders>> GetAllOrders()
+
+        public async Task<List<Orders>> GetAllOrdersAsync()
         {
             return await GetAll().Where(x => !x.IsRemoved).ToListAsync();
         }
+        public async Task<List<Orders>> GetOrderByUserIdAsync(long userId)
+        {
+            List<Orders> ordersQuery =  await GetAll().Where(e => e.UserId == userId).ToListAsync();
+
+            return ordersQuery;
+        }
+
+
         public async Task<List<Orders>> FilterOrderList(string searchString)
         {
             List<Orders> ordersQuery = await GetAll().Where(e => e.Id.ToString() == searchString)
                                                      .Where(e => e.PaymentId.ToString() == searchString)
                                                      .Where(e => e.Description.Contains(searchString)).ToListAsync();
-
-            return ordersQuery;
-        }
-        public async Task<List<Orders>> GetOrderByUserId(long userId)
-        {
-            List<Orders> ordersQuery =  await GetAll().Where(e => e.UserId == userId).ToListAsync();
 
             return ordersQuery;
         }

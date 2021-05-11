@@ -9,8 +9,6 @@ namespace EdProject.BLL.Models.Orders
 {
     public class OrderItemModel
     {
-        public int Amount { get; set; }
-        public CurrencyTypes Currency { get; set; }
         public long EditionId { get; set; }
         public long OrderId { get; set; }
     }

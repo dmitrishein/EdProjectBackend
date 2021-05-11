@@ -10,11 +10,11 @@ namespace EdProject.BLL.Services.Interfaces
 {
     public interface IPrintingEditionService
     {
-        public Task CreatePrintEdition(PrintingEditionModel editionModel);
-        public Task UpdatePrintEdition(PrintingEditionModel editionModel);
+        public Task CreateEditionAsync(EditionModel editionModel);
+        public Task UpdatePrintEditionAsync(EditionModel editionModel);
         public Task RemoveEditionAsync(long id);
-        public Task<PrintingEditionModel> GetEditionAsync(long id);
-        public Task<List<PrintingEditionModel>> GetEditionListAsync();
-        public Task<List<PrintingEditionModel>> GetEditionListByStringAsync(string searchString);
+        public Task<EditionModel> GetEditionByIdAsync(long id);
+        public Task<List<EditionModel>> GetEditionListAsync();
+        public Task<List<EditionModel>> GetEditionListByStringAsync(string searchString);
     }
 }

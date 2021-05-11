@@ -2,7 +2,7 @@
 
 namespace EdProject.BLL.Models.PrintingEditions
 {
-    public class PrintingEditionModel:BaseModel
+    public class EditionModel:BaseModel
     {
         public string Title { get; set; }
         public string Description { get; set; }

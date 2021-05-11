@@ -21,16 +21,16 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public  async Task Create(PrintingEditionModel register)
+        public  async Task CreateEdition(EditionModel register)
         {        
-            await _printEditionService.CreatePrintEdition(register);
+            await _printEditionService.CreateEditionAsync(register);
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task UpdateEdition(PrintingEditionModel updateModel)
+        public async Task UpdateEdition(EditionModel updateModel)
         {        
-            await _printEditionService.UpdatePrintEdition(updateModel);
+            await _printEditionService.UpdatePrintEditionAsync(updateModel);
         }
 
         [Authorize(Roles = "admin")]
@@ -41,19 +41,19 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpGet("[action]")]
-        public Task<List<PrintingEditionModel>> GetEditions()
+        public Task<List<EditionModel>> GetEditions()
         {
            return _printEditionService.GetEditionListAsync();
         }
 
         [HttpGet("[action]")]
-        public async Task<PrintingEditionModel> GetEdition(long id)
+        public async Task<EditionModel> GetEditionById(long id)
         {
-            return await _printEditionService.GetEditionAsync(id);
+            return await _printEditionService.GetEditionByIdAsync(id);
         }
 
         [HttpGet("[action]")]
-        public Task<List<PrintingEditionModel>> GetEditionByQuery(string searchString)
+        public Task<List<EditionModel>> GetEditionByQuery(string searchString)
         {
             return _printEditionService.GetEditionListByStringAsync(searchString);
         }

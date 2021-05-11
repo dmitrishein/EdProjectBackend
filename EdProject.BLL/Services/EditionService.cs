@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -16,73 +17,71 @@ namespace EdProject.BLL.Services
     public class EditionService : IPrintingEditionService
     {
         
-        EditionRepository _printEditionRepos;
+        EditionRepository _editionRepos;
         IMapper _mapper;
         public EditionService(AppDbContext appDbContext,IMapper mapper)
         {
-            _printEditionRepos = new EditionRepository(appDbContext);
+            _editionRepos = new EditionRepository(appDbContext);
             _mapper = mapper;
         }
 
-        public async Task CreatePrintEdition(PrintingEditionModel editionModel)
+        public async Task CreateEditionAsync(EditionModel editionModel)
         {
-            EditionValidation(editionModel);
+            EditionModelValidation(editionModel);
+            if (_editionRepos.IsExist(_mapper.Map<EditionModel, Edition>(editionModel)))
+                throw new CustomException("Error! Edition already exist!", HttpStatusCode.BadRequest);
 
-            if (_printEditionRepos.IsExist(_mapper.Map<PrintingEditionModel, Edition>(editionModel)))
-                throw new CustomException("Error! Edition with this title already exist!", System.Net.HttpStatusCode.BadRequest);
+            var newEdition = _mapper.Map<EditionModel, Edition>(editionModel);
 
-            var newEdition = _mapper.Map<PrintingEditionModel, Edition>(editionModel);
-
-            await _printEditionRepos.CreateAsync(newEdition);
-                       
+            await _editionRepos.CreateAsync(newEdition);
         }
-        public async Task UpdatePrintEdition(PrintingEditionModel editionModel)
+        public async Task UpdatePrintEditionAsync(EditionModel editionModel)
         {
-            EditionValidation(editionModel);
+            EditionModelValidation(editionModel);
 
-            var newEdition = _mapper.Map<PrintingEditionModel, Edition>(editionModel);
-            var oldEdition = await _printEditionRepos.FindByIdAsync(newEdition.Id);
-           
-            if (oldEdition is null)
-                throw new CustomException("Edition was not found",System.Net.HttpStatusCode.BadRequest);
-            if (oldEdition.IsRemoved)
-                throw new CustomException("Edition was removed", System.Net.HttpStatusCode.BadRequest);
+            var newEdition = _mapper.Map<EditionModel, Edition>(editionModel);
+            var oldEdition = await _editionRepos.FindByIdAsync(newEdition.Id);
 
-            await _printEditionRepos.UpdateAsync(oldEdition,newEdition);
+            EditionExistCheck(oldEdition);
+
+            await _editionRepos.UpdateAsync(oldEdition,newEdition);
 
         }
         public async Task RemoveEditionAsync(long id)
         {
-            await _printEditionRepos.RemoveEditionById(id);
+            await _editionRepos.RemoveEditionById(id);
         }
-        public async Task<List<PrintingEditionModel>> GetEditionListAsync()
+
+        public async Task<List<EditionModel>> GetEditionListAsync()
         {
-            var query = await _printEditionRepos.GetAllEditionsAsync();
+            var query = await _editionRepos.GetAllEditionsAsync();
 
             if (!query.Any())
-                throw new CustomException("Edition's list is empty", System.Net.HttpStatusCode.BadRequest);
+                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.BadRequest);
 
-            return _mapper.Map<List<Edition>, List<PrintingEditionModel>>(query);
+            return _mapper.Map<List<Edition>, List<EditionModel>>(query);
         }
-        public async Task<PrintingEditionModel> GetEditionAsync(long id)
+        public async Task<EditionModel> GetEditionByIdAsync(long id)
         {
-            var getEdition = await _printEditionRepos.FindByIdAsync(id);
-            if (getEdition.IsRemoved)
-                throw new Exception("Error! Edition was removed");
+            var getEdition = await _editionRepos.FindByIdAsync(id);
+            EditionExistCheck(getEdition);
 
-            return _mapper.Map<Edition, PrintingEditionModel>(getEdition);
+            return _mapper.Map<Edition, EditionModel>(getEdition);
         }
-        public async Task<List<PrintingEditionModel>> GetEditionListByStringAsync(string searchString)
+        public async Task<List<EditionModel>> GetEditionListByStringAsync(string searchString)
         {
-            var query = (await _printEditionRepos.GetAllEditionsAsync()).Where(x => x.Id.ToString() == searchString || 
-            x.Title == searchString).ToList();
+            var query = (await _editionRepos.GetAllEditionsAsync()).Where(x => x.Id.ToString() == searchString)
+                                                                   .Where(x => x.Title == searchString).ToList();
+            
 
             if (!query.Any())
-                throw new CustomException("Nothing found:(", System.Net.HttpStatusCode.OK);
+                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.OK);
 
-            return _mapper.Map<List<Edition>, List<PrintingEditionModel>>(query);      
+            return _mapper.Map<List<Edition>, List<EditionModel>>(query);      
         }
-        private void EditionValidation(PrintingEditionModel editionModel)
+
+
+        private void EditionModelValidation(EditionModel editionModel)
         {        
             if (!editionModel.Title.Any())
                 throw new CustomException("Error! Title shouldn't empty", System.Net.HttpStatusCode.BadRequest);
@@ -90,6 +89,11 @@ namespace EdProject.BLL.Services
                 throw new CustomException($"Invalid title!", System.Net.HttpStatusCode.BadRequest);
             if (editionModel.Price < 0)
                 throw new CustomException("Error! Price must be higher!", System.Net.HttpStatusCode.BadRequest);
+        }
+        private void EditionExistCheck(Edition edition)
+        {
+            if (edition is null || edition.IsRemoved)
+                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.BadRequest);
         }
 
     }
