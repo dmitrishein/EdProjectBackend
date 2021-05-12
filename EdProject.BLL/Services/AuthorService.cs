@@ -43,23 +43,25 @@ namespace EdProject.BLL.Services
             await _authorRepository.AddEditionToAuthor(author,edition);
         }
 
-        public async Task<List<AuthorModel>> GetAuthorList()
+        public async Task<List<AuthorModel>> GetAuthorListAsync()
         {
             if (!(await _authorRepository.GetAllAuthorsAsync()).Any())
-                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.OK);
+            {
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.OK);
+            }
 
             return _mapper.Map<List<Author>, List<AuthorModel>>(await _authorRepository.GetAllAuthorsAsync());          
         }
-        public async Task<AuthorModel> GetAuthorById(long id)
+        public async Task<AuthorModel> GetAuthorByIdAsync(long id)
         {
             var authorIn = await _authorRepository.FindByIdAsync(id);
-            AuthorExist(authorIn);
+            AuthorExistCheck(authorIn);
             return _mapper.Map<Author, AuthorModel>(authorIn);
         }
         public async Task<List<EditionModel>> GetEditionsByAuthorIdAsync(long authorId)
         {
             var author = await _authorRepository.FindByIdAsync(authorId);
-            AuthorExist(author);
+            AuthorExistCheck(author);
 
             List<Edition> editionsList = author.Editions.Where(e => !e.IsRemoved).ToList();
             return _mapper.Map<List<Edition>, List<EditionModel>>(editionsList);
@@ -69,7 +71,7 @@ namespace EdProject.BLL.Services
             var edition = await _editionRepository.FindByIdAsync(editionId);
 
             if (edition is null || edition.IsRemoved)
-                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
 
             List<Author> authorsList = edition.Authors.Where(a => !a.IsRemoved).ToList();
             return _mapper.Map<List<Author>, List<AuthorModel>>(authorsList);
@@ -80,10 +82,7 @@ namespace EdProject.BLL.Services
             var updatedAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
             var oldAuthor = await _authorRepository.FindByIdAsync(updatedAuthor.Id);
 
-            if (oldAuthor is null)
-                throw new CustomException("Error! Author wasn't found",HttpStatusCode.NoContent);
-            if (oldAuthor.IsRemoved is true)
-                throw new CustomException("Cannot update. Author was removed", HttpStatusCode.BadRequest);
+            AuthorExistCheck(oldAuthor);
 
             await _authorRepository.UpdateAsync(oldAuthor,updatedAuthor);
         }
@@ -91,13 +90,13 @@ namespace EdProject.BLL.Services
         public async Task RemoveAuthorAsync(long id)
         {
             var author = await _authorRepository.FindByIdAsync(id);
-            AuthorExist(author);
+            AuthorExistCheck(author);
             await _authorRepository.RemoveAuthorById(id);
         }
         public async Task RemoveAuthorInEditionAsync(AuthorInEditionModel authorInEditionModel)
         {
             var author = await _authorRepository.FindByIdAsync(authorInEditionModel.AuthorId);
-            AuthorExist(author);
+            AuthorExistCheck(author);
             var edition = await _editionRepository.FindByIdAsync(authorInEditionModel.EditionId);
 
             await _authorRepository.RemoveAuthorInEdition(author,edition);
@@ -110,12 +109,12 @@ namespace EdProject.BLL.Services
             if (!authorModel.Name.Trim().Any(char.IsLetter)) 
                 throw new CustomException("Invalid Author's name!", HttpStatusCode.BadRequest);
         }
-        private void AuthorExist(Author author)
+        private void AuthorExistCheck(Author author)
         {
             if (author is null)
-                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.NoContent);
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.NoContent);
             if (author.IsRemoved)
-                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.NoContent);
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.NoContent);
         }
     }
 }

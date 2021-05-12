@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -29,72 +30,61 @@ namespace EdProject.BLL.Services
         }
         #endregion
 
-        public async Task AddToRoleAsync(string email, string role)
+        public async Task AddToRoleAsync(UserToRoleModel userToRole)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(userToRole.UserEmail);
 
-            if (user is null)
-                throw new CustomException("User not exist", System.Net.HttpStatusCode.BadRequest);
+            UserExistCheck(user);
 
-            if(!await _roleManager.RoleExistsAsync(role))
+            if(!await _roleManager.RoleExistsAsync(userToRole.RoleName))
             {
                 throw new CustomException("Wrong role! Check the rolename", System.Net.HttpStatusCode.BadRequest);
             }
 
-            await _userManager.AddToRoleAsync(user, role);
-        }
-        public async Task CreateUserAsync(UserCreateModel userModel)
-        {
-            if (await _userManager.FindByEmailAsync(userModel.Email) is not null)
-                throw new CustomException($"User with this email already exist", System.Net.HttpStatusCode.BadRequest);
-            UserValidation(userModel);
-            var newUser = _mapper.Map<UserCreateModel, User>(userModel);
-            newUser.EmailConfirmed = true;
-            await _userManager.AddToRoleAsync(newUser, "client");
-
-            var result = await _userManager.CreateAsync(newUser, userModel.Password);
-            if (!result.Succeeded)
-                throw new CustomException($"User wasn't created! {result}", System.Net.HttpStatusCode.BadRequest);
+            await _userManager.AddToRoleAsync(user, userToRole.RoleName);
         }
 
-        public async Task<User> GetUserAsync(long userId)
+        public async Task<UserModel> GetUserByIdAsync(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-
-            if(user is null)
-               throw new CustomException("Error! User not found", System.Net.HttpStatusCode.BadRequest);
-
-            return user;
+            UserExistCheck(user);
+            var userModel = _mapper.Map<User, UserModel>(user);
+            return userModel;
         }
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<UserModel>> GetAllUsersAsync()
         {
-            return await _userManager.Users.ToListAsync();  
+            var usersList = _mapper.Map <List<User>, List<UserModel>> (await _userManager.Users.Where(u=> !u.isRemoved).ToListAsync());
+            return usersList;  
         }
-        public async Task<List<User>> GetAllUsersByQuery(string searchString)
+        public List<UserModel> GetUsersByQuery(string searchString)
         {
             var usersQuery = _userManager.Users.Where(u => u.Id.ToString() == searchString ||
-                                               u.UserName == searchString ||
-                                               u.FirstName == searchString ||
-                                               u.LastName == searchString ||
-                                               u.Email == searchString
-                                               );
+                                                           u.UserName.Contains(searchString) ||
+                                                           u.FirstName.Contains(searchString) ||
+                                                           u.LastName.Contains(searchString) ||
+                                                           u.Email.Contains(searchString))
+                                                .Where(u => !u.isRemoved);
+                                                          
 
             if (!usersQuery.Any())
-                throw new CustomException("No results! Check search parameters", System.Net.HttpStatusCode.OK);
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.OK);
 
-            return await usersQuery.ToListAsync();
+            var userList = _mapper.Map<IQueryable<User>, List<UserModel>>(usersQuery);
+
+            return userList;
         }
-        public async Task<IList<User>> GetUserListByRole(string roleName)
+        public async Task<List<UserModel>> GetUserListByRole(string roleName)
         {
-            var result = await _userManager.GetUsersInRoleAsync(roleName);
-            if (result is null)
-                throw new CustomException("Nobody found:(", System.Net.HttpStatusCode.OK);
+            var users = await _userManager.GetUsersInRoleAsync(roleName);
+            //user existing check
+            var resultList = _mapper.Map<IList<User>, List<UserModel>>(users);
 
-            return result;
+            return resultList;
         }
         public async Task RemoveUserAsync(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
+            //user existing check
             if (user is null)
                 throw new Exception("user not found");
             user.isRemoved = true;
@@ -105,16 +95,16 @@ namespace EdProject.BLL.Services
         {
             var checkUser = await _userManager.FindByIdAsync(userModel.Id.ToString());
 
-            if (!checkUser.EmailConfirmed)
-                throw new Exception("Cannot update user without confirmed email");
-            if (checkUser is null)
-                throw new Exception("Cannot update. User not found");
+            UserExistCheck(checkUser);
+            UserUpdateValidation(userModel);
+
             await _userManager.SetUserNameAsync(checkUser, userModel.Username);
             checkUser.FirstName = userModel.FirstName;
             checkUser.LastName = userModel.LastName;
    
             await _userManager.UpdateAsync(checkUser);    
         }
+
         public async Task BlockUser(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -130,16 +120,32 @@ namespace EdProject.BLL.Services
             await _userManager.SetLockoutEnabledAsync(user, false);
             
         }
-        private void UserValidation(UserCreateModel userModel)
+
+        private void UserUpdateValidation(UserUpdateModel userModel)
         {
-            if (!userModel.UserName.Any())
-                throw new CustomException($"Username is empty!", System.Net.HttpStatusCode.BadRequest);
-            if (Regex.IsMatch(userModel.UserName, @"\W"))
-                throw new CustomException($"Invalid username! It must consist of only numbers and letters", System.Net.HttpStatusCode.BadRequest);
-            if (Regex.IsMatch(userModel.FirstName, @"\W") || Regex.IsMatch(userModel.FirstName, @"\d"))
-                throw new CustomException($"Invalid firstname! It must consist of only numbers and letters", System.Net.HttpStatusCode.BadRequest);
-            if (Regex.IsMatch(userModel.LastName, @"\W") || Regex.IsMatch(userModel.LastName, @"\d"))
-                throw new CustomException($"Invalid lastname! It must consist of only numbers and letters", System.Net.HttpStatusCode.BadRequest);
+            if (!userModel.Username.Any())
+            {
+                throw new CustomException(Constants.INVALID_FIELD_USERNAME, HttpStatusCode.BadRequest);
+            }
+            if (!userModel.Username.Any(char.IsLetterOrDigit) || !userModel.Username.Trim().Any())
+            {
+                throw new CustomException(Constants.INVALID_FIELD_USERNAME, HttpStatusCode.BadRequest);
+            }
+            if (userModel.FirstName.Any(char.IsDigit) || userModel.FirstName.Any(char.IsSymbol) && userModel.FirstName.Trim().Any())
+            {
+                throw new CustomException(Constants.INVALID_FIELD_FIRSTNAME, HttpStatusCode.BadRequest);
+            }
+            if (userModel.LastName.Any(char.IsDigit) || userModel.LastName.Any(char.IsSymbol))
+            {
+                throw new CustomException(Constants.INVALID_FIELD_LASTNAME, HttpStatusCode.BadRequest);
+            }
+        }
+        private void UserExistCheck(User user)
+        {
+            if (!user.EmailConfirmed)
+                throw new CustomException(Constants.NOTHING_EXIST,HttpStatusCode.BadRequest);
+            if (user is null)
+                throw new CustomException(Constants.NOTHING_EXIST,HttpStatusCode.BadRequest);
         }
     }
 }

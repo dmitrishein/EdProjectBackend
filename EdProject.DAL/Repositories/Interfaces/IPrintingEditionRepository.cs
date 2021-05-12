@@ -9,6 +9,6 @@ namespace EdProject.DAL.Repositories.Interfaces
 {
     public interface IPrintingEditionRepository : IBaseRepository<Edition>
     {
-        public Task<List<Edition>> Pagination(int pageNumber, int pageSize);
+        public Task<List<Edition>> Pagination(int pageNumber, int pageSize, string searchString);
     }
 }

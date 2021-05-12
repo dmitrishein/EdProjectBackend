@@ -84,16 +84,5 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Stripe.net.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Castle.Core.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Proxies.dll
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\angular.json
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\e2e\tsconfig.json
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\package-lock.json
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\package.json
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\tsconfig.app.json
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\tsconfig.json
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\tsconfig.spec.json
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\ClientApp\tslint.json
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Microsoft.AspNetCore.SpaServices.Extensions.dll
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\System.Net.Http.Formatting.dll
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\System.Web.Http.dll
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\EdProject.PresentationLayer.MvcApplicationPartsAssemblyInfo.cs

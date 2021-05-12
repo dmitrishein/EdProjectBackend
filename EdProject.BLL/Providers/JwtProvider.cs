@@ -21,7 +21,7 @@ namespace EdProject.PresentationLayer.Helpers
         }
 
         
-        public async Task<string> GenerateAccessToken(User appUser,IAccountService accountService)
+        public async Task<string> GenerateAccessToken(User appUser)
         {
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -32,11 +32,6 @@ namespace EdProject.PresentationLayer.Helpers
                 new Claim(JwtRegisteredClaimNames.Email, appUser.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, appUser.Id.ToString()),
             };
-
-            foreach(var role in await accountService.GetUserRoleAsync(appUser.Email))
-            {
-                claims.Add(new Claim("role", role.ToString()));
-            }
 
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                                              _configuration["Jwt:Issuer"],

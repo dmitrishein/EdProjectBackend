@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdProject.BLL.Models.Base;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -21,16 +22,16 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public  async Task CreateEdition(EditionModel register)
+        public  async Task CreateEdition(EditionModel newEdition)
         {        
-            await _printEditionService.CreateEditionAsync(register);
+            await _printEditionService.CreateEditionAsync(newEdition);
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UpdateEdition(EditionModel updateModel)
         {        
-            await _printEditionService.UpdatePrintEditionAsync(updateModel);
+            await _printEditionService.UpdateEditionAsync(updateModel);
         }
 
         [Authorize(Roles = "admin")]
@@ -58,5 +59,10 @@ namespace EdProject.PresentationLayer.Controllers
             return _printEditionService.GetEditionListByStringAsync(searchString);
         }
 
+        [HttpGet("[action]")]
+        public Task<List<EditionModel>> GetEditionPage(PageModel pageModel)
+        {
+            return _printEditionService.GetEditionPageAsync(pageModel);
+        }
     }
 }

@@ -55,24 +55,23 @@ namespace EdProject.DAL.Repositories
         }
 
 
-        public async Task<List<Orders>> FilterOrderList(string searchString)
-        {
-            List<Orders> ordersQuery = await GetAll().Where(e => e.Id.ToString() == searchString)
-                                                     .Where(e => e.PaymentId.ToString() == searchString)
-                                                     .Where(e => e.Description.Contains(searchString)).ToListAsync();
-
-            return ordersQuery;
-        }
-        public async Task<List<Orders>> PagingOrders(int pageNumber, int pageSize)
+        public async Task<List<Orders>> PagingOrders(int pageNumber, int pageSize,string searchString)
         {
             if (pageNumber == 0 || pageSize == 0)
             {
                 return null;
             }
 
-            var editionsPerPage = GetAll().Skip((pageNumber - Constant.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
+            var ordersQuery = GetAll().Where(o => o.Id.ToString() == searchString ||
+                                                  o.UserId.ToString().Contains(searchString) ||
+                                                  o.PaymentId.ToString().Equals(searchString) ||
+                                                  o.Description.Contains(searchString))
+                                       .Where(e => !e.IsRemoved);
 
-            return await editionsPerPage.ToListAsync();
+
+            var ordersPage = ordersQuery.Skip((pageNumber - Constants.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
+
+            return await ordersPage.ToListAsync();
         }
 
     }

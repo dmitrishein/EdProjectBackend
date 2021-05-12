@@ -9,6 +9,7 @@ namespace EdProject.BLL.Profiles
         public PaymentProfile()
         {
             CreateMap<PaymentModel, Payments>();
+            CreateMap<Payments, PaymentModel>();
         }
     }
 }

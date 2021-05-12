@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdProject.BLL.Models.Base;
 using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Models.PrintingEditions;
@@ -62,30 +63,48 @@ namespace EdProject.PresentationLayer.Controllers
         {
             return  _orderService.GetOrdersByUserIdAsync(userId);
         }
+
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public Task<List<OrderModel>> GetOrders()
+        public async Task<List<OrderModel>> GetOrdersList()
         {
-            return _orderService.GetOrdersListAsync();
+            return await _orderService.GetOrdersListAsync();
         }
+
+        [HttpGet("[action]")]
+        public Task<List<OrderModel>> GetOrdersPage(PageModel pageModel)
+        {
+            return _orderService.GetOrdersPageAsync(pageModel);
+        }
+
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<OrderModel> GetOrderById(long orderId)
         {
             return _orderService.GetOrderByIdAsync(orderId);
         }
+
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<List<EditionModel>> GetOrderedItemsByOrder(long orderId)
         {
             return await _orderService.GetItemsInOrderAsync(orderId);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("[action]")]
+        public async Task<PaymentModel> GetPaymentInOrder(long orderId)
+        {
+            return await _orderService.GetPaymentInOrderAsync(orderId);
+        }
+
+
+
         [HttpPost("[action]")]
         public async Task RemoveItemFromOrder(OrderItemModel orderItemModel)
         {
            await _orderService.RemoveItemFromOrderAsync(orderItemModel);
         }
-
 
     }
 }

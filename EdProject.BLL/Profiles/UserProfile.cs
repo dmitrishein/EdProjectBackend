@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdProject.BLL.Models.User;
 using EdProject.DAL.Entities;
 
 namespace EdProject.BLL.Profiles
@@ -8,6 +9,7 @@ namespace EdProject.BLL.Profiles
         public UserProfile()
         {
             CreateMap<UserCreateModel, User>();
+            CreateMap<User,UserModel>();
         }
     }
 }

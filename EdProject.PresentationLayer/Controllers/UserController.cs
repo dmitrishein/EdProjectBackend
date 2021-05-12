@@ -15,43 +15,29 @@ namespace EdProject.PresentationLayer.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        #region Private Members
-        IUserService _userService;
-        IMapper _mapper;
-       
-        #endregion
 
-        #region Constructor
+        IUserService _userService;
+
         public UserController(IUserService userService,IMapper mapper)
         {
             _userService = userService;
-            _mapper = mapper;
         }
-        #endregion
+
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task CreateUser(UserCreateModel createUserModel)
+        public async Task AddToRole(UserToRoleModel userToRole)
         {
-
-            await _userService.CreateUserAsync(createUserModel);
-        }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "admin")]
-        [HttpGet("[action]")]
-        public async Task GetUser(long id)
-        {
-            await _userService.GetUserAsync(id);
+            await _userService.AddToRoleAsync(userToRole);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task UpdateUser(UserUpdateModel userUpdViewModel)
+        public async Task UpdateUser(UserUpdateModel userUpdModel)
         {
-            await _userService.UpdateUserAsync(userUpdViewModel);
+            await _userService.UpdateUserAsync(userUpdModel);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -62,10 +48,11 @@ namespace EdProject.PresentationLayer.Controllers
             await _userService.RemoveUserAsync(userId);
         }
 
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public async Task<IList<User>> GetUserByRole(string roleName)
+        public async Task<List<UserModel>> GetUserByRole(string roleName)
         {
             return await _userService.GetUserListByRole(roleName);
         }
@@ -73,10 +60,19 @@ namespace EdProject.PresentationLayer.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public Task<List<User>> GetAllUsers()
+        public Task<List<UserModel>> GetAllUsers()
         {
             return _userService.GetAllUsersAsync();
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin")]
+        [HttpGet("[action]")]
+        public List<UserModel> GetUserByQuery(string searchString)
+        {
+            return _userService.GetUsersByQuery(searchString);
+        }
+
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]

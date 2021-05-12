@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdProject.BLL.Models.Base;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
@@ -35,7 +36,7 @@ namespace EdProject.BLL.Services
 
             await _editionRepos.CreateAsync(newEdition);
         }
-        public async Task UpdatePrintEditionAsync(EditionModel editionModel)
+        public async Task UpdateEditionAsync(EditionModel editionModel)
         {
             EditionModelValidation(editionModel);
 
@@ -57,7 +58,7 @@ namespace EdProject.BLL.Services
             var query = await _editionRepos.GetAllEditionsAsync();
 
             if (!query.Any())
-                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
 
             return _mapper.Map<List<Edition>, List<EditionModel>>(query);
         }
@@ -75,25 +76,32 @@ namespace EdProject.BLL.Services
             
 
             if (!query.Any())
-                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.OK);
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.OK);
 
-            return _mapper.Map<List<Edition>, List<EditionModel>>(query);      
+            return _mapper.Map<List<Edition>, List<EditionModel>>(query);
         }
+        public async Task<List<EditionModel>> GetEditionPageAsync(PageModel pageModel)
+        {
+            var query = await _editionRepos.Pagination(pageModel.PageNumber,pageModel.ElementsAmount,pageModel.SearchString);
 
+            if (!query.Any())
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
+
+            return _mapper.Map<List<Edition>, List<EditionModel>>(query);
+        }
 
         private void EditionModelValidation(EditionModel editionModel)
         {        
-            if (!editionModel.Title.Any())
-                throw new CustomException("Error! Title shouldn't empty", System.Net.HttpStatusCode.BadRequest);
-            if (Regex.IsMatch(editionModel.Title, @"\.\W"))
-                throw new CustomException($"Invalid title!", System.Net.HttpStatusCode.BadRequest);
+            if (!editionModel.Title.Any() || editionModel.Title.Any(char.IsSymbol) || !editionModel.Title.Trim().Any())
+                throw new CustomException("Invalid title!", HttpStatusCode.BadRequest);
+
             if (editionModel.Price < 0)
-                throw new CustomException("Error! Price must be higher!", System.Net.HttpStatusCode.BadRequest);
+                throw new CustomException("Error! Price must be higher!", HttpStatusCode.BadRequest);
         }
         private void EditionExistCheck(Edition edition)
         {
             if (edition is null || edition.IsRemoved)
-                throw new CustomException(Constant.NOTHING_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
         }
 
     }

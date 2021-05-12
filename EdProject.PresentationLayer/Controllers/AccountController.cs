@@ -13,12 +13,11 @@ namespace EdProject.PresentationLayer.Controllers
     public class AccountController : Controller
     {
         IAccountService _accountService;
-        IConfiguration _config;
 
-        public AccountController(IAccountService accountService, IConfiguration config)
+
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
-            _config = config;
         }
       
 
@@ -26,6 +25,7 @@ namespace EdProject.PresentationLayer.Controllers
         public async Task Registration(UserCreateModel register)
         {        
             var emailValidationToken = await _accountService.RegisterUserAsync(register);
+
             EmailModel emailConfirmationModel = new()
             {
                 RecipientName = register.FirstName,
@@ -33,6 +33,7 @@ namespace EdProject.PresentationLayer.Controllers
                 Message = Url.Action("ChangePassword", "Account", new {token = emailValidationToken, email = register.Email}, Request.Scheme),
                 Subject = "Account Confirmation"
             };
+
             await _accountService.SendEmail(emailConfirmationModel);
         }
 
@@ -43,12 +44,9 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task Login(LoginModel login)
+        public async Task<TokenPairModel>Login(LoginModel login)
         {
-            JwtProvider jwt = new JwtProvider(_config);
-            await _accountService.SignInAsync(login);
-            var tokenString = await jwt.GenerateAccessToken(await _accountService.GetUserByEmailAsync(login.Email), _accountService);
-            var refreshTokenString = jwt.GenerateRefreshToken(); 
+           return await _accountService.SignInAsync(login);
         }
 
         [HttpPost("[action]")]
@@ -60,11 +58,11 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task ResetPassword(string email)
         {
-            var recoveryToken = await _accountService.ResetPasswordTokenAsync(email);
+            var resetToken = await _accountService.ResetPasswordTokenAsync(email);
             EmailModel emailMessage = new()
             {
                     Email = email,
-                    Message = $"https://localhost:44386/Account/ChangePassword?token={recoveryToken}&email={email}",
+                    Message = $"https://localhost:44386/Account/ChangePassword?token={resetToken}&email={email}",
                     Subject = "Reset Password"
             };
             await _accountService.SendEmail(emailMessage);

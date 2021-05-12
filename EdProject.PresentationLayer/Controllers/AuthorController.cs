@@ -45,7 +45,7 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpGet("[action]")]
         public Task<List<AuthorModel>> GetAuthorList()
         {
-            return _authorService.GetAuthorList();
+            return _authorService.GetAuthorListAsync();
         }
 
         [HttpGet("[action]")]
@@ -67,7 +67,7 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpGet("[action]")]
         public async Task<AuthorModel> GetAuthorAsync(long id)
         {
-            return await _authorService.GetAuthorById(id);
+            return await _authorService.GetAuthorByIdAsync(id);
         }
 
 

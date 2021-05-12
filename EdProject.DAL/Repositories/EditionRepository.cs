@@ -30,15 +30,19 @@ namespace EdProject.DAL.Repositories
         {
             return await GetAll().Where(x =>!x.IsRemoved).ToListAsync();
         }
-        public async Task<List<Edition>> Pagination(int pageNumber,int pageSize)
+        public async Task<List<Edition>> Pagination(int pageNumber,int pageSize, string searchString)
         {
-            
-            if (pageNumber is Constant.EMPTY || pageSize is Constant.EMPTY)
+            if (pageNumber is Constants.EMPTY || pageSize is Constants.EMPTY)
                 return null;
 
-            var editionsPerPage = GetAll().Skip((pageNumber - Constant.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
+            var listResults = GetAll().Where(e => e.Authors.Any(a => a.Name.Contains(searchString)) || 
+                                             e.Title.Contains(searchString) || 
+                                             e.Id.ToString().Equals(searchString))
+                                      .Where(e => !e.IsRemoved);
+            
 
-            return await editionsPerPage.ToListAsync(); 
+            var editionsPage = listResults.Skip((pageNumber - Constants.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
+            return await editionsPage.ToListAsync(); 
         }
     }
 }

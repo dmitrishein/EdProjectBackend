@@ -1,0 +1,9 @@
+[2021-05-12 09:37:37+00:00] [Error] Missing type map configuration or unsupported mapping.
+
+Mapping types:
+Payments -> PaymentModel
+EdProject.DAL.Entities.Payments -> EdProject.BLL.Models.Payment.PaymentModel 
+[2021-05-12 09:53:56+00:00] [Error] User security stamp cannot be null. 
+[2021-05-12 09:55:47+00:00] [Error] User security stamp cannot be null. 
+[2021-05-12 09:57:50+00:00] [Error] A possible object cycle was detected. This can either be due to a cycle or if the object depth is larger than the maximum allowed depth of 32. Consider using ReferenceHandler.Preserve on JsonSerializerOptions to support cycles. 
+[2021-05-12 13:11:53+00:00] [Error] Value cannot be null. (Parameter 'source') 
