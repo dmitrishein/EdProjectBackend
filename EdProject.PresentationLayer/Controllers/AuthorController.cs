@@ -3,6 +3,7 @@ using EdProject.BLL;
 using EdProject.BLL.Models.Author;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,19 +23,22 @@ namespace EdProject.PresentationLayer.Controllers
             _authorService = authorService;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task CreateAuthor(AuthorModel createAuthor)
         {
             await _authorService.CreateAuthorAsync(createAuthor);
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("[action]")]
         public async Task AddAuthorToEdition(AuthorInEditionModel authorIn)
         {
             await _authorService.CreateAuthorInEditionAsync(authorIn);
         }
 
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UpdateAuthorAsync(AuthorModel newAuthor)
@@ -42,17 +46,21 @@ namespace EdProject.PresentationLayer.Controllers
             await _authorService.UpdateAuthorAsync(newAuthor);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("[action]")]
         public Task<List<AuthorModel>> GetAuthorList()
         {
             return _authorService.GetAuthorListAsync();
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("[action]")]
         public async Task<List<EditionModel>> GetEditionsByAuthorId(long authorId)
         {
             return await _authorService.GetEditionsByAuthorIdAsync(authorId);
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("[action]")]
         public async Task<List<AuthorModel>> GetAuthorsByEditionId(long editionId)
         {

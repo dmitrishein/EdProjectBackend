@@ -12,6 +12,6 @@ namespace EdProject.DAL.Repositories.Interfaces
         public Task RemoveOrderByIdAsync(long id);
         public Task RemoveOrderByPaymentIdAsync(long paymentId);
         public Task<List<Orders>> GetOrderByUserIdAsync(long userId);
-        public Task<List<Orders>> PagingOrders(int pageNumber, int pageSize, string searchString);
+        public Task<List<Orders>> OrdersPage(int pageNumber, int pageSize, string searchString);
     }
 }

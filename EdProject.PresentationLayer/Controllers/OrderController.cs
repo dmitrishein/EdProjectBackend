@@ -4,6 +4,7 @@ using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,17 +28,19 @@ namespace EdProject.PresentationLayer.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("[action]")]
         public async Task CreateOrder(OrderModel newOrder)
         {
             await _orderService.CreateOrderAsync(newOrder);
         }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("[action]")]
         public async Task CreateOrderItem(OrderItemModel newOrder)
         {
             await _orderService.CreateItemInOrderAsync(newOrder);
         }
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("[action]")]
         public async Task CreatePayment(PaymentModel newPayment)
         {
@@ -57,6 +60,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<List<OrderModel>> GetOrdersByUserId(long userId)
@@ -64,6 +68,7 @@ namespace EdProject.PresentationLayer.Controllers
             return  _orderService.GetOrdersByUserIdAsync(userId);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<List<OrderModel>> GetOrdersList()
@@ -71,12 +76,14 @@ namespace EdProject.PresentationLayer.Controllers
             return await _orderService.GetOrdersListAsync();
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("[action]")]
         public Task<List<OrderModel>> GetOrdersPage(PageModel pageModel)
         {
             return _orderService.GetOrdersPageAsync(pageModel);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<OrderModel> GetOrderById(long orderId)
@@ -84,6 +91,7 @@ namespace EdProject.PresentationLayer.Controllers
             return _orderService.GetOrderByIdAsync(orderId);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<List<EditionModel>> GetOrderedItemsByOrder(long orderId)
@@ -91,6 +99,7 @@ namespace EdProject.PresentationLayer.Controllers
             return await _orderService.GetItemsInOrderAsync(orderId);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<PaymentModel> GetPaymentInOrder(long orderId)
@@ -99,7 +108,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
 
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("[action]")]
         public async Task RemoveItemFromOrder(OrderItemModel orderItemModel)
         {

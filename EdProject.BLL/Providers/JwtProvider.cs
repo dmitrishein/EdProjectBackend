@@ -21,7 +21,7 @@ namespace EdProject.PresentationLayer.Helpers
         }
 
         
-        public async Task<string> GenerateAccessToken(User appUser)
+        public string GenerateAccessToken(User appUser)
         {
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

@@ -29,7 +29,7 @@ namespace EdProject.BLL.EmailSender
 
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync("smtp.gmail.com", 587);
+                await client.ConnectAsync(_config["EmailProvider:SmtpHost"], int.Parse(_config["EmailProvider:SmtpPort"]));
 
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
 

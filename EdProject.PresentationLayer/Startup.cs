@@ -64,20 +64,19 @@ namespace EdProject.PresentationLayer
                                                 .UseLazyLoadingProxies());
           
             services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddScoped<IPrintingEditionService, EditionService>();
+            services.AddScoped<IEditionService, EditionService>();
             services.AddScoped<IAccountService, AccountsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IOrdersService, OrderService>();
 
             services.AddAutoMapper(typeof(Startup).Assembly);
-            services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), typeof(OrderItemProfile), typeof(PaymentProfile),typeof(AuthorProfile), typeof(AuthorInEditionProfile), typeof(AccountProfile));
+            services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), typeof(PaymentProfile),typeof(AuthorProfile), typeof(AccountProfile));
             services.Configure<IdentityOptions>(options =>
             {
-                options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 5;
                 options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = false;
+                options.Password.RequireUppercase = true;
                 options.Password.RequireNonAlphanumeric = false;
             });
 

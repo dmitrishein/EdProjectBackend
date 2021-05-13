@@ -15,6 +15,11 @@ namespace EdProject.DAL.Repositories
         {
         }
 
+        public bool OrderExist(Orders order)
+        {
+            return GetAll().Any(o => o.Id == order.Id && o.PaymentId == order.PaymentId && o.UserId == order.UserId);
+                
+        }
         public async Task AddPaymentToOrderAsync(Orders order, Payments payments)
         {
             order.Payment = payments;
@@ -55,19 +60,13 @@ namespace EdProject.DAL.Repositories
         }
 
 
-        public async Task<List<Orders>> PagingOrders(int pageNumber, int pageSize,string searchString)
+        public async Task<List<Orders>> OrdersPage(int pageNumber, int pageSize,string searchString)
         {
-            if (pageNumber == 0 || pageSize == 0)
-            {
-                return null;
-            }
-
             var ordersQuery = GetAll().Where(o => o.Id.ToString() == searchString ||
                                                   o.UserId.ToString().Contains(searchString) ||
                                                   o.PaymentId.ToString().Equals(searchString) ||
                                                   o.Description.Contains(searchString))
                                        .Where(e => !e.IsRemoved);
-
 
             var ordersPage = ordersQuery.Skip((pageNumber - Constants.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
 

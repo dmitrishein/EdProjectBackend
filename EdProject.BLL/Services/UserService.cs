@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -75,18 +74,18 @@ namespace EdProject.BLL.Services
         }
         public async Task<List<UserModel>> GetUserListByRole(string roleName)
         {
-            var users = await _userManager.GetUsersInRoleAsync(roleName);
-            //user existing check
-            var resultList = _mapper.Map<IList<User>, List<UserModel>>(users);
+            var users = await _userManager.GetUsersInRoleAsync(roleName);        
+            if(!users.Any())
+            {
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.OK);
+            }
 
-            return resultList;
+            return _mapper.Map<IList<User>, List<UserModel>>(users);
         }
         public async Task RemoveUserAsync(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            //user existing check
-            if (user is null)
-                throw new Exception("user not found");
+            UserExistCheck(user);
             user.isRemoved = true;
             await _userManager.UpdateAsync(user);
             
@@ -96,7 +95,7 @@ namespace EdProject.BLL.Services
             var checkUser = await _userManager.FindByIdAsync(userModel.Id.ToString());
 
             UserExistCheck(checkUser);
-            UserUpdateValidation(userModel);
+            UserUpdateModelValidation(userModel);
 
             await _userManager.SetUserNameAsync(checkUser, userModel.Username);
             checkUser.FirstName = userModel.FirstName;
@@ -108,20 +107,18 @@ namespace EdProject.BLL.Services
         public async Task BlockUser(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
+            UserExistCheck(user);
             await _userManager.SetLockoutEnabledAsync(user, true);
             await _userManager.SetLockoutEndDateAsync(user, DateTime.Today.AddYears(100));
         }
         public async Task UnblockUser(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null)
-                throw new Exception("user not found");
-            
-            await _userManager.SetLockoutEnabledAsync(user, false);
-            
+            UserExistCheck(user);    
+            await _userManager.SetLockoutEnabledAsync(user, false);       
         }
 
-        private void UserUpdateValidation(UserUpdateModel userModel)
+        private void UserUpdateModelValidation(UserUpdateModel userModel)
         {
             if (!userModel.Username.Any())
             {

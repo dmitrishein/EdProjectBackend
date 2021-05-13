@@ -7,11 +7,11 @@ namespace EdProject.BLL.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<string> RegisterUserAsync(UserCreateModel newUser);
+        Task RegisterUserAsync(UserCreateModel newUser);
         Task<TokenPairModel> SignInAsync(LoginModel userSignInModel); 
         Task SignOutAsync();
         Task ConfirmEmailAsync(EmailValidationModel validationModel);
-        Task<string> ResetPasswordTokenAsync(string email);
+        Task ResetPasswordTokenAsync(string email);
         public Task ChangePasswordAsync(ChangePasswordModel resetPasswordModel);
         public Task SendEmail(EmailModel emailModel);
         public Task<User> GetUserByEmailAsync(string email);

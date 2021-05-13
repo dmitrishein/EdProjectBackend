@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
 {
-    public class EditionService : IPrintingEditionService
+    public class EditionService : IEditionService
     {
         
         EditionRepository _editionRepos;
@@ -55,12 +55,11 @@ namespace EdProject.BLL.Services
 
         public async Task<List<EditionModel>> GetEditionListAsync()
         {
-            var query = await _editionRepos.GetAllEditionsAsync();
+            var editionList = await _editionRepos.GetAllEditionsAsync();
 
-            if (!query.Any())
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
+            EditionListCheck(editionList);
 
-            return _mapper.Map<List<Edition>, List<EditionModel>>(query);
+            return _mapper.Map<List<Edition>, List<EditionModel>>(editionList);
         }
         public async Task<EditionModel> GetEditionByIdAsync(long id)
         {
@@ -71,24 +70,24 @@ namespace EdProject.BLL.Services
         }
         public async Task<List<EditionModel>> GetEditionListByStringAsync(string searchString)
         {
-            var query = (await _editionRepos.GetAllEditionsAsync()).Where(x => x.Id.ToString() == searchString)
+            var editionList = (await _editionRepos.GetAllEditionsAsync()).Where(x => x.Id.ToString() == searchString)
                                                                    .Where(x => x.Title == searchString).ToList();
-            
 
-            if (!query.Any())
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.OK);
 
-            return _mapper.Map<List<Edition>, List<EditionModel>>(query);
+            EditionListCheck(editionList);
+
+            return _mapper.Map<List<Edition>, List<EditionModel>>(editionList);
         }
         public async Task<List<EditionModel>> GetEditionPageAsync(PageModel pageModel)
         {
-            var query = await _editionRepos.Pagination(pageModel.PageNumber,pageModel.ElementsAmount,pageModel.SearchString);
+            PageModelValidation(pageModel);
 
-            if (!query.Any())
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
+            var editionList = await _editionRepos.Pagination(pageModel.PageNumber,pageModel.ElementsAmount,pageModel.SearchString);
+            EditionListCheck(editionList);
 
-            return _mapper.Map<List<Edition>, List<EditionModel>>(query);
+            return _mapper.Map<List<Edition>, List<EditionModel>>(editionList);
         }
+
 
         private void EditionModelValidation(EditionModel editionModel)
         {        
@@ -103,6 +102,19 @@ namespace EdProject.BLL.Services
             if (edition is null || edition.IsRemoved)
                 throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
         }
-
+        private void EditionListCheck(List<Edition> queryList)
+        {
+            if(!queryList.Any())
+            {
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.NoContent);
+            }
+        }
+        private void PageModelValidation(PageModel pageModel)
+        {
+            if (pageModel.PageNumber is Constants.EMPTY || pageModel.ElementsAmount is Constants.EMPTY)
+            {
+                throw new CustomException("Incorrect page number or elements amount", HttpStatusCode.BadRequest);
+            }
+        }
     }
 }

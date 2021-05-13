@@ -73,7 +73,7 @@ namespace EdProject.PresentationLayer.Controllers
             return _userService.GetUsersByQuery(searchString);
         }
 
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task BlockUser(long userId)
@@ -81,6 +81,7 @@ namespace EdProject.PresentationLayer.Controllers
             await _userService.BlockUser(userId);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UnblockUser(long userId)

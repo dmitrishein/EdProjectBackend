@@ -34,17 +34,18 @@ namespace EdProject.BLL.Services
             _jwt = new JwtProvider(_config);
         }
 
+
         public async Task<TokenPairModel> SignInAsync(LoginModel userSignInModel)
         {
-            LoginValidation(userSignInModel);
+            LoginModelValidation(userSignInModel);
 
             var user = await _userManager.FindByEmailAsync(userSignInModel.Email);
 
-            UserValidation(user);
+            UserCheck(user);
 
             TokenPairModel tokenPairModel = new TokenPairModel
             {
-                AccessToken = await _jwt.GenerateAccessToken(user),
+                AccessToken = _jwt.GenerateAccessToken(user),
                 RefreshToken = _jwt.GenerateRefreshToken()
             };
 
@@ -54,9 +55,10 @@ namespace EdProject.BLL.Services
         }
         public async Task SignOutAsync()
         {          
+          
           await _signInManager.SignOutAsync();
         }
-        public async Task<string> RegisterUserAsync(UserCreateModel userModel)
+        public async Task RegisterUserAsync(UserCreateModel userModel)
         {
             RegistrationModelValidation(userModel);
 
@@ -64,12 +66,26 @@ namespace EdProject.BLL.Services
             var result = await _userManager.CreateAsync(newUser, userModel.Password);
 
             if (!result.Succeeded)
-                throw new CustomException($"Registration failed. Possible reasons:{result}", HttpStatusCode.BadRequest); 
+            {
+                throw new CustomException($"Registration failed. Possible reasons:{result}", HttpStatusCode.BadRequest);
+            }
             
-            await _userManager.AddToRoleAsync(newUser,"сlient");
-            return await _userManager.GenerateEmailConfirmationTokenAsync(newUser);         
+            await _userManager.AddToRoleAsync(newUser,"Client");
+            await ConfirmAccountAsync(newUser);
+      
         }
 
+        public async Task ConfirmAccountAsync(User user)
+        {
+            var confirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            EmailModel emailMessage = new()
+            {
+                Email = user.Email,
+                Message = $"https://localhost:44386/Account/ChangePassword?token={confirmToken}&email={user.Email}",
+                Subject = "Account confirm"
+            };
+            await SendEmail(emailMessage);
+        }
         public async Task SendEmail(EmailModel emailModel)
         {
             await _emailService.SendEmailAsync(emailModel);    
@@ -77,25 +93,31 @@ namespace EdProject.BLL.Services
         public async Task ConfirmEmailAsync(EmailValidationModel validationModel)
         {       
              var user = await _userManager.FindByEmailAsync(validationModel.Email);
-             if (user is null)
-                 throw new CustomException(Constants.ITEM_NOT_FOUND, HttpStatusCode.BadRequest);
+            
 
              await _userManager.ConfirmEmailAsync(user, validationModel.Token);    
         }
 
-        public async Task<string> ResetPasswordTokenAsync(string email)
+        public async Task ResetPasswordTokenAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            return await _userManager.GeneratePasswordResetTokenAsync(user);      
+            EmailModel emailMessage = new()
+            {
+                Email = email,
+                Message = $"https://localhost:44386/Account/ChangePassword?token={resetToken}&email={email}",
+                Subject = "Reset Password"
+            };
+
+            await SendEmail(emailMessage);     
         }
         public async Task ChangePasswordAsync(ChangePasswordModel changePasswordModel)
         {
              var user = await _userManager.FindByEmailAsync(changePasswordModel.Email);
-             if (user is null)
-                throw new CustomException(Constants.ITEM_NOT_FOUND, HttpStatusCode.BadRequest);
+             UserCheck(user);
 
-            var result = await _userManager.ResetPasswordAsync(user, changePasswordModel.Token, changePasswordModel.NewPassword);
+            await _userManager.ResetPasswordAsync(user, changePasswordModel.Token, changePasswordModel.NewPassword);
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
@@ -139,7 +161,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException(Constants.INCORRECT_EMAIL, HttpStatusCode.BadRequest);
             }
         }
-        private void LoginValidation(LoginModel loginModel)
+        private void LoginModelValidation(LoginModel loginModel)
         {
             //email validation pattern
             string emailPattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
@@ -152,12 +174,12 @@ namespace EdProject.BLL.Services
             if (!Regex.IsMatch(loginModel.Email, emailPattern, RegexOptions.IgnoreCase))
                 throw new CustomException(Constants.INCORRECT_EMAIL, HttpStatusCode.BadRequest);
         }
-        private void UserValidation(User user)
+        private void UserCheck(User user)
         {
             if (user is null)
-                throw new CustomException(Constants.ITEM_NOT_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
             if (!user.EmailConfirmed)
-                throw new CustomException("Email wasn't confirmed. Cannot recover the password", HttpStatusCode.BadRequest);
+                throw new CustomException("Email wasn't confirmed", HttpStatusCode.BadRequest);
         }
     }
 }

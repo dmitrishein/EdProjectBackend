@@ -32,9 +32,6 @@ namespace EdProject.DAL.Repositories
         }
         public async Task<List<Edition>> Pagination(int pageNumber,int pageSize, string searchString)
         {
-            if (pageNumber is Constants.EMPTY || pageSize is Constants.EMPTY)
-                return null;
-
             var listResults = GetAll().Where(e => e.Authors.Any(a => a.Name.Contains(searchString)) || 
                                              e.Title.Contains(searchString) || 
                                              e.Id.ToString().Equals(searchString))
