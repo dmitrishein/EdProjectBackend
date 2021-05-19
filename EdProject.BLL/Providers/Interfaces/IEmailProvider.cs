@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EdProject.BLL.Providers
 {
-    interface IEmailProvider
+    public interface IEmailProvider
     {
         Task SendEmailAsync(EmailModel emailModel);
     }

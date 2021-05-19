@@ -38,7 +38,8 @@ namespace EdProject.DAL.Repositories
                                       .Where(e => !e.IsRemoved);
             
 
-            var editionsPage = listResults.Skip((pageNumber - Constants.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
+            var editionsPage = listResults.Skip((pageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
+
             return await editionsPage.ToListAsync(); 
         }
     }

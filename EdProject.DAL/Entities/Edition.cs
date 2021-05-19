@@ -10,7 +10,7 @@ namespace EdProject.DAL.Entities
         public string Description { get; set; }
 
         public decimal Price { get; set; }
-        public EditionStatusTypes Status { get; set; }
+        public AvailableStatusType Status { get; set; }
         public CurrencyTypes Currency { get; set; }
         public EditionTypes Type { get; set; }
 

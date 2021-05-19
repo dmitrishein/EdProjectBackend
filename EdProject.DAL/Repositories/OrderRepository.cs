@@ -17,8 +17,7 @@ namespace EdProject.DAL.Repositories
 
         public bool OrderExist(Orders order)
         {
-            return GetAll().Any(o => o.Id == order.Id && o.PaymentId == order.PaymentId && o.UserId == order.UserId);
-                
+            return GetAll().Any(o => o.Id == order.Id);        
         }
         public async Task AddPaymentToOrderAsync(Orders order, Payments payments)
         {
@@ -30,9 +29,20 @@ namespace EdProject.DAL.Repositories
             order.Editions.Add(edition);
             await UpdateAsync(order);
         }
+        public async Task AddItemListToOrderAsync(Orders order, List<Edition> editions)
+        {
+            editions.ForEach(a => a.Orders.Add(order));
+            await UpdateAsync(order);
+        }
+
         public async Task RemoveItemToOrderAsync(Orders order, Edition edition)
         {
             order.Editions.Remove(edition);
+            await UpdateAsync(order);
+        }
+        public async Task RemoveItemListFromOrderAsync(Orders order, List<Edition> editions)
+        {
+            editions.ForEach(a => a.Orders.Remove(order));
             await UpdateAsync(order);
         }
         public async Task RemoveOrderByIdAsync(long id)
@@ -41,13 +51,7 @@ namespace EdProject.DAL.Repositories
             res.IsRemoved = true;
             await UpdateAsync(res);
         }
-        public async Task RemoveOrderByPaymentIdAsync(long paymentId)
-        {
-            var order = GetAll().Where(e => e.PaymentId == paymentId).FirstOrDefault();
-            order.IsRemoved = true;
-            await UpdateAsync(order);
-        }
-
+    
         public async Task<List<Orders>> GetAllOrdersAsync()
         {
             return await GetAll().Where(x => !x.IsRemoved).ToListAsync();
@@ -68,7 +72,7 @@ namespace EdProject.DAL.Repositories
                                                   o.Description.Contains(searchString))
                                        .Where(e => !e.IsRemoved);
 
-            var ordersPage = ordersQuery.Skip((pageNumber - Constants.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
+            var ordersPage = ordersQuery.Skip((pageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
 
             return await ordersPage.ToListAsync();
         }

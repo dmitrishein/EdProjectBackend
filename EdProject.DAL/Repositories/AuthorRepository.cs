@@ -33,9 +33,19 @@ namespace EdProject.DAL.Repositories
             author.Editions.Add(edition);
             await UpdateAsync(author);
         }
+        public async Task AddEditionListToAuthor(Author author, List<Edition> editions)
+        {
+            editions.ForEach(a => a.Authors.Add(author));
+            await UpdateAsync(author);
+        }
         public async Task RemoveAuthorInEdition(Author author, Edition edition)
         {
             author.Editions.Remove(edition);
+            await UpdateAsync(author);
+        }
+        public async Task RemoveAuthorInEditionList(Author author, List<Edition> editions)
+        {
+            editions.ForEach(a => a.Authors.Remove(author));
             await UpdateAsync(author);
         }
     }

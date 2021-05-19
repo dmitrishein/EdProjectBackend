@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.IO;
 
 namespace EdProject.BLL.Common
@@ -25,7 +24,7 @@ namespace EdProject.BLL.Common
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            this.Dispose();
         }
     }
 }

@@ -1,4 +1,9 @@
+using EdProject.BLL;
+using EdProject.BLL.Common.Options;
+using EdProject.BLL.EmailSender;
 using EdProject.BLL.Profiles;
+using EdProject.BLL.Providers;
+using EdProject.BLL.Providers.Interfaces;
 using EdProject.BLL.Services;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
@@ -36,6 +41,10 @@ namespace EdProject.PresentationLayer
             //{
             //    configuration.RootPath = "ClientApp/dist";
             //});
+            services.Configure<EmailOptions>(Configuration.GetSection("EmailProvider"));
+            services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
+            services.Configure<RoutingOptions>(Configuration.GetSection("ApiRoutes"));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
@@ -62,13 +71,15 @@ namespace EdProject.PresentationLayer
             services.AddDbContext<AppDbContext>(options => options
                                                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                                                 .UseLazyLoadingProxies());
-          
+
+            services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IEditionService, EditionService>();
             services.AddScoped<IAccountService, AccountsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IOrdersService, OrderService>();
+            services.AddScoped<IEmailProvider, EmailProvider>();
 
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), typeof(PaymentProfile),typeof(AuthorProfile), typeof(AccountProfile));

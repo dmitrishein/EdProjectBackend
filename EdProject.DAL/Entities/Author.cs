@@ -6,6 +6,6 @@ namespace EdProject.DAL.Entities
     public class Author:BaseEntity
     {
         public string Name{ get; set; }
-        public virtual ICollection<Edition> Editions { get; set; }
+        public virtual List<Edition> Editions { get; set; }
     }
 }

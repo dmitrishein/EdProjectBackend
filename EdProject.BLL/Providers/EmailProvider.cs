@@ -1,7 +1,8 @@
-﻿using EdProject.BLL.Models.User;
+﻿using EdProject.BLL.Common.Options;
+using EdProject.BLL.Models.User;
 using EdProject.BLL.Providers;
 using MailKit.Net.Smtp;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Threading.Tasks;
 
@@ -9,16 +10,16 @@ namespace EdProject.BLL.EmailSender
 {
     public class EmailProvider : IEmailProvider
     {
-        IConfiguration _config;
-        public EmailProvider(IConfiguration configuration)
+        private readonly EmailOptions _emailOptions;
+        public EmailProvider(IOptions<EmailOptions> options)
         {
-            _config = configuration;
+            _emailOptions = options.Value;
         }
         public async Task SendEmailAsync(EmailModel emailModel )
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress(_config["EmailProvider:Owner"], _config["EmailProvider:Login"]));
+            emailMessage.From.Add(new MailboxAddress(_emailOptions.Owner, _emailOptions.Login));
             emailMessage.To.Add(new MailboxAddress(emailModel.RecipientName, emailModel.Email));
             emailMessage.Subject = emailModel.Subject;
 
@@ -29,11 +30,11 @@ namespace EdProject.BLL.EmailSender
 
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync(_config["EmailProvider:SmtpHost"], int.Parse(_config["EmailProvider:SmtpPort"]));
+                await client.ConnectAsync(_emailOptions.SmtpHost, _emailOptions.SmtpPort);
 
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                client.Authenticate(_config["EmailProvider:Login"], _config["EmailProvider:Password"]);
+                client.Authenticate(_emailOptions.Login, _emailOptions.Password);
 
                 await client.SendAsync(emailMessage);
 

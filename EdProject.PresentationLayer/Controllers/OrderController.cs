@@ -20,12 +20,10 @@ namespace EdProject.PresentationLayer.Controllers
     {
         IConfiguration _config;
         IOrdersService _orderService;
-        IMapper _mapper;
         public OrderController(IOrdersService orderService, IConfiguration configuration,IMapper mapper)
         {
             _orderService = orderService;
             _config = configuration;
-            _mapper = mapper;
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -34,12 +32,22 @@ namespace EdProject.PresentationLayer.Controllers
         {
             await _orderService.CreateOrderAsync(newOrder);
         }
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("[action]")]
         public async Task CreateOrderItem(OrderItemModel newOrder)
         {
             await _orderService.CreateItemInOrderAsync(newOrder);
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("[action]")]
+        public async Task CreateOrderItemList(OrderItemsListModel newOrder)
+        {
+            await _orderService.CreateItemsListInOrderAsync(newOrder);
+        }
+
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("[action]")]
         public async Task CreatePayment(PaymentModel newPayment)
@@ -69,7 +77,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<List<OrderModel>> GetOrdersList()
         {
@@ -92,7 +100,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<List<EditionModel>> GetOrderedItemsByOrder(long orderId)
         {
@@ -113,6 +121,13 @@ namespace EdProject.PresentationLayer.Controllers
         public async Task RemoveItemFromOrder(OrderItemModel orderItemModel)
         {
            await _orderService.RemoveItemFromOrderAsync(orderItemModel);
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("[action]")]
+        public async Task RemoveItemsListFromOrder(OrderItemsListModel orderItemListModel)
+        {
+            await _orderService.RemoveItemsListFromOrder(orderItemListModel);
         }
 
     }

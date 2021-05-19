@@ -1,6 +1,8 @@
-﻿using EdProject.BLL.Services.Interfaces;
+﻿using EdProject.BLL.Common.Options;
+using EdProject.BLL.Providers.Interfaces;
 using EdProject.DAL.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -8,23 +10,22 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace EdProject.PresentationLayer.Helpers
+namespace EdProject.BLL
 {
-    public class JwtProvider
+    public class JwtProvider : IJwtProvider
     {
-        private IConfiguration _configuration;
-        public JwtProvider(IConfiguration configuration)
+        private readonly JwtOptions _jwtOptions;
+        public JwtProvider(IOptions<JwtOptions> options)
         {
-            _configuration = configuration;
+            _jwtOptions = options.Value;
         }
 
         
         public string GenerateAccessToken(User appUser)
         {
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>()
@@ -33,8 +34,8 @@ namespace EdProject.PresentationLayer.Helpers
                 new Claim(JwtRegisteredClaimNames.Sub, appUser.Id.ToString()),
             };
 
-            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
-                                             _configuration["Jwt:Issuer"],
+            var token = new JwtSecurityToken(_jwtOptions.Issuer,
+                                             _jwtOptions.Issuer,
                                              claims,
                                              expires: DateTime.Now.AddMinutes(40), 
                                              signingCredentials: credentials);
@@ -44,7 +45,7 @@ namespace EdProject.PresentationLayer.Helpers
 
         public string GenerateRefreshToken()
         {
-            var randomNum = new byte[32];
+            var randomNum = new byte[VariableConstant.REFRESH_TOKEN_CAPACITY];
             using(var randomNumberGenerator = RandomNumberGenerator.Create())
             {
                 randomNumberGenerator.GetBytes(randomNum);

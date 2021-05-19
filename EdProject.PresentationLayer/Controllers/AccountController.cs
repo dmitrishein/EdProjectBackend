@@ -1,9 +1,7 @@
 ﻿using EdProject.BLL;
 using EdProject.BLL.Models.User;
 using EdProject.BLL.Services.Interfaces;
-using EdProject.PresentationLayer.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Controllers

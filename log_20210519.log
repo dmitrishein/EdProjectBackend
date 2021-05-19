@@ -1,0 +1,10 @@
+[2021-05-19 11:44:07+00:00] [Error] An exception occurred while iterating over the results of a query for context type 'EdProject.DAL.DataContext.AppDbContext'.
+System.InvalidCastException: Unable to cast object of type 'System.String' to type 'System.DateTime'.
+   at Microsoft.Data.SqlClient.SqlBuffer.get_DateTime()
+   at Microsoft.Data.SqlClient.SqlDataReader.GetDateTime(Int32 i)
+   at lambda_method159(Closure , QueryContext , DbDataReader , ResultContext , SingleQueryResultCoordinator )
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()    at Microsoft.Data.SqlClient.SqlBuffer.get_DateTime()
+   at Microsoft.Data.SqlClient.SqlDataReader.GetDateTime(Int32 i)
+   at lambda_method159(Closure , QueryContext , DbDataReader , ResultContext , SingleQueryResultCoordinator )
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[2021-05-19 11:44:07+00:00] [Error] Unable to cast object of type 'System.String' to type 'System.DateTime'. 

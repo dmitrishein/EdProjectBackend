@@ -7,8 +7,8 @@ namespace EdProject.BLL.Models.PrintingEditions
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public EditionStatusTypes Status { get; set; }
+        public AvailableStatusType Status { get; set; }
         public CurrencyTypes Currency { get; set; }
-        public EditionStatusTypes Type { get; set; }
+        public AvailableStatusType Type { get; set; }
     }
 }

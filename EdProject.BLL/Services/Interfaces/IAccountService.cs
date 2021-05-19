@@ -13,7 +13,6 @@ namespace EdProject.BLL.Services.Interfaces
         Task ConfirmEmailAsync(EmailValidationModel validationModel);
         Task ResetPasswordTokenAsync(string email);
         public Task ChangePasswordAsync(ChangePasswordModel resetPasswordModel);
-        public Task SendEmail(EmailModel emailModel);
         public Task<User> GetUserByEmailAsync(string email);
         public Task<IList<string>> GetUserRoleAsync(string email);
 

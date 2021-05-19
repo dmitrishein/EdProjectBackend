@@ -26,11 +26,5 @@ namespace EdProject.DAL.Repositories
             res.IsRemoved = true;
             await UpdateAsync(res);   
         }
-        public async Task RemovePaymentByTransactionIdAsync(string transactId)
-        {    
-            var transaction = GetAll().Where(e => e.TransactionId == transactId).FirstOrDefault();
-            transaction.IsRemoved = true;
-            await UpdateAsync(transaction);
-        }
     }
 }

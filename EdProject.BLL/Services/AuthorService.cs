@@ -37,15 +37,36 @@ namespace EdProject.BLL.Services
         public async Task CreateAuthorInEditionAsync(AuthorInEditionModel authorModel)
         {
             var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
+            AuthorExistCheck(author);
             var edition = await _editionRepository.FindByIdAsync(authorModel.EditionId);
             await _authorRepository.AddEditionToAuthor(author,edition);
+        }
+        public async Task CreateAuthorInEditionsList(AuthorInEditionsList authorModel)
+        {
+            var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
+            AuthorExistCheck(author);            
+            string[] editionsId = authorModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
+            List<Edition> editionList = new List<Edition>();
+          
+            foreach(var edition in editionsId)
+            {
+                var tempEdition =  await _editionRepository.FindByIdAsync(int.Parse(edition));
+
+                if (tempEdition is null || tempEdition.IsRemoved)
+                {
+                    throw new CustomException($"Incorrect edition Id{edition}", HttpStatusCode.BadRequest);
+                }
+
+                editionList.Add(tempEdition);
+            }
+            await _authorRepository.AddEditionListToAuthor(author, editionList);
         }
 
         public async Task<List<AuthorModel>> GetAuthorListAsync()
         {
             if (!(await _authorRepository.GetAllAuthorsAsync()).Any())
             {
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.OK);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
             }
 
             return _mapper.Map<List<Author>, List<AuthorModel>>(await _authorRepository.GetAllAuthorsAsync());          
@@ -69,7 +90,7 @@ namespace EdProject.BLL.Services
             var edition = await _editionRepository.FindByIdAsync(editionId);
 
             if (edition is null || edition.IsRemoved)
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
 
             List<Author> authorsList = edition.Authors.Where(a => !a.IsRemoved).ToList();
             return _mapper.Map<List<Author>, List<AuthorModel>>(authorsList);
@@ -99,6 +120,30 @@ namespace EdProject.BLL.Services
 
             await _authorRepository.RemoveAuthorInEdition(author,edition);
         }
+        public async Task RemoveAuthorInEditionsList(AuthorInEditionsList authorModel)
+        {
+            var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
+
+            AuthorExistCheck(author);
+
+            string[] editionsId = authorModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
+            List<Edition> editionList = new List<Edition>();
+
+            foreach (var edition in editionsId)
+            {
+                var tempEdition = await _editionRepository.FindByIdAsync(int.Parse(edition));
+
+                if (tempEdition is null || tempEdition.IsRemoved)
+                {
+                    throw new CustomException($"Incorrect edition Id {edition}", HttpStatusCode.BadRequest);
+                }
+
+                editionList.Add(tempEdition);
+            }
+
+            await _authorRepository.RemoveAuthorInEditionList(author, editionList);
+        }
+
 
         private void AuthorValidation(AuthorModel authorModel)
         {
@@ -110,9 +155,9 @@ namespace EdProject.BLL.Services
         private void AuthorExistCheck(Author author)
         {
             if (author is null)
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.NoContent);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
             if (author.IsRemoved)
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.NoContent);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
         }
     }
 }

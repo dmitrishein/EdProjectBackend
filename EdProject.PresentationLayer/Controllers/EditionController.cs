@@ -46,7 +46,7 @@ namespace EdProject.PresentationLayer.Controllers
             await _printEditionService.RemoveEditionAsync(id);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("[action]")]
         public Task<List<EditionModel>> GetEditions()
         {

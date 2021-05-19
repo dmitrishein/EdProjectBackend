@@ -5,12 +5,9 @@ using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -100,18 +97,18 @@ namespace EdProject.BLL.Services
         private void EditionExistCheck(Edition edition)
         {
             if (edition is null || edition.IsRemoved)
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
         }
         private void EditionListCheck(List<Edition> queryList)
         {
             if(!queryList.Any())
             {
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.NoContent);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
             }
         }
         private void PageModelValidation(PageModel pageModel)
         {
-            if (pageModel.PageNumber is Constants.EMPTY || pageModel.ElementsAmount is Constants.EMPTY)
+            if (pageModel.PageNumber is VariableConstant.EMPTY || pageModel.ElementsAmount is VariableConstant.EMPTY)
             {
                 throw new CustomException("Incorrect page number or elements amount", HttpStatusCode.BadRequest);
             }

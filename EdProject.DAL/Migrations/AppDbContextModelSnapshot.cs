@@ -73,8 +73,8 @@ namespace EdProject.DAL.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedAt")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
@@ -90,14 +90,14 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = "2021-05-12 09:42:48Z",
+                            CreatedAt = new DateTime(2021, 5, 19, 11, 45, 44, 792, DateTimeKind.Local).AddTicks(4792),
                             IsRemoved = false,
                             Name = "William Shakespare"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = "2021-05-12 09:42:48Z",
+                            CreatedAt = new DateTime(2021, 5, 19, 11, 45, 44, 792, DateTimeKind.Local).AddTicks(5217),
                             IsRemoved = false,
                             Name = "Stephen King"
                         });
@@ -110,8 +110,8 @@ namespace EdProject.DAL.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedAt")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -145,7 +145,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = "2021-05-12 09:42:48Z",
+                            CreatedAt = new DateTime(2021, 5, 19, 11, 45, 44, 789, DateTimeKind.Local).AddTicks(7246),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -157,7 +157,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            CreatedAt = "2021-05-12 09:42:48Z",
+                            CreatedAt = new DateTime(2021, 5, 19, 11, 45, 44, 792, DateTimeKind.Local).AddTicks(3899),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -169,7 +169,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 3L,
-                            CreatedAt = "2021-05-12 09:42:48Z",
+                            CreatedAt = new DateTime(2021, 5, 19, 11, 45, 44, 792, DateTimeKind.Local).AddTicks(3948),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -181,7 +181,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 4L,
-                            CreatedAt = "2021-05-12 09:42:48Z",
+                            CreatedAt = new DateTime(2021, 5, 19, 11, 45, 44, 792, DateTimeKind.Local).AddTicks(4014),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -193,7 +193,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 5L,
-                            CreatedAt = "2021-05-12 09:42:48Z",
+                            CreatedAt = new DateTime(2021, 5, 19, 11, 45, 44, 792, DateTimeKind.Local).AddTicks(4018),
                             Currency = "EUR",
                             Description = "Featuring Willy Shakespare",
                             IsRemoved = false,
@@ -211,8 +211,8 @@ namespace EdProject.DAL.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedAt")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -250,8 +250,8 @@ namespace EdProject.DAL.Migrations
                     b.Property<long>("Amount")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("CreatedAt")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Currency")
                         .HasColumnType("int");
@@ -305,7 +305,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "bfb6979f-a4b6-4eb9-9e00-d0d7b7f2f5b3",
+                            ConcurrencyStamp = "ca0b13ca-43a9-4dc1-bbdb-56f3c8af28bc",
                             Name = "admin",
                             NormalizedName = "admin",
                             RolesType = 1,
@@ -314,7 +314,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "86767788-1477-4e26-aea1-eaa3133e4492",
+                            ConcurrencyStamp = "7c1cc412-7a20-4f80-a9df-972cd6e7d989",
                             Name = "client",
                             NormalizedName = "client",
                             RolesType = 2,
@@ -402,7 +402,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0742521f-81bb-42a1-afa9-979193460856",
+                            ConcurrencyStamp = "062c5072-23aa-4be6-a837-6f6a363df351",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -410,9 +410,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG8DGH5G8uwm8p2nghnROmErPka139HnEyMFasIAISDUT+SLxnQQN+rpRIYF0E/WrQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELL8fYvVQygiSvzEBeGuagPorry92IMkEvGPcUJHqkMq2DZsrWRyzCUqS91S4F5t9Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e0fbaa0b-8b0a-4963-bbb4-80b46f8daadc",
+                            SecurityStamp = "9106fdf3-8047-4a82-876c-e5c688ced1c2",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             isRemoved = false
@@ -421,7 +421,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f19d33a4-d92c-44b5-be83-0054964df430",
+                            ConcurrencyStamp = "3e71b110-5729-495c-9acd-1ca65585da3e",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
@@ -429,9 +429,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBhy0e/iY4DcTAJE36sR417P8Fk/wr+WxIvM528haBNVy8b9SlniLp8dqrsG+cyjZg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPl1X5hbDHhCOBRJUhRfd3FEb2Z/B1uYiHlfXhlg08ZzNqAvtfXM89HGIcNNh+NIOA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4635b590-c839-4b59-b892-1b933b8c029d",
+                            SecurityStamp = "13e39538-1073-4f64-83ee-262f99c39ae7",
                             TwoFactorEnabled = false,
                             UserName = "client",
                             isRemoved = false

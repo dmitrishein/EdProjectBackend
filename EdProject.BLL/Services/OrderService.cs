@@ -34,7 +34,7 @@ namespace EdProject.BLL.Services
             var newOrder = _mapper.Map<OrderModel, Orders>(orderModel);
             if(_orderRepository.OrderExist(newOrder))
             {
-                throw new CustomException(Constants.ALREADY_EXIST, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.ALREADY_EXIST, HttpStatusCode.BadRequest);
             }
 
             await _orderRepository.CreateAsync(newOrder);
@@ -45,6 +45,27 @@ namespace EdProject.BLL.Services
             var order = await _orderRepository.FindByIdAsync(orderItemModel.OrderId);
 
             await _orderRepository.AddItemToOrderAsync(order, item);
+        }
+        public async Task CreateItemsListInOrderAsync(OrderItemsListModel orderItemlistModel)
+        {
+            var order = await _orderRepository.FindByIdAsync(orderItemlistModel.OrderId);
+            OrderCheck(order);
+            string[] editionsId = orderItemlistModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
+            List<Edition> editionList = new List<Edition>();
+
+            foreach (var edition in editionsId)
+            {
+                var tempEdition = await _editionRepository.FindByIdAsync(int.Parse(edition));
+
+                if (tempEdition is null || tempEdition.IsRemoved)
+                {
+                    throw new CustomException($"Incorrect edition Id{edition}", HttpStatusCode.BadRequest);
+                }
+
+                editionList.Add(tempEdition);
+            }
+
+            await _orderRepository.AddItemListToOrderAsync(order, editionList);
         }
         public async Task CreatePaymentAsync(PaymentModel paymentModel)
         {
@@ -106,22 +127,44 @@ namespace EdProject.BLL.Services
 
             await _orderRepository.RemoveItemToOrderAsync(order, item);
         }
+        public async Task RemoveItemsListFromOrder(OrderItemsListModel orderItemsListModel)
+        {
+            var order = await _orderRepository.FindByIdAsync(orderItemsListModel.OrderId);
+            OrderCheck(order);
+
+            string[] editionsId = orderItemsListModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
+            List<Edition> editionList = new List<Edition>();
+
+            foreach (var edition in editionsId)
+            {
+                var tempEdition = await _editionRepository.FindByIdAsync(int.Parse(edition));
+
+                if (tempEdition is null || tempEdition.IsRemoved)
+                {
+                    throw new CustomException($"Incorrect edition Id{edition}", HttpStatusCode.BadRequest);
+                }
+
+                editionList.Add(tempEdition);
+            }
+
+            await _orderRepository.RemoveItemListFromOrderAsync(order, editionList);
+        }
 
         private void OrderCheck(Orders order)
         {
             if(order is null || order.IsRemoved)
             {
-                throw new CustomException(Constants.NOTHING_EXIST, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
             }
         }
         private void OrderListCheck(List<Orders> query)
         {
             if (!query.Any())
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
         }
         private void PageModelValidation(PageModel pageModel)
         {
-            if(pageModel.PageNumber is Constants.EMPTY || pageModel.ElementsAmount is Constants.EMPTY)
+            if(pageModel.PageNumber is VariableConstant.EMPTY || pageModel.ElementsAmount is VariableConstant.EMPTY)
             {
                 throw new CustomException("Incorrect page number or elements amount", HttpStatusCode.BadRequest);
             }

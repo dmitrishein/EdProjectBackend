@@ -54,7 +54,7 @@ namespace EdProject.DAL.DataContext
                 .Property(e => e.Status)
                 .HasConversion(
                 v => v.ToString(),
-                v => (EditionStatusTypes)Enum.Parse(typeof(EditionStatusTypes), v)
+                v => (AvailableStatusType)Enum.Parse(typeof(AvailableStatusType), v)
                 );
             modelBuilder
                 .Entity<Edition>()

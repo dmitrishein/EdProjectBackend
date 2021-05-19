@@ -24,7 +24,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task CreateAuthor(AuthorModel createAuthor)
         {
@@ -36,6 +36,12 @@ namespace EdProject.PresentationLayer.Controllers
         public async Task AddAuthorToEdition(AuthorInEditionModel authorIn)
         {
             await _authorService.CreateAuthorInEditionAsync(authorIn);
+        }
+
+        [HttpPost("[action]")]
+        public async Task AddAuthorToEditionsList(AuthorInEditionsList authorIn)
+        {
+            await _authorService.CreateAuthorInEditionsList(authorIn);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -68,10 +74,6 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
 
-
-
-
-
         [HttpGet("[action]")]
         public async Task<AuthorModel> GetAuthorAsync(long id)
         {
@@ -83,6 +85,12 @@ namespace EdProject.PresentationLayer.Controllers
         public async Task RemoveAuthorInEdition(AuthorInEditionModel authorIn)
         {
             await _authorService.RemoveAuthorInEditionAsync(authorIn);
+        }
+
+        [HttpPost("[action]")]
+        public async Task RemoveAuthorInEditionsList(AuthorInEditionsList authorIn)
+        {
+            await _authorService.RemoveAuthorInEditionsList(authorIn);
         }
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]

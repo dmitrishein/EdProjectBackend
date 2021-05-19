@@ -66,7 +66,7 @@ namespace EdProject.BLL.Services
                                                           
 
             if (!usersQuery.Any())
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.OK);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
 
             var userList = _mapper.Map<IQueryable<User>, List<UserModel>>(usersQuery);
 
@@ -77,7 +77,7 @@ namespace EdProject.BLL.Services
             var users = await _userManager.GetUsersInRoleAsync(roleName);        
             if(!users.Any())
             {
-                throw new CustomException(Constants.NOTHING_FOUND, HttpStatusCode.OK);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
             }
 
             return _mapper.Map<IList<User>, List<UserModel>>(users);
@@ -122,27 +122,27 @@ namespace EdProject.BLL.Services
         {
             if (!userModel.Username.Any())
             {
-                throw new CustomException(Constants.INVALID_FIELD_USERNAME, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INVALID_FIELD_USERNAME, HttpStatusCode.BadRequest);
             }
             if (!userModel.Username.Any(char.IsLetterOrDigit) || !userModel.Username.Trim().Any())
             {
-                throw new CustomException(Constants.INVALID_FIELD_USERNAME, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INVALID_FIELD_USERNAME, HttpStatusCode.BadRequest);
             }
             if (userModel.FirstName.Any(char.IsDigit) || userModel.FirstName.Any(char.IsSymbol) && userModel.FirstName.Trim().Any())
             {
-                throw new CustomException(Constants.INVALID_FIELD_FIRSTNAME, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INVALID_FIELD_FIRSTNAME, HttpStatusCode.BadRequest);
             }
             if (userModel.LastName.Any(char.IsDigit) || userModel.LastName.Any(char.IsSymbol))
             {
-                throw new CustomException(Constants.INVALID_FIELD_LASTNAME, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INVALID_FIELD_LASTNAME, HttpStatusCode.BadRequest);
             }
         }
         private void UserExistCheck(User user)
         {
             if (!user.EmailConfirmed)
-                throw new CustomException(Constants.NOTHING_EXIST,HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.NOTHING_EXIST,HttpStatusCode.BadRequest);
             if (user is null)
-                throw new CustomException(Constants.NOTHING_EXIST,HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.NOTHING_EXIST,HttpStatusCode.BadRequest);
         }
     }
 }
