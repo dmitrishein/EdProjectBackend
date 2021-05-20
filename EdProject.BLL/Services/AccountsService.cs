@@ -9,7 +9,6 @@ using EdProject.DAL.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -40,23 +39,22 @@ namespace EdProject.BLL.Services
 
         public async Task<TokenPairModel> SignInAsync(LoginModel userSignInModel)
         {
-            LoginModelValidation(userSignInModel);
-
             var user = await _userManager.FindByEmailAsync(userSignInModel.Email);
             if(user is null)
             {
                 throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-
             var result = await _signInManager.PasswordSignInAsync(user, userSignInModel.Password, userSignInModel.RememberMe, false);
             if(!result.Succeeded)
             {
                 throw new CustomException(result.ToString(), HttpStatusCode.BadRequest);
             }
 
+            var userRoles = await _userManager.GetRolesAsync(user);
+
             TokenPairModel tokenPairModel = new TokenPairModel
             {
-                AccessToken = _jwt.GenerateAccessToken(user),
+                AccessToken = _jwt.GenerateAccessToken(user,userRoles),
                 RefreshToken = _jwt.GenerateRefreshToken()
             };
 
@@ -68,7 +66,6 @@ namespace EdProject.BLL.Services
         }
         public async Task RegisterUserAsync(UserCreateModel userModel)
         {
-            //refactor validation
             var newUser = _mapper.Map<UserCreateModel, User>(userModel);
             var result = await _userManager.CreateAsync(newUser, userModel.Password);
 
@@ -78,7 +75,6 @@ namespace EdProject.BLL.Services
             }
            
             await _userManager.AddToRoleAsync(newUser,UserRolesType.Client.ToString());
-
 
             var confirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
             var confirmLink = _conectOption.ConfirmAccountRoute;
@@ -90,7 +86,6 @@ namespace EdProject.BLL.Services
             };
 
             await _emailService.SendEmailAsync(emailMessage);
-
         }
 
         public async Task ConfirmEmailAsync(EmailValidationModel validationModel)
@@ -147,20 +142,6 @@ namespace EdProject.BLL.Services
             }
 
             return await _userManager.GetRolesAsync(user);
-        }
-
-        private void LoginModelValidation(LoginModel loginModel)
-        {
-            //email validation pattern
-            string emailPattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                            @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
-
-            if (!loginModel.Email.Any())
-                throw new CustomException(ErrorConstant.INCORRECT_EMAIL, HttpStatusCode.BadRequest);
-            if (!loginModel.Password.Any())
-                throw new CustomException("Error! Enter password", HttpStatusCode.BadRequest);
-            if (!Regex.IsMatch(loginModel.Email, emailPattern, RegexOptions.IgnoreCase))
-                throw new CustomException(ErrorConstant.INCORRECT_EMAIL, HttpStatusCode.BadRequest);
         }
     }
 }

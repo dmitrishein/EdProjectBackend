@@ -60,7 +60,7 @@ namespace EdProject.DAL.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -80,7 +80,7 @@ namespace EdProject.DAL.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -95,7 +95,9 @@ namespace EdProject.DAL.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<long>(type: "bigint", nullable: false),
+                    Currency = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -240,11 +242,10 @@ namespace EdProject.DAL.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StatusType = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     PaymentId = table.Column<long>(type: "bigint", nullable: true),
-                    CreatedAt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRemoved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -293,8 +294,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RolesType", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, "74146a6f-77ea-4b3a-8e88-bfa96f8f0cf1", "admin", "admin", 1, false },
-                    { 2L, "f50b57a1-617c-4d57-8dba-e0bbd93b1f91", "client", "client", 2, false }
+                    { 1L, "050dbed0-97d0-420b-83a0-e99da26a5cd8", "admin", "admin", 1, false },
+                    { 2L, "65e297f7-eaba-4314-b29f-792bd4583c7c", "client", "client", 2, false }
                 });
 
             migrationBuilder.InsertData(
@@ -302,8 +303,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "isRemoved" },
                 values: new object[,]
                 {
-                    { 1L, 0, "bd01a517-2176-4d01-b13a-7b9c41d187dc", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEED/zAVUHBmCF4yKuMTzPk23MNfzjoyo36eh40aDiHxhPxytIlXMUVuKQRx/oe7gxQ==", null, false, "c80d1c5a-2cb0-418c-87f3-51e620f9335c", false, "admin", false },
-                    { 2L, 0, "277ee3a1-0f78-421f-bcdd-7b6013732525", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAENRq8BhvJkhAWqPIkSXYrE3zoBy2cA7JI2dnzMjVFeO3yTElZe//QQbU8NmG5NNRFw==", null, false, "3dfeae9c-077d-48bb-94d7-ec5b6b7b3e41", false, "client", false }
+                    { 1L, 0, "0db809a8-819b-40b3-8982-6d32305e65f6", "adminex@sample.te", true, "Admin", "Admin", false, null, "ADMINEX@SAMPLE.TE", "ADMIN", "AQAAAAEAACcQAAAAEA9QvS4Dw7FgWSmVtC14Bj5oAv8+mPPf7sWctYEDW2KidD/xj3DedypUKWZTzMIMhg==", null, false, "8999e4fc-407f-4f33-acfd-0b378c3cc335", false, "admin", false },
+                    { 2L, 0, "1e3b0eac-00cf-488e-8c66-9879b09e4753", "userex@sample.te", true, "Client", "User", false, null, "USEREX@SAMPLE.TE", "CLIENT", "AQAAAAEAACcQAAAAEOiVcnZOR+sYGMCbuiNK4fCu4avhpSWqGrPcgB2jQLjojd92dXHgS/4CLrRDKOzL+A==", null, false, "d4fa6567-b931-41bb-a933-ca6edd24cc1c", false, "client", false }
                 });
 
             migrationBuilder.InsertData(
@@ -311,8 +312,8 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsRemoved", "Name" },
                 values: new object[,]
                 {
-                    { 1L, "2021-05-10 15:47:33Z", false, "William Shakespare" },
-                    { 2L, "2021-05-10 15:47:33Z", false, "Stephen King" }
+                    { 1L, new DateTime(2021, 5, 20, 15, 12, 46, 463, DateTimeKind.Local).AddTicks(4583), false, "William Shakespare" },
+                    { 2L, new DateTime(2021, 5, 20, 15, 12, 46, 463, DateTimeKind.Local).AddTicks(4992), false, "Stephen King" }
                 });
 
             migrationBuilder.InsertData(
@@ -320,11 +321,11 @@ namespace EdProject.DAL.Migrations
                 columns: new[] { "Id", "CreatedAt", "Currency", "Description", "IsRemoved", "Price", "Status", "Title", "Type" },
                 values: new object[,]
                 {
-                    { 1L, "2021-05-10 15:47:33Z", "UAH", "Classic Printing Edition", false, 1444.9m, "Available", "Hamlet", "Book" },
-                    { 2L, "2021-05-10 15:47:33Z", "UAH", "Classic Printing Edition", false, 1200.9m, "Available", "Othello", "Book" },
-                    { 3L, "2021-05-10 15:47:33Z", "UAH", "Classic Printing Edition", false, 1300.9m, "Available", "Pet Graveyard", "Book" },
-                    { 4L, "2021-05-10 15:47:33Z", "UAH", "Classic Printing Edition", false, 1140.6m, "NotAvailable", "Confrontation", "Book" },
-                    { 5L, "2021-05-10 15:47:33Z", "EUR", "Featuring Willy Shakespare", false, 120.23m, "NotAvailable", "Something Weird", "Magazine" }
+                    { 1L, new DateTime(2021, 5, 20, 15, 12, 46, 460, DateTimeKind.Local).AddTicks(6667), "UAH", "Classic Printing Edition", false, 1444.9m, "Available", "Hamlet", "Book" },
+                    { 2L, new DateTime(2021, 5, 20, 15, 12, 46, 463, DateTimeKind.Local).AddTicks(3755), "UAH", "Classic Printing Edition", false, 1200.9m, "Available", "Othello", "Book" },
+                    { 3L, new DateTime(2021, 5, 20, 15, 12, 46, 463, DateTimeKind.Local).AddTicks(3799), "UAH", "Classic Printing Edition", false, 1300.9m, "Available", "Pet Graveyard", "Book" },
+                    { 4L, new DateTime(2021, 5, 20, 15, 12, 46, 463, DateTimeKind.Local).AddTicks(3807), "UAH", "Classic Printing Edition", false, 1140.6m, "NotAvailable", "Confrontation", "Book" },
+                    { 5L, new DateTime(2021, 5, 20, 15, 12, 46, 463, DateTimeKind.Local).AddTicks(3811), "EUR", "Featuring Willy Shakespare", false, 120.23m, "NotAvailable", "Something Weird", "Magazine" }
                 });
 
             migrationBuilder.InsertData(

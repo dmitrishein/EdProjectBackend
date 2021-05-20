@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using EdProject.BLL;
 using EdProject.BLL.Models.User;
 using EdProject.BLL.Services.Interfaces;
-using EdProject.DAL.Entities;
+using EdProject.DAL.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +49,7 @@ namespace EdProject.PresentationLayer.Controllers
 
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<List<UserModel>> GetUserByRole(string roleName)
         {

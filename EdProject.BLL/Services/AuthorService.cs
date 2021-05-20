@@ -26,11 +26,12 @@ namespace EdProject.BLL.Services
 
         public async Task CreateAuthorAsync(AuthorModel authorModel)
         {
-            AuthorValidation(authorModel);
             var newAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
 
             if (_authorRepository.AuthorIsExist(newAuthor))
-                throw new CustomException("Error! Author already exist!", HttpStatusCode.BadRequest);
+            {
+                throw new CustomException(ErrorConstant.ALREADY_EXIST, HttpStatusCode.BadRequest);
+            }
 
             await _authorRepository.CreateAsync(newAuthor);
         }
@@ -44,7 +45,9 @@ namespace EdProject.BLL.Services
         public async Task CreateAuthorInEditionsList(AuthorInEditionsList authorModel)
         {
             var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
-            AuthorExistCheck(author);            
+
+            AuthorExistCheck(author);
+            
             string[] editionsId = authorModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
             List<Edition> editionList = new List<Edition>();
           
@@ -54,7 +57,7 @@ namespace EdProject.BLL.Services
 
                 if (tempEdition is null || tempEdition.IsRemoved)
                 {
-                    throw new CustomException($"Incorrect edition Id{edition}", HttpStatusCode.BadRequest);
+                    throw new CustomException($"{ErrorConstant.CANNOT_ADD_EDITION}: {edition}", HttpStatusCode.BadRequest);
                 }
 
                 editionList.Add(tempEdition);
@@ -90,7 +93,9 @@ namespace EdProject.BLL.Services
             var edition = await _editionRepository.FindByIdAsync(editionId);
 
             if (edition is null || edition.IsRemoved)
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
+            { 
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest); 
+            }
 
             List<Author> authorsList = edition.Authors.Where(a => !a.IsRemoved).ToList();
             return _mapper.Map<List<Author>, List<AuthorModel>>(authorsList);
@@ -135,7 +140,7 @@ namespace EdProject.BLL.Services
 
                 if (tempEdition is null || tempEdition.IsRemoved)
                 {
-                    throw new CustomException($"Incorrect edition Id {edition}", HttpStatusCode.BadRequest);
+                    throw new CustomException($"{ErrorConstant.CANNOT_ADD_EDITION}:{edition}", HttpStatusCode.BadRequest);
                 }
 
                 editionList.Add(tempEdition);
@@ -144,20 +149,12 @@ namespace EdProject.BLL.Services
             await _authorRepository.RemoveAuthorInEditionList(author, editionList);
         }
 
-
-        private void AuthorValidation(AuthorModel authorModel)
-        {
-            if (authorModel.Name.Any(char.IsDigit) || authorModel.Name.Any(char.IsPunctuation))
-                throw new CustomException("Invalid Author's name! Name consist of letter only! ", HttpStatusCode.BadRequest);
-            if (!authorModel.Name.Trim().Any(char.IsLetter)) 
-                throw new CustomException("Invalid Author's name!", HttpStatusCode.BadRequest);
-        }
         private void AuthorExistCheck(Author author)
         {
-            if (author is null)
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
-            if (author.IsRemoved)
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
+            if (author is null || author.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
+            }              
         }
     }
 }

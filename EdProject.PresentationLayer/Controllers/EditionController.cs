@@ -23,7 +23,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public  async Task CreateEdition(EditionModel newEdition)
         {        
@@ -31,14 +31,14 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UpdateEdition(EditionModel updateModel)
         {        
             await _printEditionService.UpdateEditionAsync(updateModel);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task RemoveEditionAsync(long id)
@@ -46,7 +46,7 @@ namespace EdProject.PresentationLayer.Controllers
             await _printEditionService.RemoveEditionAsync(id);
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<List<EditionModel>> GetEditions()
         {

@@ -16,9 +16,9 @@ namespace EdProject.DAL.Repositories
            
         }
 
-        public bool IsExist(Edition edition)
+        public Edition FindEditionByTitle(string title)
         {
-            return GetAll().Where(item => item.Title == edition.Title).Any();
+            return GetAll().FirstOrDefault(e => e.Title == title);
         }
         public async Task RemoveEditionById(long id)
         {

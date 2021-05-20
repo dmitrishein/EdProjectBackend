@@ -22,17 +22,22 @@ namespace EdProject.BLL
         }
 
         
-        public string GenerateAccessToken(User appUser)
+        public string GenerateAccessToken(User appUser,IList<string> roles)
         {
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
+            
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Email, appUser.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, appUser.Id.ToString()),
             };
+
+            foreach(var userRole in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
 
             var token = new JwtSecurityToken(_jwtOptions.Issuer,
                                              _jwtOptions.Issuer,

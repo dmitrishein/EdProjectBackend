@@ -33,9 +33,12 @@ namespace EdProject.BLL.Services
         {
             var user = await _userManager.FindByEmailAsync(userToRole.UserEmail);
 
-            UserExistCheck(user);
+            if (user is null)
+            {
+                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+            }
 
-            if(!await _roleManager.RoleExistsAsync(userToRole.RoleName))
+            if (!await _roleManager.RoleExistsAsync(userToRole.RoleName))
             {
                 throw new CustomException("Wrong role! Check the rolename", System.Net.HttpStatusCode.BadRequest);
             }
@@ -46,7 +49,10 @@ namespace EdProject.BLL.Services
         public async Task<UserModel> GetUserByIdAsync(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            UserExistCheck(user);
+            if (user is null)
+            {
+                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+            }
             var userModel = _mapper.Map<User, UserModel>(user);
             return userModel;
         }
@@ -85,7 +91,10 @@ namespace EdProject.BLL.Services
         public async Task RemoveUserAsync(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            UserExistCheck(user);
+            if (user is null)
+            {
+                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+            }
             user.isRemoved = true;
             await _userManager.UpdateAsync(user);
             
@@ -94,8 +103,10 @@ namespace EdProject.BLL.Services
         {
             var checkUser = await _userManager.FindByIdAsync(userModel.Id.ToString());
 
-            UserExistCheck(checkUser);
-            UserUpdateModelValidation(userModel);
+            if (checkUser is null)
+            {
+                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+            }
 
             await _userManager.SetUserNameAsync(checkUser, userModel.Username);
             checkUser.FirstName = userModel.FirstName;
@@ -107,42 +118,22 @@ namespace EdProject.BLL.Services
         public async Task BlockUser(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            UserExistCheck(user);
+            if (user is null)
+            {
+                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+            }
             await _userManager.SetLockoutEnabledAsync(user, true);
             await _userManager.SetLockoutEndDateAsync(user, DateTime.Today.AddYears(100));
         }
         public async Task UnblockUser(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            UserExistCheck(user);    
+            if (user is null)
+            {
+                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+            }
             await _userManager.SetLockoutEnabledAsync(user, false);       
         }
 
-        private void UserUpdateModelValidation(UserUpdateModel userModel)
-        {
-            if (!userModel.Username.Any())
-            {
-                throw new CustomException(ErrorConstant.INVALID_FIELD_USERNAME, HttpStatusCode.BadRequest);
-            }
-            if (!userModel.Username.Any(char.IsLetterOrDigit) || !userModel.Username.Trim().Any())
-            {
-                throw new CustomException(ErrorConstant.INVALID_FIELD_USERNAME, HttpStatusCode.BadRequest);
-            }
-            if (userModel.FirstName.Any(char.IsDigit) || userModel.FirstName.Any(char.IsSymbol) && userModel.FirstName.Trim().Any())
-            {
-                throw new CustomException(ErrorConstant.INVALID_FIELD_FIRSTNAME, HttpStatusCode.BadRequest);
-            }
-            if (userModel.LastName.Any(char.IsDigit) || userModel.LastName.Any(char.IsSymbol))
-            {
-                throw new CustomException(ErrorConstant.INVALID_FIELD_LASTNAME, HttpStatusCode.BadRequest);
-            }
-        }
-        private void UserExistCheck(User user)
-        {
-            if (!user.EmailConfirmed)
-                throw new CustomException(ErrorConstant.NOTHING_EXIST,HttpStatusCode.BadRequest);
-            if (user is null)
-                throw new CustomException(ErrorConstant.NOTHING_EXIST,HttpStatusCode.BadRequest);
-        }
     }
 }

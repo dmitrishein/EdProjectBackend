@@ -17,7 +17,8 @@ namespace EdProject.BLL
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {   
             List<ValidationResult> errors = new List<ValidationResult>();
-            if (!UserName.Any(char.IsLetterOrDigit) || string.IsNullOrWhiteSpace(UserName) || UserName.Length < 3)
+
+            if (!UserName.Any(char.IsLetterOrDigit) || string.IsNullOrWhiteSpace(UserName))
             {
                 errors.Add(new ValidationResult(ErrorConstant.INVALID_FIELD_USERNAME));
             }
@@ -29,6 +30,10 @@ namespace EdProject.BLL
             {
                 errors.Add(new ValidationResult("Invalid LastName"));
             }
+            if (!Regex.IsMatch(Password, VariableConstant.PASSWORD_PATTERN))
+            {
+                errors.Add(new ValidationResult(ErrorConstant.INCORRECT_PASSWORD));
+            }
             if (!Regex.IsMatch(Email, VariableConstant.EMAIL_PATERN, RegexOptions.IgnoreCase))
             {
                 errors.Add(new ValidationResult(ErrorConstant.INCORRECT_EMAIL));
@@ -38,6 +43,18 @@ namespace EdProject.BLL
                 errors.Add(new ValidationResult("Password's doesn't match"));
             }
 
+            if (UserName.Length < VariableConstant.MIN_FIELD_SIZE)
+            {
+                errors.Add(new ValidationResult($"{ErrorConstant.INVALID_FIELD_USERNAME}. {ErrorConstant.FIELD_IS_TOO_SHORT}"));
+            }
+            if(FirstName.Length < VariableConstant.MIN_FIELD_SIZE)
+            {
+                errors.Add(new ValidationResult($"{ErrorConstant.INVALID_FIELD_FIRSTNAME}. {ErrorConstant.FIELD_IS_TOO_SHORT}"));
+            }
+            if (LastName.Length < VariableConstant.MIN_FIELD_SIZE)
+            {
+                errors.Add(new ValidationResult($"{ErrorConstant.INVALID_FIELD_LASTNAME}. {ErrorConstant.FIELD_IS_TOO_SHORT}"));
+            }
             //throw new CustomException(string.Join(",", errors), System.Net.HttpStatusCode.BadRequest);
             return errors;
         }

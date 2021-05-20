@@ -37,10 +37,6 @@ namespace EdProject.PresentationLayer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSpaStaticFiles(configuration =>
-            //{
-            //    configuration.RootPath = "ClientApp/dist";
-            //});
             services.Configure<EmailOptions>(Configuration.GetSection("EmailProvider"));
             services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
             services.Configure<RoutingOptions>(Configuration.GetSection("ApiRoutes"));
@@ -50,10 +46,15 @@ namespace EdProject.PresentationLayer
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
             });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                 .AddJwtBearer(options =>
-                 {
-                     options.TokenValidationParameters = new TokenValidationParameters
+            services.AddAuthentication(options =>
+                      {
+                          options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                          options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                          options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                      })
+                    .AddJwtBearer(options =>
+                    {
+                       options.TokenValidationParameters = new TokenValidationParameters
                      {
                          ValidateIssuer = true,
                          ValidateAudience = true,
@@ -61,13 +62,13 @@ namespace EdProject.PresentationLayer
                          ValidateIssuerSigningKey = true,
                          ValidIssuer = Configuration["Jwt:Issuer"],
                          ValidAudience = Configuration["Jwt:Issuer"],
-                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                      };
-                 });
-  
-            services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>()
-                                                  .AddDefaultTokenProviders();
+                    });
 
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>()
+                                              .AddDefaultTokenProviders();
+            services.AddAuthorization();
             services.AddDbContext<AppDbContext>(options => options
                                                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                                                 .UseLazyLoadingProxies());
@@ -80,9 +81,10 @@ namespace EdProject.PresentationLayer
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IOrdersService, OrderService>();
             services.AddScoped<IEmailProvider, EmailProvider>();
-
             services.AddAutoMapper(typeof(Startup).Assembly);
-            services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), typeof(PaymentProfile),typeof(AuthorProfile), typeof(AccountProfile));
+
+            services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), 
+                                   typeof(PaymentProfile),typeof(AuthorProfile), typeof(AccountProfile));
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 5;
@@ -96,7 +98,6 @@ namespace EdProject.PresentationLayer
             services.AddCors();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors(options =>
@@ -111,8 +112,6 @@ namespace EdProject.PresentationLayer
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
-
-                //app.UseSpaStaticFiles();
             }
 
             app.UseHttpsRedirection();
@@ -125,17 +124,6 @@ namespace EdProject.PresentationLayer
             {
                 endpoints.MapControllers();   
             });
-
-            //app.UseSpa(spa =>
-            //{
-            //    spa.Options.SourcePath = "ClientApp";
-
-            //    if (env.IsDevelopment())
-            //    {
-            //        spa.UseAngularCliServer(npmScript: "start");
-            //    }
-            //});
-
         }
     }
    
