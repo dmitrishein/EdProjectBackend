@@ -21,5 +21,6 @@ namespace EdProject.BLL.Services.Interfaces
         public Task<PaymentModel> GetPaymentInOrderAsync(long orderId);
         public Task RemoveItemFromOrderAsync(OrderItemModel orderItemModel);
         public Task RemoveItemsListFromOrder(OrderItemsListModel orderItemsListModel);
+        public Task RemoveOrderByIdAsync(long orderId);
     }
 }

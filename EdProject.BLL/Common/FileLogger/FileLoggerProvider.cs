@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.IO;
 
 namespace EdProject.BLL.Common
@@ -16,15 +17,12 @@ namespace EdProject.BLL.Common
                 Directory.CreateDirectory(_options.FolderPath);
             }
         }
-
         public ILogger CreateLogger(string categoryName)
         {
             return new FileLogger(this);
         }
-
         public void Dispose()
         {
-            this.Dispose();
         }
     }
 }

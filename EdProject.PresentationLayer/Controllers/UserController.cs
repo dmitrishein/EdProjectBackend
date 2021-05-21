@@ -22,8 +22,6 @@ namespace EdProject.PresentationLayer.Controllers
             _userService = userService;
         }
 
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task AddToRole(UserToRoleModel userToRole)
@@ -31,7 +29,6 @@ namespace EdProject.PresentationLayer.Controllers
             await _userService.AddToRoleAsync(userToRole);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UpdateUser(UserUpdateModel userUpdModel)
@@ -39,7 +36,6 @@ namespace EdProject.PresentationLayer.Controllers
             await _userService.UpdateUserAsync(userUpdModel);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task RemoveUser(long userId)
@@ -48,15 +44,13 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<List<UserModel>> GetUserByRole(string roleName)
         {
             return await _userService.GetUserListByRole(roleName);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<List<UserModel>> GetAllUsers()
@@ -64,7 +58,6 @@ namespace EdProject.PresentationLayer.Controllers
             return _userService.GetAllUsersAsync();
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public List<UserModel> GetUserByQuery(string searchString)
@@ -72,7 +65,6 @@ namespace EdProject.PresentationLayer.Controllers
             return _userService.GetUsersByQuery(searchString);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task BlockUser(long userId)
@@ -80,7 +72,7 @@ namespace EdProject.PresentationLayer.Controllers
             await _userService.BlockUser(userId);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UnblockUser(long userId)

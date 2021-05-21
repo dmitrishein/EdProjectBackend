@@ -33,19 +33,21 @@ namespace EdProject.BLL.Services
         {
             var user = await _userManager.FindByEmailAsync(userToRole.UserEmail);
 
-            if (user is null)
+            if (user is null || user.isRemoved)
             {
                 throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
             }
-
             if (!await _roleManager.RoleExistsAsync(userToRole.RoleName))
             {
-                throw new CustomException("Wrong role! Check the rolename", System.Net.HttpStatusCode.BadRequest);
+                throw new CustomException("Wrong role! Check the rolename", HttpStatusCode.BadRequest);
+            }
+            if(await _userManager.IsInRoleAsync(user,userToRole.RoleName))
+            {
+                throw new CustomException(ErrorConstant.ALREADY_IN_ROLE, HttpStatusCode.BadRequest);
             }
 
             await _userManager.AddToRoleAsync(user, userToRole.RoleName);
         }
-
         public async Task<UserModel> GetUserByIdAsync(long userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -56,6 +58,7 @@ namespace EdProject.BLL.Services
             var userModel = _mapper.Map<User, UserModel>(user);
             return userModel;
         }
+
         public async Task<List<UserModel>> GetAllUsersAsync()
         {
             var usersList = _mapper.Map <List<User>, List<UserModel>> (await _userManager.Users.Where(u=> !u.isRemoved).ToListAsync());
@@ -69,10 +72,12 @@ namespace EdProject.BLL.Services
                                                            u.LastName.Contains(searchString) ||
                                                            u.Email.Contains(searchString))
                                                 .Where(u => !u.isRemoved);
-                                                          
+
 
             if (!usersQuery.Any())
+            {
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
+            }
 
             var userList = _mapper.Map<IQueryable<User>, List<UserModel>>(usersQuery);
 
@@ -103,7 +108,7 @@ namespace EdProject.BLL.Services
         {
             var checkUser = await _userManager.FindByIdAsync(userModel.Id.ToString());
 
-            if (checkUser is null)
+            if (checkUser is null || checkUser.isRemoved)
             {
                 throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
             }

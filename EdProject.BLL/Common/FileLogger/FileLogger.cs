@@ -13,10 +13,7 @@ namespace EdProject.BLL.Common
             _LoggerFileProvider = LoggerFileProvider;
         }
 
-        public IDisposable BeginScope<TState>(TState state)
-        {
-            return null;
-        }
+        public IDisposable BeginScope<TState>(TState state) => default;
 
         public bool IsEnabled(LogLevel logLevel)
         {

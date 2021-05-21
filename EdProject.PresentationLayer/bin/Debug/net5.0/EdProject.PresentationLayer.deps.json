@@ -2075,7 +2075,8 @@
           "AutoMapper": "10.1.1",
           "EdProject.DAL": "1.0.0",
           "MailKit": "2.11.1",
-          "Microsoft.AspNetCore.Identity": "2.2.0"
+          "Microsoft.AspNetCore.Identity": "2.2.0",
+          "Stripe.net": "39.48.0"
         },
         "runtime": {
           "EdProject.BLL.dll": {}

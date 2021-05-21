@@ -23,28 +23,28 @@ namespace EdProject.PresentationLayer.Controllers
             _authorService = authorService;
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[Authorize(Roles = "admin")]
+
+        [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task CreateAuthor(AuthorModel createAuthor)
         {
             await _authorService.CreateAuthorAsync(createAuthor);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task AddAuthorToEdition(AuthorInEditionModel authorIn)
         {
             await _authorService.CreateAuthorInEditionAsync(authorIn);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task AddAuthorToEditionsList(AuthorInEditionsList authorIn)
         {
             await _authorService.CreateAuthorInEditionsList(authorIn);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task UpdateAuthorAsync(AuthorModel newAuthor)
@@ -52,21 +52,21 @@ namespace EdProject.PresentationLayer.Controllers
             await _authorService.UpdateAuthorAsync(newAuthor);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin,client")]
         [HttpGet("[action]")]
         public Task<List<AuthorModel>> GetAuthorList()
         {
             return _authorService.GetAuthorListAsync();
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin,client")]
         [HttpGet("[action]")]
         public async Task<List<EditionModel>> GetEditionsByAuthorId(long authorId)
         {
             return await _authorService.GetEditionsByAuthorIdAsync(authorId);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin,client")]
         [HttpGet("[action]")]
         public async Task<List<AuthorModel>> GetAuthorsByEditionId(long editionId)
         {
@@ -74,24 +74,27 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
 
+        [Authorize(Roles = "admin,client")]
         [HttpGet("[action]")]
         public async Task<AuthorModel> GetAuthorAsync(long id)
         {
             return await _authorService.GetAuthorByIdAsync(id);
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task RemoveAuthorInEdition(AuthorInEditionModel authorIn)
         {
             await _authorService.RemoveAuthorInEditionAsync(authorIn);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task RemoveAuthorInEditionsList(AuthorInEditionsList authorIn)
         {
             await _authorService.RemoveAuthorInEditionsList(authorIn);
         }
+
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task RemoveAuthorAsync(long id)

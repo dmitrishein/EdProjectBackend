@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories.Interfaces
 {
-    public interface IPrintingEditionRepository : IBaseRepository<Edition>
+    public interface IEditionRepository : IBaseRepository<Edition>
     {
+        public Edition FindEditionByTitle(string title);
+        public Task RemoveEditionById(long id);
+        public Task<List<Edition>> GetAllEditionsAsync();
         public Task<List<Edition>> Pagination(int pageNumber, int pageSize, string searchString);
     }
 }

@@ -1,4 +1,6 @@
-﻿using EdProject.DAL.Enums;
+﻿using EdProject.DAL.Entities;
+using EdProject.DAL.Enums;
+using System.Collections.Generic;
 
 namespace EdProject.BLL.Models.Orders
 {
@@ -6,7 +8,7 @@ namespace EdProject.BLL.Models.Orders
     {
         public long UserId { get; set; }
         public string Description { get; set; }
-        public PaidStatusType StatusType { get; set; }
+        public string StatusType { get; set; }
         
     }
 }

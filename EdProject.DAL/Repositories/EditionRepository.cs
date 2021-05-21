@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories
 {
-    public class EditionRepository : BaseRepository<Edition>, IPrintingEditionRepository
+    public class EditionRepository : BaseRepository<Edition>, IEditionRepository
     {
         public EditionRepository(AppDbContext appDbContext) : base (appDbContext)
         {

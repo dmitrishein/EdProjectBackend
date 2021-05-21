@@ -18,9 +18,9 @@ namespace EdProject.DAL.Repositories
         {
             return await GetAll().Where(x => !x.IsRemoved).ToListAsync();
         }
-        public bool AuthorIsExist(Author author)
+        public Author FindAuthorByName(string authorName)
         {
-            return GetAll().Any(item => item.Name == author.Name);
+            return GetAll().FirstOrDefault(a => a.Name == authorName);
         }
         public async Task RemoveAuthorById(long id)
         {

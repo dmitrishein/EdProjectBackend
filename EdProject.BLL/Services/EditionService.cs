@@ -2,9 +2,8 @@
 using EdProject.BLL.Models.Base;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
-using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
-using EdProject.DAL.Repositories;
+using EdProject.DAL.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,22 +14,26 @@ namespace EdProject.BLL.Services
     public class EditionService : IEditionService
     {
         
-        EditionRepository _editionRepos;
+        IEditionRepository _editionRepos;
         IMapper _mapper;
-        public EditionService(AppDbContext appDbContext,IMapper mapper)
+        public EditionService(IEditionRepository editionRepository,IMapper mapper)
         {
-            _editionRepos = new EditionRepository(appDbContext);
+            _editionRepos = editionRepository;
             _mapper = mapper;
         }
 
         public async Task CreateEditionAsync(EditionModel editionModel)
         {
-            var editions = _editionRepos.FindEditionByTitle(editionModel.Title);
-            if (editions is not null && editions.IsRemoved)
+            var edition = _editionRepos.FindEditionByTitle(editionModel.Title);
+            if (edition is not null && edition.IsRemoved)
             {
-                //throw new CustomException($"{ErrorConstant.CANNOT_ADD_EDITION}. {ErrorConstant.ALREADY_EXIST}", HttpStatusCode.BadRequest);
-                await _editionRepos.DeleteAsync(editions);
+                await _editionRepos.DeleteAsync(edition);
             }
+            if (edition is not null && !edition.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.ALREADY_EXIST, HttpStatusCode.BadRequest);
+            }
+
             var newEdition = _mapper.Map<EditionModel, Edition>(editionModel);
             await _editionRepos.CreateAsync(newEdition);
         }

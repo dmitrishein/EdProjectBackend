@@ -26,21 +26,21 @@ namespace EdProject.PresentationLayer.Controllers
             _config = configuration;
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
         public async Task CreateOrder(OrderModel newOrder)
         {
             await _orderService.CreateOrderAsync(newOrder);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
         public async Task CreateOrderItem(OrderItemModel newOrder)
         {
             await _orderService.CreateItemInOrderAsync(newOrder);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
         public async Task CreateOrderItemList(OrderItemsListModel newOrder)
         {
@@ -48,27 +48,15 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
         public async Task CreatePayment(PaymentModel newPayment)
         {
-             StripeConfiguration.ApiKey =_config["Stripe:SecretKey"];
-             var options = new ChargeCreateOptions
-             {
-                 Amount = newPayment.Amount,
-                 Currency = newPayment.Currency.ToString().ToLower(),
-                 Source = "tok_amex",
-                 Description = "Test Charge (created for API docs)",
-             };
-             var service = new ChargeService();
-             service.Create(options);
-             
-             newPayment.TransactionId = options.Source;
              await _orderService.CreatePaymentAsync(newPayment);        
         }
 
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+       
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<List<OrderModel>> GetOrdersByUserId(long userId)
@@ -76,38 +64,38 @@ namespace EdProject.PresentationLayer.Controllers
             return  _orderService.GetOrdersByUserIdAsync(userId);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[Authorize(Roles = "admin")]
+
+        [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<List<OrderModel>> GetOrdersList()
         {
             return await _orderService.GetOrdersListAsync();
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<List<OrderModel>> GetOrdersPage(PageModel pageModel)
         {
             return _orderService.GetOrdersPageAsync(pageModel);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "admin")]
+
+        [Authorize(Roles = "admin,client")]
         [HttpGet("[action]")]
         public Task<OrderModel> GetOrderById(long orderId)
         {
             return _orderService.GetOrderByIdAsync(orderId);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[Authorize(Roles = "admin")]
+
+        [Authorize(Roles = "admin,client")]
         [HttpGet("[action]")]
         public async Task<List<EditionModel>> GetOrderedItemsByOrder(long orderId)
         {
             return await _orderService.GetItemsInOrderAsync(orderId);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public async Task<PaymentModel> GetPaymentInOrder(long orderId)
@@ -116,18 +104,25 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
         public async Task RemoveItemFromOrder(OrderItemModel orderItemModel)
         {
            await _orderService.RemoveItemFromOrderAsync(orderItemModel);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
         public async Task RemoveItemsListFromOrder(OrderItemsListModel orderItemListModel)
         {
             await _orderService.RemoveItemsListFromOrder(orderItemListModel);
+        }
+
+        [Authorize(Roles = "admin,client")]
+        [HttpGet("[action]")]
+        public async Task RemoveOrderById(long orderId)
+        {
+            await _orderService.RemoveOrderByIdAsync(orderId);
         }
 
     }

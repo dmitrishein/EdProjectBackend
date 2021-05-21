@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +39,7 @@ namespace EdProject.PresentationLayer
             services.Configure<EmailOptions>(Configuration.GetSection("EmailProvider"));
             services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
             services.Configure<RoutingOptions>(Configuration.GetSection("ApiRoutes"));
-
+            services.Configure<StripeOptions>(Configuration.GetSection("Stripe"));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
@@ -73,16 +72,27 @@ namespace EdProject.PresentationLayer
                                                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                                                 .UseLazyLoadingProxies());
 
+            #region Providers Inject
             services.AddScoped<IJwtProvider, JwtProvider>();
-            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IEmailProvider, EmailProvider>();
+            #endregion
+
+            #region Services Inject
             services.AddScoped<IEditionService, EditionService>();
             services.AddScoped<IAccountService, AccountsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IOrdersService, OrderService>();
-            services.AddScoped<IEmailProvider, EmailProvider>();
-            services.AddAutoMapper(typeof(Startup).Assembly);
+            #endregion
 
+            #region Repositories Inject
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IEditionRepository, EditionRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            #endregion
+
+            services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), 
                                    typeof(PaymentProfile),typeof(AuthorProfile), typeof(AccountProfile));
             services.Configure<IdentityOptions>(options =>

@@ -15,10 +15,6 @@ namespace EdProject.DAL.Repositories
         {
         }
 
-        public bool OrderExist(Orders order)
-        {
-            return GetAll().Any(o => o.Id == order.Id);        
-        }
         public async Task AddPaymentToOrderAsync(Orders order, Payments payments)
         {
             order.Payment = payments;

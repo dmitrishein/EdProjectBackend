@@ -2,9 +2,8 @@
 using EdProject.BLL.Models.Author;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
-using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
-using EdProject.DAL.Repositories;
+using EdProject.DAL.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,55 +13,74 @@ namespace EdProject.BLL.Services
 {
     public class AuthorService : IAuthorService
     {
-        AuthorRepository _authorRepository;
-        EditionRepository _editionRepository;
+        IAuthorRepository _authorRepository;
+        IEditionRepository _editionRepository;
         IMapper _mapper;
-        public AuthorService(AppDbContext appDb,IMapper mapper)
+        public AuthorService(IAuthorRepository authorRepository,IEditionRepository editionRepository,IMapper mapper)
         {
-            _authorRepository = new AuthorRepository(appDb);
-            _editionRepository = new EditionRepository(appDb);
+            _authorRepository = authorRepository;
+            _editionRepository = editionRepository;
             _mapper = mapper;
         }
 
         public async Task CreateAuthorAsync(AuthorModel authorModel)
         {
-            var newAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
+            var author = _authorRepository.FindAuthorByName(authorModel.Name);
 
-            if (_authorRepository.AuthorIsExist(newAuthor))
+            if (author is not null && author.IsRemoved)
+            {
+                await _authorRepository.DeleteAsync(author);
+            }
+            if (author is not null && !author.IsRemoved)
             {
                 throw new CustomException(ErrorConstant.ALREADY_EXIST, HttpStatusCode.BadRequest);
             }
 
+            var newAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
             await _authorRepository.CreateAsync(newAuthor);
         }
         public async Task CreateAuthorInEditionAsync(AuthorInEditionModel authorModel)
         {
             var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
-            AuthorExistCheck(author);
+            if (author is null || author.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
+            if(author.Editions.Any(e=> e.Id == authorModel.EditionId))
+            {
+                throw new CustomException($"{ErrorConstant.CANNOT_ADD_EDITION}{ErrorConstant.ALREADY_EXIST}",HttpStatusCode.BadRequest);
+            }
+
             var edition = await _editionRepository.FindByIdAsync(authorModel.EditionId);
+            if(edition is null || edition.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.CANNOT_ADD_EDITION, HttpStatusCode.BadRequest);
+            }
             await _authorRepository.AddEditionToAuthor(author,edition);
         }
         public async Task CreateAuthorInEditionsList(AuthorInEditionsList authorModel)
         {
             var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
 
-            AuthorExistCheck(author);
-            
+            if (author is null || author.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
+
             string[] editionsId = authorModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
-            List<Edition> editionList = new List<Edition>();
-          
+            List<Edition> editionAddList = new List<Edition>();
             foreach(var edition in editionsId)
             {
                 var tempEdition =  await _editionRepository.FindByIdAsync(int.Parse(edition));
 
                 if (tempEdition is null || tempEdition.IsRemoved)
                 {
-                    throw new CustomException($"{ErrorConstant.CANNOT_ADD_EDITION}: {edition}", HttpStatusCode.BadRequest);
+                    continue;
                 }
 
-                editionList.Add(tempEdition);
+                editionAddList.Add(tempEdition);
             }
-            await _authorRepository.AddEditionListToAuthor(author, editionList);
+            await _authorRepository.AddEditionListToAuthor(author, editionAddList);
         }
 
         public async Task<List<AuthorModel>> GetAuthorListAsync()
@@ -77,13 +95,22 @@ namespace EdProject.BLL.Services
         public async Task<AuthorModel> GetAuthorByIdAsync(long id)
         {
             var authorIn = await _authorRepository.FindByIdAsync(id);
-            AuthorExistCheck(authorIn);
+
+            if (authorIn is null || authorIn.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
+
             return _mapper.Map<Author, AuthorModel>(authorIn);
         }
         public async Task<List<EditionModel>> GetEditionsByAuthorIdAsync(long authorId)
         {
             var author = await _authorRepository.FindByIdAsync(authorId);
-            AuthorExistCheck(author);
+
+            if (author is null || author.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
 
             List<Edition> editionsList = author.Editions.Where(e => !e.IsRemoved).ToList();
             return _mapper.Map<List<Edition>, List<EditionModel>>(editionsList);
@@ -106,7 +133,10 @@ namespace EdProject.BLL.Services
             var updatedAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
             var oldAuthor = await _authorRepository.FindByIdAsync(updatedAuthor.Id);
 
-            AuthorExistCheck(oldAuthor);
+            if (oldAuthor is null || oldAuthor.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
 
             await _authorRepository.UpdateAsync(oldAuthor,updatedAuthor);
         }
@@ -114,13 +144,19 @@ namespace EdProject.BLL.Services
         public async Task RemoveAuthorAsync(long id)
         {
             var author = await _authorRepository.FindByIdAsync(id);
-            AuthorExistCheck(author);
+            if (author is null || author.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
             await _authorRepository.RemoveAuthorById(id);
         }
         public async Task RemoveAuthorInEditionAsync(AuthorInEditionModel authorInEditionModel)
         {
             var author = await _authorRepository.FindByIdAsync(authorInEditionModel.AuthorId);
-            AuthorExistCheck(author);
+            if (author is null || author.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
             var edition = await _editionRepository.FindByIdAsync(authorInEditionModel.EditionId);
 
             await _authorRepository.RemoveAuthorInEdition(author,edition);
@@ -129,7 +165,10 @@ namespace EdProject.BLL.Services
         {
             var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
 
-            AuthorExistCheck(author);
+            if (author is null || author.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
 
             string[] editionsId = authorModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
             List<Edition> editionList = new List<Edition>();
@@ -140,7 +179,7 @@ namespace EdProject.BLL.Services
 
                 if (tempEdition is null || tempEdition.IsRemoved)
                 {
-                    throw new CustomException($"{ErrorConstant.CANNOT_ADD_EDITION}:{edition}", HttpStatusCode.BadRequest);
+                    continue;
                 }
 
                 editionList.Add(tempEdition);
@@ -149,12 +188,5 @@ namespace EdProject.BLL.Services
             await _authorRepository.RemoveAuthorInEditionList(author, editionList);
         }
 
-        private void AuthorExistCheck(Author author)
-        {
-            if (author is null || author.IsRemoved)
-            {
-                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
-            }              
-        }
     }
 }
