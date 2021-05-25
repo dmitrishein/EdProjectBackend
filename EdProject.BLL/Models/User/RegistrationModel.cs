@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace EdProject.BLL
 {
-    public class UserCreateModel: IValidatableObject
+    public class RegistrationModel: IValidatableObject
     {
         public string UserName { get; set; }
         public string FirstName { get; set;}

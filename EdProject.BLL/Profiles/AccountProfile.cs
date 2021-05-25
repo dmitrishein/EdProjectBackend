@@ -7,7 +7,7 @@ namespace EdProject.BLL.Profiles
     {
         public AccountProfile()
         {
-            CreateMap<UserCreateModel, User>().ReverseMap();
+            CreateMap<RegistrationModel, User>().ReverseMap();
 
         }
     }

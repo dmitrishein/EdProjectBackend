@@ -42,7 +42,7 @@ namespace EdProject.BLL.Services
             var newEdition = _mapper.Map<EditionModel, Edition>(editionModel);
             var oldEdition = await _editionRepos.FindByIdAsync(newEdition.Id);
 
-            if (oldEdition is null || newEdition.IsRemoved)
+            if (oldEdition is null || oldEdition.IsRemoved)
             {
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
             }
@@ -76,20 +76,7 @@ namespace EdProject.BLL.Services
 
             return _mapper.Map<Edition, EditionModel>(getEdition);
         }
-        public async Task<List<EditionModel>> GetEditionListByStringAsync(string searchString)
-        {
-            var editionList = (await _editionRepos.GetAllEditionsAsync()).Where(x => x.Id.ToString() == searchString)
-                                                                   .Where(x => x.Title == searchString).ToList();
-
-
-            if (!editionList.Any())
-            {
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
-            }
-
-            return _mapper.Map<List<Edition>, List<EditionModel>>(editionList);
-        }
-        public async Task<List<EditionModel>> GetEditionPageAsync(PageModel pageModel)
+        public async Task<List<EditionModel>> GetEditionPageAsync(FilterPageModel pageModel)
         {
             var editionList = await _editionRepos.Pagination(pageModel.PageNumber,pageModel.ElementsAmount,pageModel.SearchString);
             if (!editionList.Any())

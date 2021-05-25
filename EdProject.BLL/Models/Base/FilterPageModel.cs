@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EdProject.BLL.Models.Base
 {
-    public class PageModel: IValidatableObject
+    public class FilterPageModel: IValidatableObject
     {
         public int ElementsAmount { get; set; }
         public int PageNumber { get; set; }

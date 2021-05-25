@@ -74,7 +74,7 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public Task<List<OrderModel>> GetOrdersPage(PageModel pageModel)
+        public Task<List<OrderModel>> GetOrdersPage(FilterPageModel pageModel)
         {
             return _orderService.GetOrdersPageAsync(pageModel);
         }

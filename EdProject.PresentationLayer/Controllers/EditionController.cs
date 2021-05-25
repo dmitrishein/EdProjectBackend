@@ -56,14 +56,7 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin,client")]
         [HttpGet("[action]")]
-        public Task<List<EditionModel>> GetEditionByQuery(string searchString)
-        {
-            return _printEditionService.GetEditionListByStringAsync(searchString);
-        }
-
-        [Authorize(Roles = "admin,client")]
-        [HttpGet("[action]")]
-        public Task<List<EditionModel>> GetEditionPage(PageModel pageModel)
+        public Task<List<EditionModel>> GetEditionPage(FilterPageModel pageModel)
         {
             return _printEditionService.GetEditionPageAsync(pageModel);
         }

@@ -37,9 +37,16 @@ namespace EdProject.BLL.Services
         public async Task CreateOrderAsync(OrderModel orderModel)
         {
             var usersOrderList = await _orderRepository.GetOrderByUserIdAsync(orderModel.UserId);
-            if(usersOrderList.Any(order => order.StatusType == DAL.Enums.PaidStatusType.Unpaid))
+            //remove empty orders
+            if(usersOrderList.Any(order => !order.Editions.Any()))
             {
-                throw new CustomException(ErrorConstant.ORDER_ERROR,HttpStatusCode.BadRequest);
+                foreach(var item in usersOrderList)
+                {
+                    if(!item.Editions.Any())
+                    {
+                        await _orderRepository.DeleteAsync(item);
+                    }
+                }
             }
 
             var newOrder = _mapper.Map<OrderModel, Orders>(orderModel);
@@ -59,7 +66,10 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.ITEM_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-
+            if(order.Editions.Any(edit=> edit.Id == orderItemModel.EditionId))
+            {
+                throw new CustomException($"{ErrorConstant.CANNOT_ADD_EDITION}.{ErrorConstant.ALREADY_EXIST}", HttpStatusCode.BadRequest);
+            }
             await _orderRepository.AddItemToOrderAsync(order, item);
         }
         public async Task CreateItemsListInOrderAsync(OrderItemsListModel orderItemlistModel)
@@ -72,7 +82,7 @@ namespace EdProject.BLL.Services
 
             string[] editionsId = orderItemlistModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
 
-            List<Edition> editionList = new List<Edition>();
+            List<Edition> editionToAddList = new List<Edition>();
 
             foreach (var edition in editionsId)
             {
@@ -80,18 +90,22 @@ namespace EdProject.BLL.Services
 
                 if (tempEdition is null || tempEdition.IsRemoved)
                 {
-                    throw new CustomException($"{ErrorConstant.CANNOT_ADD_EDITION}:{edition}", HttpStatusCode.BadRequest);
+                    continue;
                 }
 
-                editionList.Add(tempEdition);
+                editionToAddList.Add(tempEdition);
             }
 
-            await _orderRepository.AddItemListToOrderAsync(order, editionList);
+            await _orderRepository.AddItemListToOrderAsync(order, editionToAddList);
         }
         public async Task CreatePaymentAsync(PaymentModel paymentModel)
         {
             var order = await _orderRepository.FindByIdAsync(paymentModel.OrderId);
             if (order is null || order.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
+            }
+            if (!order.Editions.Any())
             {
                 throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
             }
@@ -138,22 +152,23 @@ namespace EdProject.BLL.Services
             var ordersList = await _orderRepository.GetAllOrdersAsync();
             if (!ordersList.Any())
             {
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
             }
             return _mapper.Map<List<Orders>, List<OrderModel>>(ordersList);
         }
-        public async Task<List<OrderModel>> GetOrdersPageAsync(PageModel pageModel)
+        public async Task<List<OrderModel>> GetOrdersPageAsync(FilterPageModel pageModel)
         {
             var query = await _orderRepository.OrdersPage(pageModel.PageNumber, pageModel.ElementsAmount, pageModel.SearchString);
             if (!query.Any())
             {
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
             }
             return _mapper.Map<List<Orders>, List<OrderModel>>(query);
         }
         public async Task<OrderModel> GetOrderByIdAsync(long orderId)
         {
-            var queryItem = (await _orderRepository.GetAllOrdersAsync()).Where(o => o.Id == orderId).FirstOrDefault();
+            var queryItem = await _orderRepository.FindByIdAsync(orderId);
+               
             if (queryItem is null || queryItem.IsRemoved)
             {
                 throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
@@ -166,7 +181,7 @@ namespace EdProject.BLL.Services
             var order = await _orderRepository.FindByIdAsync(orderId);
             if (order is null || order.IsRemoved)
             {
-                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
             }
             var orderItemList = order.Editions.Where(i => !i.IsRemoved).ToList();
 
@@ -177,9 +192,14 @@ namespace EdProject.BLL.Services
             var order = await _orderRepository.FindByIdAsync(orderId);
             if (order is null || order.IsRemoved)
             {
-                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
             }
+
             var payment = order.Payment;
+            if(payment is null || payment.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.ITEM_NOT_FOUND, HttpStatusCode.OK);
+            }  
 
             return _mapper.Map<Payments, PaymentModel>(payment);
         }
@@ -206,11 +226,11 @@ namespace EdProject.BLL.Services
             var order = await _orderRepository.FindByIdAsync(orderItemsListModel.OrderId);
             if (order is null || order.IsRemoved)
             {
-                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
             }
 
             string[] editionsId = orderItemsListModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
-            List<Edition> editionList = new List<Edition>();
+            List<Edition> itemsToRemoveList = new List<Edition>();
 
             foreach (var edition in editionsId)
             {
@@ -218,13 +238,13 @@ namespace EdProject.BLL.Services
 
                 if (tempEdition is null || tempEdition.IsRemoved)
                 {
-                    throw new CustomException($"Incorrect edition Id{edition}", HttpStatusCode.BadRequest);
+                    continue;
                 }
 
-                editionList.Add(tempEdition);
+                itemsToRemoveList.Add(tempEdition);
             }
 
-            await _orderRepository.RemoveItemListFromOrderAsync(order, editionList);
+            await _orderRepository.RemoveItemListFromOrderAsync(order, itemsToRemoveList);
         }
 
         public async Task RemoveOrderByIdAsync(long orderId)
@@ -235,6 +255,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.REMOVE_ORDER_ERROR,HttpStatusCode.BadRequest);
             }
             order.IsRemoved = true;
+
             await _orderRepository.UpdateAsync(order);
         }
        

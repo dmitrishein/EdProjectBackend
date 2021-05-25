@@ -46,7 +46,7 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-            if(author.Editions.Any(e=> e.Id == authorModel.EditionId))
+            if (author.Editions.Any(e=> e.Id == authorModel.EditionId))
             {
                 throw new CustomException($"{ErrorConstant.CANNOT_ADD_EDITION}{ErrorConstant.ALREADY_EXIST}",HttpStatusCode.BadRequest);
             }
@@ -61,13 +61,13 @@ namespace EdProject.BLL.Services
         public async Task CreateAuthorInEditionsList(AuthorInEditionsList authorModel)
         {
             var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
-
             if (author is null || author.IsRemoved)
             {
                 throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
             }
 
             string[] editionsId = authorModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
+
             List<Edition> editionAddList = new List<Edition>();
             foreach(var edition in editionsId)
             {
@@ -80,6 +80,7 @@ namespace EdProject.BLL.Services
 
                 editionAddList.Add(tempEdition);
             }
+
             await _authorRepository.AddEditionListToAuthor(author, editionAddList);
         }
 
@@ -106,13 +107,13 @@ namespace EdProject.BLL.Services
         public async Task<List<EditionModel>> GetEditionsByAuthorIdAsync(long authorId)
         {
             var author = await _authorRepository.FindByIdAsync(authorId);
-
             if (author is null || author.IsRemoved)
             {
                 throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
             }
 
             List<Edition> editionsList = author.Editions.Where(e => !e.IsRemoved).ToList();
+
             return _mapper.Map<List<Edition>, List<EditionModel>>(editionsList);
         }
         public async Task<List<AuthorModel>> GetAuthorsByEditionIdAsync(long editionId)
@@ -123,8 +124,8 @@ namespace EdProject.BLL.Services
             { 
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest); 
             }
-
             List<Author> authorsList = edition.Authors.Where(a => !a.IsRemoved).ToList();
+
             return _mapper.Map<List<Author>, List<AuthorModel>>(authorsList);
         }
 
@@ -157,8 +158,12 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-            var edition = await _editionRepository.FindByIdAsync(authorInEditionModel.EditionId);
 
+            var edition = await _editionRepository.FindByIdAsync(authorInEditionModel.EditionId);
+            if (edition is null)
+            {
+                throw new CustomException(ErrorConstant.ITEM_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
             await _authorRepository.RemoveAuthorInEdition(author,edition);
         }
         public async Task RemoveAuthorInEditionsList(AuthorInEditionsList authorModel)
@@ -171,8 +176,7 @@ namespace EdProject.BLL.Services
             }
 
             string[] editionsId = authorModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
-            List<Edition> editionList = new List<Edition>();
-
+            List<Edition> editionToRemoveList = new List<Edition>();
             foreach (var edition in editionsId)
             {
                 var tempEdition = await _editionRepository.FindByIdAsync(int.Parse(edition));
@@ -182,10 +186,10 @@ namespace EdProject.BLL.Services
                     continue;
                 }
 
-                editionList.Add(tempEdition);
+                editionToRemoveList.Add(tempEdition);
             }
 
-            await _authorRepository.RemoveAuthorInEditionList(author, editionList);
+            await _authorRepository.RemoveAuthorInEditionList(author, editionToRemoveList);
         }
 
     }

@@ -42,17 +42,16 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
             }
+
             var result = await _signInManager.PasswordSignInAsync(user, userSignInModel.Password, userSignInModel.RememberMe, false);
             if(!result.Succeeded)
             {
                 throw new CustomException(result.ToString(), HttpStatusCode.BadRequest);
             }
 
-            var userRoles = await _userManager.GetRolesAsync(user);
-
             TokenPairModel tokenPairModel = new TokenPairModel
             {
-                AccessToken = _jwt.GenerateAccessToken(user,userRoles),
+                AccessToken = _jwt.GenerateAccessToken(user,await _userManager.GetRolesAsync(user)),
                 RefreshToken = _jwt.GenerateRefreshToken()
             };
 
@@ -62,16 +61,15 @@ namespace EdProject.BLL.Services
         {              
           await _signInManager.SignOutAsync();
         }
-        public async Task RegisterUserAsync(UserCreateModel userModel)
+        public async Task RegisterUserAsync(RegistrationModel userModel)
         {
-            var newUser = _mapper.Map<UserCreateModel, User>(userModel);
+            var newUser = _mapper.Map<RegistrationModel, User>(userModel);
             var result = await _userManager.CreateAsync(newUser, userModel.Password);
 
             if (!result.Succeeded)
             {
                 throw new CustomException($"{ErrorConstant.REGISTRATION_FAILED}. {result}", HttpStatusCode.BadRequest);
             }
-           
             await _userManager.AddToRoleAsync(newUser,UserRolesType.Client.ToString());
 
             var confirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);

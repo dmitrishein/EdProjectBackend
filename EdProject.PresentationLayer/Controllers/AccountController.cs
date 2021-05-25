@@ -20,7 +20,7 @@ namespace EdProject.PresentationLayer.Controllers
       
 
         [HttpPost("[action]")]
-        public async Task Registration(UserCreateModel register)
+        public async Task Registration(RegistrationModel register)
         {        
             await _accountService.RegisterUserAsync(register);
         }

@@ -14,7 +14,7 @@ namespace EdProject.BLL.Services.Interfaces
         public Task CreatePaymentAsync(PaymentModel paymentModel);
         public Task CreateItemsListInOrderAsync(OrderItemsListModel orderItemlistModel);
         public Task<List<OrderModel>> GetOrdersByUserIdAsync(long userId);
-        public Task<List<OrderModel>> GetOrdersPageAsync(PageModel pageModel);
+        public Task<List<OrderModel>> GetOrdersPageAsync(FilterPageModel pageModel);
         public Task<List<OrderModel>> GetOrdersListAsync();
         public Task<OrderModel> GetOrderByIdAsync(long orderId);
         public Task<List<EditionModel>> GetItemsInOrderAsync(long orderId);

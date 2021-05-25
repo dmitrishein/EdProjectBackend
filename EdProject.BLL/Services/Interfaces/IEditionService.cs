@@ -12,7 +12,6 @@ namespace EdProject.BLL.Services.Interfaces
         public Task RemoveEditionAsync(long id);
         public Task<EditionModel> GetEditionByIdAsync(long id);
         public Task<List<EditionModel>> GetEditionListAsync();
-        public Task<List<EditionModel>> GetEditionListByStringAsync(string searchString);
-        public Task<List<EditionModel>> GetEditionPageAsync(PageModel pageModel);
+        public Task<List<EditionModel>> GetEditionPageAsync(FilterPageModel pageModel);
     }
 }
