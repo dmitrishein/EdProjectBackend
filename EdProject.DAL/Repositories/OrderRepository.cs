@@ -20,25 +20,25 @@ namespace EdProject.DAL.Repositories
             order.Payment = payments;
             await UpdateAsync(order);
         }
-        public async Task AddItemToOrderAsync(Orders order, Edition edition)
+        public async Task AddItemToOrderAsync(Orders order, OrderItem item)
         {
-            order.Editions.Add(edition);
+            order.OrderItems.Add(item);
             await UpdateAsync(order);
         }
-        public async Task AddItemListToOrderAsync(Orders order, List<Edition> editions)
+        public async Task AddItemListToOrderAsync(Orders order, List<OrderItem> items)
         {
-            editions.ForEach(a => a.Orders.Add(order));
+            items.ForEach(item => order.OrderItems.Add(item));
             await UpdateAsync(order);
         }
 
-        public async Task RemoveItemToOrderAsync(Orders order, Edition edition)
+        public async Task RemoveItemToOrderAsync(Orders order, OrderItem item)
         {
-            order.Editions.Remove(edition);
+            order.OrderItems.Remove(item);
             await UpdateAsync(order);
         }
-        public async Task RemoveItemListFromOrderAsync(Orders order, List<Edition> editions)
+        public async Task RemoveItemListFromOrderAsync(Orders order, List<OrderItem> items)
         {
-            editions.ForEach(a => a.Orders.Remove(order));
+            items.ForEach(item => order.OrderItems.Remove(item));
             await UpdateAsync(order);
         }
         public async Task RemoveOrderByIdAsync(long id)
@@ -47,7 +47,21 @@ namespace EdProject.DAL.Repositories
             res.IsRemoved = true;
             await UpdateAsync(res);
         }
-    
+        public async Task ClearOrderByIdAsync(Orders order)
+        {
+            order.OrderItems.Clear();
+            await UpdateAsync(order);
+        }
+
+        public async Task UpdateOrderItem(Orders order,OrderItem orderItem)
+        {
+            var item = order.OrderItems.First(ed => ed.EditionId == orderItem.EditionId);
+            item.ItemsCount = orderItem.ItemsCount;
+            item.Amount = item.Edition.Price * orderItem.ItemsCount;
+            await UpdateAsync(order);
+        }
+
+
         public async Task<List<Orders>> GetAllOrdersAsync()
         {
             return await GetAll().Where(x => !x.IsRemoved).ToListAsync();
@@ -58,7 +72,6 @@ namespace EdProject.DAL.Repositories
 
             return ordersQuery;
         }
-
 
         public async Task<List<Orders>> OrdersPage(int pageNumber, int pageSize,string searchString)
         {

@@ -16,12 +16,12 @@ namespace EdProject.BLL.Services
     {
         #region Private Members
         private UserManager<User> _userManager;
-        private RoleManager<Role> _roleManager;
+        private RoleManager<IdentityRole<long>> _roleManager;
         IMapper _mapper;
         #endregion
 
         #region Constructor
-        public UserService(UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper)
+        public UserService(UserManager<User> userManager, RoleManager<IdentityRole<long>> roleManager, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;

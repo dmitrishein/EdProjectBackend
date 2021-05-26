@@ -36,25 +36,28 @@ namespace EdProject.PresentationLayer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Classes with options
             services.Configure<EmailOptions>(Configuration.GetSection("EmailProvider"));
             services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
             services.Configure<RoutingOptions>(Configuration.GetSection("ApiRoutes"));
             services.Configure<StripeOptions>(Configuration.GetSection("Stripe"));
+            #endregion
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
             });
 
             services.AddAuthentication(options =>
-                      {
-                          options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                          options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                          options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                      })
+                    {
+                       options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                       options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                       options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    })
                     .AddJwtBearer(options =>
                     {
                        options.TokenValidationParameters = new TokenValidationParameters
-                     {
+                       {
                          ValidateIssuer = true,
                          ValidateAudience = true,
                          ValidateLifetime = true,
@@ -62,12 +65,13 @@ namespace EdProject.PresentationLayer
                          ValidIssuer = Configuration["Jwt:Issuer"],
                          ValidAudience = Configuration["Jwt:Issuer"],
                          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
-                     };
+                       };
                     });
 
-            services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>()
-                                              .AddDefaultTokenProviders();
+            services.AddIdentity<User, IdentityRole<long>>().AddEntityFrameworkStores<AppDbContext>()
+                                                            .AddDefaultTokenProviders();
             services.AddAuthorization();
+
             services.AddDbContext<AppDbContext>(options => options
                                                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                                                 .UseLazyLoadingProxies());

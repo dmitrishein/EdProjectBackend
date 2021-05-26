@@ -12,6 +12,7 @@ namespace EdProject.DAL.Entities
         public long UserId { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<Edition> Editions { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
 
         public long? PaymentId { get; set; }
         public virtual Payments Payment { get; set; }

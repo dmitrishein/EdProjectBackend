@@ -42,7 +42,7 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
-        public async Task CreateOrderItemList(OrderItemsListModel newOrder)
+        public async Task CreateOrderItemList(List<OrderItemModel> newOrder)
         {
             await _orderService.CreateItemsListInOrderAsync(newOrder);
         }
@@ -90,11 +90,16 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin,client")]
         [HttpGet("[action]")]
-        public async Task<List<EditionModel>> GetOrderedItemsByOrder(long orderId)
+        public async Task<List<OrderItemModel>> GetOrderedItemsByOrder(long orderId)
         {
             return await _orderService.GetItemsInOrderAsync(orderId);
         }
-
+        [Authorize(Roles = "admin")]
+        [HttpPost("[action]")]
+        public async Task UpdateOrderItem(UpdateOrderItem orderItem)
+        {
+            await _orderService.UpdateOrderItemAsync(orderItem);
+        }
 
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
@@ -103,6 +108,12 @@ namespace EdProject.PresentationLayer.Controllers
             return await _orderService.GetPaymentInOrderAsync(orderId);
         }
 
+        [Authorize(Roles = "admin,client")]
+        [HttpPost("[action]")]
+        public async Task ClearOrder(long orderId)
+        {
+            await _orderService.ClearOrder(orderId);
+        }
 
         [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
@@ -113,7 +124,7 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
-        public async Task RemoveItemsListFromOrder(OrderItemsListModel orderItemListModel)
+        public async Task RemoveItemsListFromOrder(List<OrderItemModel> orderItemListModel)
         {
             await _orderService.RemoveItemsListFromOrder(orderItemListModel);
         }

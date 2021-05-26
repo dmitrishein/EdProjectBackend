@@ -1,13 +1,18 @@
 ﻿using EdProject.DAL.Entities.Enums;
 
-namespace EdProject.BLL.Models.Orders
+namespace EdProject.DAL.Entities
 {
-    public class OrderItemModel
+    public class OrderItem
     {
-        public long EditionId { get; set; }
         public long OrderId { get; set; }
+        public virtual Orders Order { get; set; }
+
+        public long EditionId { get; set; }
+        public virtual Edition Edition { get; set; }
+
         public decimal Amount { get; set; }
         public int ItemsCount { get; set; }
         public CurrencyTypes Currency { get; set; }
+
     }
 }

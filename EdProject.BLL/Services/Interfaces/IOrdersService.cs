@@ -12,15 +12,17 @@ namespace EdProject.BLL.Services.Interfaces
         public Task CreateOrderAsync(OrderModel orderModel);
         public Task CreateItemInOrderAsync(OrderItemModel orderModel);
         public Task CreatePaymentAsync(PaymentModel paymentModel);
-        public Task CreateItemsListInOrderAsync(OrderItemsListModel orderItemlistModel);
+        public Task CreateItemsListInOrderAsync(List<OrderItemModel> orderItemlistModel);
         public Task<List<OrderModel>> GetOrdersByUserIdAsync(long userId);
         public Task<List<OrderModel>> GetOrdersPageAsync(FilterPageModel pageModel);
         public Task<List<OrderModel>> GetOrdersListAsync();
         public Task<OrderModel> GetOrderByIdAsync(long orderId);
-        public Task<List<EditionModel>> GetItemsInOrderAsync(long orderId);
+        public Task<List<OrderItemModel>> GetItemsInOrderAsync(long orderId);
         public Task<PaymentModel> GetPaymentInOrderAsync(long orderId);
+        public Task UpdateOrderItemAsync(UpdateOrderItem orderItem);
         public Task RemoveItemFromOrderAsync(OrderItemModel orderItemModel);
-        public Task RemoveItemsListFromOrder(OrderItemsListModel orderItemsListModel);
+        public Task RemoveItemsListFromOrder(List<OrderItemModel> orderItemsListModel);
         public Task RemoveOrderByIdAsync(long orderId);
+        public Task ClearOrder(long orderId);
     }
 }

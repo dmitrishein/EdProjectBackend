@@ -1,13 +1,14 @@
 ﻿using EdProject.DAL.Entities;
 using EdProject.DAL.Entities.Enums;
 using EdProject.DAL.Extension;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace EdProject.DAL.DataContext
 {
-    public class AppDbContext : IdentityDbContext<User,Role,long>
+    public class AppDbContext : IdentityDbContext<User,IdentityRole<long>,long>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         {
@@ -18,7 +19,26 @@ namespace EdProject.DAL.DataContext
             modelBuilder.Entity<Edition>()
                 .HasMany(o => o.Orders)
                 .WithMany(e => e.Editions)
-                .UsingEntity(j => j.ToTable("OrderItems"));
+                .UsingEntity<OrderItem>(
+                    j=> j
+                    .HasOne(o => o.Order)
+                    .WithMany(oi => oi.OrderItems)
+                    .HasForeignKey(o => o.OrderId),
+                    j=> j
+                    .HasOne(ed => ed.Edition)
+                    .WithMany(oi => oi.OrderItems)
+                    .HasForeignKey(ed => ed.EditionId),
+                    j =>
+                    {
+                        j.Property(pt => pt.Amount).HasColumnType("decimal(18,4)")
+                                                   .HasDefaultValue(VariableConstant.MIN_PRICE);
+
+                        j.Property(pt => pt.ItemsCount).HasDefaultValue(VariableConstant.DEFAULT_AMOUNT);
+                        j.Property(pt => pt.Currency).HasDefaultValue(CurrencyTypes.None);
+                        j.HasKey(t => new { t.EditionId, t.OrderId });
+                        j.ToTable("OrderItems");
+                    }
+                );
             #endregion
 
             #region relations between Authors and Editions (many-to-many)

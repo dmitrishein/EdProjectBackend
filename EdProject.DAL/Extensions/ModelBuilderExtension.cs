@@ -42,9 +42,9 @@ namespace EdProject.DAL.Extension
                 }
                 );
 
-            modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "admin", RolesType = Enums.UserRolesType.Admin, NormalizedName = "admin" },
-                new Role { Id = 2, Name = "client", RolesType = Enums.UserRolesType.Client, NormalizedName = "client" }
+            modelBuilder.Entity<IdentityRole<long>>().HasData(
+                new IdentityRole<long> { Id = 1, Name = "admin",ConcurrencyStamp ="1", NormalizedName = "admin" },
+                new IdentityRole<long> { Id = 2, Name = "client",ConcurrencyStamp ="2" ,NormalizedName = "client" }
                 );
             modelBuilder.Entity<IdentityUserRole<long>>().HasData(
                 new IdentityUserRole<long> { UserId = 1, RoleId = 1 },

@@ -4,14 +4,16 @@ using EdProject.DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EdProject.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210526122015_add orderItem entity")]
+    partial class addorderItementity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,14 +92,14 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2021, 5, 26, 15, 42, 8, 464, DateTimeKind.Local).AddTicks(5655),
+                            CreatedAt = new DateTime(2021, 5, 26, 15, 20, 14, 626, DateTimeKind.Local).AddTicks(4092),
                             IsRemoved = false,
                             Name = "William Shakespare"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2021, 5, 26, 15, 42, 8, 464, DateTimeKind.Local).AddTicks(6292),
+                            CreatedAt = new DateTime(2021, 5, 26, 15, 20, 14, 626, DateTimeKind.Local).AddTicks(4514),
                             IsRemoved = false,
                             Name = "Stephen King"
                         });
@@ -145,7 +147,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2021, 5, 26, 15, 42, 8, 461, DateTimeKind.Local).AddTicks(5665),
+                            CreatedAt = new DateTime(2021, 5, 26, 15, 20, 14, 623, DateTimeKind.Local).AddTicks(8789),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -157,7 +159,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2021, 5, 26, 15, 42, 8, 464, DateTimeKind.Local).AddTicks(4143),
+                            CreatedAt = new DateTime(2021, 5, 26, 15, 20, 14, 626, DateTimeKind.Local).AddTicks(3323),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -169,7 +171,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2021, 5, 26, 15, 42, 8, 464, DateTimeKind.Local).AddTicks(4234),
+                            CreatedAt = new DateTime(2021, 5, 26, 15, 20, 14, 626, DateTimeKind.Local).AddTicks(3357),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -181,7 +183,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2021, 5, 26, 15, 42, 8, 464, DateTimeKind.Local).AddTicks(4240),
+                            CreatedAt = new DateTime(2021, 5, 26, 15, 20, 14, 626, DateTimeKind.Local).AddTicks(3364),
                             Currency = "UAH",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -193,7 +195,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 5L,
-                            CreatedAt = new DateTime(2021, 5, 26, 15, 42, 8, 464, DateTimeKind.Local).AddTicks(4312),
+                            CreatedAt = new DateTime(2021, 5, 26, 15, 20, 14, 626, DateTimeKind.Local).AddTicks(3367),
                             Currency = "EUR",
                             Description = "Featuring Willy Shakespare",
                             IsRemoved = false,
@@ -297,6 +299,61 @@ namespace EdProject.DAL.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("EdProject.DAL.Entities.Role", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("RolesType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isRemoved")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            ConcurrencyStamp = "07889453-f641-4efd-8d64-b8f94d117839",
+                            Name = "admin",
+                            NormalizedName = "admin",
+                            RolesType = 1,
+                            isRemoved = false
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            ConcurrencyStamp = "b1b1e1b4-4eb0-438a-8f60-33e00e6c0dc4",
+                            Name = "client",
+                            NormalizedName = "client",
+                            RolesType = 2,
+                            isRemoved = false
+                        });
+                });
+
             modelBuilder.Entity("EdProject.DAL.Entities.User", b =>
                 {
                     b.Property<long>("Id")
@@ -377,7 +434,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fc39a822-9a40-4b0e-8465-e20bfd91be80",
+                            ConcurrencyStamp = "fb8d32e8-f349-48d6-802f-3d0304b4c491",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -385,9 +442,9 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAED2tdilraxWUUKgd1+pFiaNPL6RbaY0j5MUg5vBk39vwwPKqhRsaMQ9MwavJdkBU/Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM5UfrMTbnM9+A8gfX/mpv+sVM9UuCkDUHBgU5tnwAaJAgKY5q7sM8ymGpA0KXyPOA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "88edd25b-b068-416f-9c46-79724c20539a",
+                            SecurityStamp = "54be1e01-80b3-4a8a-843f-149d8dc55dd0",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             isRemoved = false
@@ -396,7 +453,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "85405c37-d33d-4826-85d3-579ff0a0d5d1",
+                            ConcurrencyStamp = "7165d773-0eab-44eb-9d18-6a8a73458e97",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
@@ -404,57 +461,12 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAENn12DWd/88Tg+XErHNjmCt5oAjeSVnxKfZDqf7kEOMgsCMwCxZSy6bngmTgNyZpFw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOUKTcDmEC9Zh7wx+T/lOI7KeoeOrssIEUOl2OLKEviVA9MusuZjFkl2b5otfEwtVQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "478955b1-6a4c-4eaa-b528-36ce300084e6",
+                            SecurityStamp = "a4af2348-450f-4622-8816-33a8baccd46f",
                             TwoFactorEnabled = false,
                             UserName = "client",
                             isRemoved = false
-                        });
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<long>", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            ConcurrencyStamp = "1",
-                            Name = "admin",
-                            NormalizedName = "admin"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            ConcurrencyStamp = "2",
-                            Name = "client",
-                            NormalizedName = "client"
                         });
                 });
 
@@ -629,7 +641,7 @@ namespace EdProject.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", null)
+                    b.HasOne("EdProject.DAL.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -656,7 +668,7 @@ namespace EdProject.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", null)
+                    b.HasOne("EdProject.DAL.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
