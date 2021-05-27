@@ -10,7 +10,7 @@ namespace EdProject.PresentationLayer.Middleware
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private ILogger _logger;
+        private ILogger<ExceptionMiddleware> _logger;
 
         public ExceptionMiddleware(RequestDelegate next,ILogger<ExceptionMiddleware> logger)
         {
@@ -30,8 +30,8 @@ namespace EdProject.PresentationLayer.Middleware
             }
             catch (Exception ex)
             {
+                await httpContext.Response.WriteAsync("Something went wrong! Connect with your administrator");
                 _logger.LogError(ex.Message, ex);
-                await httpContext.Response.WriteAsync("something went wrong! Connect with your administrator");
             }
             
         }

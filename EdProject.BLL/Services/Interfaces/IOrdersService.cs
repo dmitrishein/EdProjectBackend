@@ -2,6 +2,7 @@
 using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Models.PrintingEditions;
+using EdProject.BLL.Models.User;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

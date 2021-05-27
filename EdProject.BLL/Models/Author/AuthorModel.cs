@@ -21,7 +21,12 @@ namespace EdProject.BLL.Models.Author
                 errors.Add(new ValidationResult($"{ErrorConstant.INVALID_FIELD_FIRSTNAME}. {ErrorConstant.FIELD_IS_TOO_SHORT}"));
             }
 
-            return errors;
+            if (!errors.Any())
+            {
+                return errors;
+            }
+
+            throw new CustomException(string.Join(",", errors), System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

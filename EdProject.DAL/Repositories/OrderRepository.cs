@@ -73,6 +73,15 @@ namespace EdProject.DAL.Repositories
             return ordersQuery;
         }
 
+        public bool OrderItemIsExist(Orders order, OrderItem item)
+        {
+            var orderItem = order.OrderItems.First(orderItem => orderItem.EditionId == item.EditionId);
+            if(orderItem is not null)
+            {
+                return true;
+            }
+            return false;
+        }
         public async Task<List<Orders>> OrdersPage(int pageNumber, int pageSize,string searchString)
         {
             var ordersQuery = GetAll().Where(o => o.Id.ToString() == searchString ||

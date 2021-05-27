@@ -25,8 +25,7 @@ namespace EdProject.PresentationLayer
                 })
                 .ConfigureLogging((HostBuilderContext, logging) =>
                 {
-                    logging.AddFileLogger(options =>
-                    {
+                    logging.AddCustomFileLogger(options => {
                         HostBuilderContext.Configuration.GetSection("Logging").GetSection("FileLogger").GetSection("Options").Bind(options);
                     });
                 });

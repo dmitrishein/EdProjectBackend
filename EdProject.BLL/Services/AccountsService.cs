@@ -46,7 +46,7 @@ namespace EdProject.BLL.Services
             var result = await _signInManager.PasswordSignInAsync(user, userSignInModel.Password, userSignInModel.RememberMe, false);
             if(!result.Succeeded)
             {
-                throw new CustomException(result.ToString(), HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INCORRECT_PASSWORD, HttpStatusCode.BadRequest);
             }
 
             TokenPairModel tokenPairModel = new TokenPairModel

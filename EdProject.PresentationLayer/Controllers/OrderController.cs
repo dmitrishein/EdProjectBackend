@@ -2,15 +2,14 @@
 using EdProject.BLL.Models.Base;
 using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
-using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Stripe;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using EdProject.BLL.Models.User;
 
 namespace EdProject.PresentationLayer.Controllers
 {

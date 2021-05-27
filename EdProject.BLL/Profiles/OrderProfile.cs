@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EdProject.BLL.Models.Orders;
+using EdProject.BLL.Models.User;
 using EdProject.DAL.Entities;
 
 namespace EdProject.BLL.Profiles

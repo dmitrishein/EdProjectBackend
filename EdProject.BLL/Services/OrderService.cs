@@ -3,7 +3,7 @@ using EdProject.BLL.Common.Options;
 using EdProject.BLL.Models.Base;
 using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
-using EdProject.BLL.Models.PrintingEditions;
+using EdProject.BLL.Models.User;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Interfaces;
@@ -55,18 +55,24 @@ namespace EdProject.BLL.Services
         }
         public async Task CreateItemInOrderAsync(OrderItemModel orderItemModel)
         {
-            var item = _mapper.Map<OrderItemModel, DAL.Entities.OrderItem>(orderItemModel);
             var order = await _orderRepository.FindByIdAsync(orderItemModel.OrderId);
+
             var editionToOrder = await _editionRepository.FindByIdAsync(orderItemModel.EditionId);
 
-            if(order is null || order.IsRemoved)
+            orderItemModel.Currency = editionToOrder.Currency;
+            orderItemModel.Amount = editionToOrder.Price * orderItemModel.ItemsCount;
+
+            if (order is null || order.IsRemoved)
             {
                 throw new CustomException(ErrorConstant.INCORRECT_ORDER,HttpStatusCode.BadRequest);
             }
-
-            item.Currency = editionToOrder.Currency;
-            item.Amount = editionToOrder.Price * orderItemModel.ItemsCount;
-            
+          
+            var item = _mapper.Map<OrderItemModel, DAL.Entities.OrderItem>(orderItemModel);
+   
+            if(order.OrderItems.Any(orderItem => orderItem.EditionId == item.EditionId))
+            {
+                throw new CustomException(ErrorConstant.ALREADY_EXIST, HttpStatusCode.BadRequest);
+            }
             await _orderRepository.AddItemToOrderAsync(order, item);
         }
         public async Task CreateItemsListInOrderAsync(List<OrderItemModel> orderItemlistModel)
@@ -86,6 +92,11 @@ namespace EdProject.BLL.Services
                     orderItemlistModel.Remove(item);
                     continue;
                 }
+                if (order.OrderItems.Any(orderItem => orderItem.EditionId == item.EditionId))
+                {
+                    orderItemlistModel.Remove(item);
+                    continue;
+                }
 
                 item.Currency = tempEdition.Currency;
                 item.Amount = tempEdition.Price * item.ItemsCount;
@@ -101,7 +112,7 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
             }
-            if (!order.Editions.Any())
+            if (!order.OrderItems.Any())
             {
                 throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
             }
@@ -117,6 +128,7 @@ namespace EdProject.BLL.Services
                 Currency = paymentModel.Currency.ToString().ToLower(),
                 Description = paymentModel.OrderId.ToString(),
                 Source = paymentModel.PaymentSource
+                
             };
             var service = new ChargeService();
             var charge = service.Create(options);
@@ -204,7 +216,12 @@ namespace EdProject.BLL.Services
         public async Task UpdateOrderItemAsync(UpdateOrderItem orderItem)
         {
             var order = await _orderRepository.FindByIdAsync(orderItem.OrderId);
+            if(order is null || order.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.INCORRECT_ORDER,HttpStatusCode.BadRequest);
+            }
             var updItem = _mapper.Map<UpdateOrderItem, DAL.Entities.OrderItem>(orderItem);
+         
             await _orderRepository.UpdateOrderItem(order,updItem);
         }
 

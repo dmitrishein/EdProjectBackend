@@ -34,8 +34,12 @@ namespace EdProject.BLL.Models.PrintingEditions
             {
                 errors.Add(new ValidationResult(ErrorConstant.INCORRECT_PRICE));
             }
+            if (!errors.Any())
+            {
+                return errors;
+            }
 
-            return errors;
+            throw new CustomException(string.Join(",", errors), System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

@@ -37,8 +37,12 @@ namespace EdProject.BLL.Models.User
             {
                 errors.Add(new ValidationResult("Invalid LastName"));
             }
+            if (!errors.Any())
+            {
+                return errors;
+            }
 
-            return errors;
+            throw new CustomException(string.Join(",", errors), System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

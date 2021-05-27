@@ -14,20 +14,19 @@ namespace EdProject.BLL.Services
 {
     public class UserService : IUserService
     {
-        #region Private Members
+      
         private UserManager<User> _userManager;
         private RoleManager<IdentityRole<long>> _roleManager;
         IMapper _mapper;
-        #endregion
+      
 
-        #region Constructor
+      
         public UserService(UserManager<User> userManager, RoleManager<IdentityRole<long>> roleManager, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
         }
-        #endregion
 
         public async Task AddToRoleAsync(UserToRoleModel userToRole)
         {

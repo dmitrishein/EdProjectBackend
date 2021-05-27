@@ -55,8 +55,12 @@ namespace EdProject.BLL
             {
                 errors.Add(new ValidationResult($"{ErrorConstant.INVALID_FIELD_LASTNAME}. {ErrorConstant.FIELD_IS_TOO_SHORT}"));
             }
-            //throw new CustomException(string.Join(",", errors), System.Net.HttpStatusCode.BadRequest);
-            return errors;
+
+            if (!errors.Any())
+            {
+                return errors;
+            }
+            throw new CustomException(string.Join(",", errors), System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

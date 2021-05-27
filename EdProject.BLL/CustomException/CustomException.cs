@@ -12,5 +12,6 @@ namespace EdProject.BLL
         {
             StatusCode = statusCode;
         }
+
     }
 }

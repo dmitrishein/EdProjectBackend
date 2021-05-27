@@ -26,7 +26,8 @@
         public const string REMOVE_ORDER_ERROR = "Cannot remove the order! This order contains item";
         public const string INCORRECT_PAGEMODEL = "Incorrect input! Check the element amount or page number";
         public const string INCORRECT_ORDER = "Error! Incorrect order!";
-
-
+        public const string INCORRECT_ITEMS_COUNT = "Incorrect items count!";
+        public const string INCORRECT_EDITION = "Incorrect edition!";
+        public const string INCORRECT_TRANSACTION = "Incorrect transaction!";
     }
 }
