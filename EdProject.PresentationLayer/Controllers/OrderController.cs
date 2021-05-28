@@ -32,18 +32,12 @@ namespace EdProject.PresentationLayer.Controllers
             await _orderService.CreateOrderAsync(newOrder);
         }
 
-        [Authorize(Roles = "admin,client")]
-        [HttpPost("[action]")]
-        public async Task CreateOrderItem(OrderItemModel newOrder)
-        {
-            await _orderService.CreateItemInOrderAsync(newOrder);
-        }
 
         [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
-        public async Task CreateOrderItemList(List<OrderItemModel> newOrder)
+        public async Task CreateOrderItems(List<OrderItemModel> newOrder)
         {
-            await _orderService.CreateItemsListInOrderAsync(newOrder);
+            await _orderService.CreateItemsInOrderAsync(newOrder);
         }
 
 
@@ -100,13 +94,6 @@ namespace EdProject.PresentationLayer.Controllers
             await _orderService.UpdateOrderItemAsync(orderItem);
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpGet("[action]")]
-        public async Task<PaymentModel> GetPaymentInOrder(long orderId)
-        {
-            return await _orderService.GetPaymentInOrderAsync(orderId);
-        }
-
         [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
         public async Task ClearOrder(long orderId)
@@ -114,18 +101,12 @@ namespace EdProject.PresentationLayer.Controllers
             await _orderService.ClearOrder(orderId);
         }
 
-        [Authorize(Roles = "admin,client")]
-        [HttpPost("[action]")]
-        public async Task RemoveItemFromOrder(OrderItemModel orderItemModel)
-        {
-           await _orderService.RemoveItemFromOrderAsync(orderItemModel);
-        }
 
         [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
-        public async Task RemoveItemsListFromOrder(List<OrderItemModel> orderItemListModel)
+        public async Task RemoveItemsFromOrder(List<OrderItemModel> orderItemListModel)
         {
-            await _orderService.RemoveItemsListFromOrder(orderItemListModel);
+            await _orderService.RemoveItemsFromOrder(orderItemListModel);
         }
 
         [Authorize(Roles = "admin,client")]

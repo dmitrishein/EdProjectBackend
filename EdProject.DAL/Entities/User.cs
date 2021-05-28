@@ -9,7 +9,7 @@ namespace EdProject.DAL.Entities
         public string LastName { get; set; }
         public bool isRemoved { get; set; }
 
-        public virtual ICollection<Orders> Orders { get; set; }
+        public virtual List<Orders> Orders { get; set; }
 
     }
 }

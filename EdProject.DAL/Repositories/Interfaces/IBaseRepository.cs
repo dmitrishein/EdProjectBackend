@@ -13,5 +13,6 @@ namespace EdProject.DAL.Repositories.Interfaces
         public Task UpdateAsync(TEntity old,TEntity item);
         public Task UpdateAsync(TEntity item);
         public Task DeleteAsync(TEntity item);
+        public Task SaveChangesAsync();
     }
 }

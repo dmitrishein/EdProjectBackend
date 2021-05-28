@@ -36,7 +36,7 @@ namespace EdProject.PresentationLayer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            #region Classes with options
+            #region IOptionClasses
             services.Configure<EmailOptions>(Configuration.GetSection("EmailProvider"));
             services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
             services.Configure<RoutingOptions>(Configuration.GetSection("ApiRoutes"));

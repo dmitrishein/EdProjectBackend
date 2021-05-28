@@ -3,10 +3,12 @@
     public static class ErrorConstant
     {
         public const string REGISTRATION_FAILED = "Registration failed!";
+        public const string AUTHOR_CREATING_ERROR = "Author cannot be create without editions";
         public const string ITEM_NOT_FOUND = "Error! Item wasn't found!";
         public const string USER_NOT_FOUND = "Error! User wasn't found!";
         public const string FIELD_IS_TOO_SHORT = "Size must be greater!";
-        public const string ORDER_ERROR = "You have unpaid orders. To create new you have to pay your previous order";
+        public const string ORDER_ERROR = "You have empty orders. To create new you have to remove them";
+        public const string UNPAID_ORDER_ERROR = "You have unpaid orders. To create new you have to paid them";
         public const string INCORRECT_EMAIL = "Error! Incorrect email!";
         public const string INCORRECT_PASSWORD = "Error! Incorrect password!";
         public const string UNCONFIRMED_EMAIL = "Error! Cannot do this action while email unconfirmed!";
@@ -29,5 +31,8 @@
         public const string INCORRECT_ITEMS_COUNT = "Incorrect items count!";
         public const string INCORRECT_EDITION = "Incorrect edition!";
         public const string INCORRECT_TRANSACTION = "Incorrect transaction!";
+        public const string INCORRECT_ROLE = "Incorrect role!";
+        public const string EMAIL_NOT_CONFIRMED = "Email was not confirmed";
+        public const string FAILED_TO_CHANGE_PASSWORD = "Failed to change password";
     }
 }

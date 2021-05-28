@@ -65,19 +65,6 @@ namespace EdProject.PresentationLayer.Controllers
             return _userService.GetUsersByQuery(searchString);
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
-        public async Task BlockUser(long userId)
-        {
-            await _userService.BlockUser(userId);
-        }
-
-
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
-        public async Task UnblockUser(long userId)
-        {
-            await _userService.UnblockUser(userId);
-        }
+ 
     }
 }

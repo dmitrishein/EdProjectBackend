@@ -15,9 +15,5 @@ namespace EdProject.BLL.Services.Interfaces
         public Task<List<UserModel>> GetAllUsersAsync();
         public Task<List<UserModel>> GetUserListByRole(string roleName);
 
-        public Task BlockUser(long userId);
-        public Task UnblockUser(long userId);
-
-
     }
 }

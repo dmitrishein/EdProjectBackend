@@ -15,7 +15,38 @@ namespace EdProject.DAL.Repositories
         {
            
         }
+        public async Task AddEditionListToAuthor(Author author, string[]editionsId)
+        {
+            var editionsInRepos = await GetAllEditionsAsync();
 
+            foreach (var id in editionsId)
+            {
+                var item = editionsInRepos.Find(ed => ed.Id == int.Parse(id));
+                if (item is null)
+                {
+                    continue;
+                }
+                item.Authors.Add(author);
+            }
+
+            await SaveChangesAsync();
+        }
+        public async Task RemoveEditionListFromAuthor(Author author, string[] editionsId)
+        {
+            var editionsInRepos = await GetAllEditionsAsync();
+
+            foreach (var id in editionsId)
+            {
+                var item = editionsInRepos.Find(ed => ed.Id == int.Parse(id));
+                if (item is null)
+                {
+                    continue;
+                }
+                item.Authors.Remove(author);
+            }
+
+            await SaveChangesAsync();
+        }
         public Edition FindEditionByTitle(string title)
         {
             return GetAll().FirstOrDefault(e => e.Title == title);
@@ -29,6 +60,10 @@ namespace EdProject.DAL.Repositories
         public async Task<List<Edition>> GetAllEditionsAsync()
         {
             return await GetAll().Where(x =>!x.IsRemoved).ToListAsync();
+        }
+        public async Task<List<Edition>> GetAllEditionsInOrderAsync(long orderId)
+        {
+            return await GetAll().Where(x => x.Orders.Any(y=> y.Id == orderId)).ToListAsync();
         }
         public async Task<List<Edition>> Pagination(int pageNumber,int pageSize, string searchString)
         {

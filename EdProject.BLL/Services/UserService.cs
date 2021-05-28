@@ -38,7 +38,7 @@ namespace EdProject.BLL.Services
             }
             if (!await _roleManager.RoleExistsAsync(userToRole.RoleName))
             {
-                throw new CustomException("Wrong role! Check the rolename", HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INCORRECT_ROLE, HttpStatusCode.BadRequest);
             }
             if(await _userManager.IsInRoleAsync(user,userToRole.RoleName))
             {
@@ -54,14 +54,15 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
             }
-            var userModel = _mapper.Map<User, UserModel>(user);
+            var userModel = _mapper.Map<UserModel>(user);
             return userModel;
         }
 
         public async Task<List<UserModel>> GetAllUsersAsync()
         {
-            var usersList = _mapper.Map <List<User>, List<UserModel>> (await _userManager.Users.Where(u=> !u.isRemoved).ToListAsync());
-            return usersList;  
+            var userList = await _userManager.Users.Where(u => !u.isRemoved).ToListAsync();
+           
+            return _mapper.Map<List<UserModel>>(userList);  
         }
         public List<UserModel> GetUsersByQuery(string searchString)
         {
@@ -78,7 +79,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
             }
 
-            var userList = _mapper.Map<IQueryable<User>, List<UserModel>>(usersQuery);
+            var userList = _mapper.Map<List<UserModel>>(usersQuery);
 
             return userList;
         }
@@ -89,8 +90,8 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
             }
-
-            return _mapper.Map<IList<User>, List<UserModel>>(users);
+            
+            return _mapper.Map<List<UserModel>>(users);
         }
         public async Task RemoveUserAsync(long userId)
         {
@@ -100,8 +101,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
             }
             user.isRemoved = true;
-            await _userManager.UpdateAsync(user);
-            
+            await _userManager.UpdateAsync(user);   
         }
         public async Task UpdateUserAsync(UserUpdateModel userModel)
         {
@@ -119,25 +119,7 @@ namespace EdProject.BLL.Services
             await _userManager.UpdateAsync(checkUser);    
         }
 
-        public async Task BlockUser(long userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null)
-            {
-                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
-            }
-            await _userManager.SetLockoutEnabledAsync(user, true);
-            await _userManager.SetLockoutEndDateAsync(user, DateTime.Today.AddYears(100));
-        }
-        public async Task UnblockUser(long userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user is null)
-            {
-                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
-            }
-            await _userManager.SetLockoutEnabledAsync(user, false);       
-        }
+       
 
     }
 }

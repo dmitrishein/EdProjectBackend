@@ -20,23 +20,13 @@ namespace EdProject.DAL.Repositories
         }
         public Author FindAuthorByName(string authorName)
         {
-            return GetAll().FirstOrDefault(a => a.Name == authorName);
+            return GetAll().FirstOrDefault(a => a.Name == authorName && !a.IsRemoved);
         }
         public async Task RemoveAuthorById(long id)
         {
             var res = await _dbSet.FindAsync(id);
             res.IsRemoved = true;
             await UpdateAsync(res); 
-        }
-        public async Task AddEditionToAuthor(Author author,Edition edition)
-        {
-            author.Editions.Add(edition);
-            await UpdateAsync(author);
-        }
-        public async Task AddEditionListToAuthor(Author author, List<Edition> editions)
-        {
-            editions.ForEach(a => a.Authors.Add(author));
-            await UpdateAsync(author);
         }
         public async Task RemoveAuthorInEdition(Author author, Edition edition)
         {

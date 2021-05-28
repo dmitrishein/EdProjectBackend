@@ -15,27 +15,12 @@ namespace EdProject.DAL.Repositories
         {
         }
 
-        public async Task AddPaymentToOrderAsync(Orders order, Payments payments)
-        {
-            order.Payment = payments;
-            await UpdateAsync(order);
-        }
-        public async Task AddItemToOrderAsync(Orders order, OrderItem item)
-        {
-            order.OrderItems.Add(item);
-            await UpdateAsync(order);
-        }
         public async Task AddItemListToOrderAsync(Orders order, List<OrderItem> items)
         {
             items.ForEach(item => order.OrderItems.Add(item));
             await UpdateAsync(order);
         }
 
-        public async Task RemoveItemToOrderAsync(Orders order, OrderItem item)
-        {
-            order.OrderItems.Remove(item);
-            await UpdateAsync(order);
-        }
         public async Task RemoveItemListFromOrderAsync(Orders order, List<OrderItem> items)
         {
             items.ForEach(item => order.OrderItems.Remove(item));
@@ -65,6 +50,15 @@ namespace EdProject.DAL.Repositories
         public async Task<List<Orders>> GetAllOrdersAsync()
         {
             return await GetAll().Where(x => !x.IsRemoved).ToListAsync();
+        }
+        public decimal GetOrderCost(Orders order)
+        {
+            decimal amount = 0;
+            foreach(var itemCost in order.OrderItems)
+            {
+                amount += itemCost.Amount;
+            }
+            return amount; 
         }
         public async Task<List<Orders>> GetOrderByUserIdAsync(long userId)
         {

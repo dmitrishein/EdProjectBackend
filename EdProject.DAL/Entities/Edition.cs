@@ -16,8 +16,8 @@ namespace EdProject.DAL.Entities
 
 
         //relationships
-        public virtual ICollection<Author> Authors { get; set; }
-        public virtual ICollection<Orders> Orders { get; set; }
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual List<Author> Authors { get; set; }
+        public virtual List<Orders> Orders { get; set; }
+        public virtual List<OrderItem> OrderItems { get; set; }
     }
 }

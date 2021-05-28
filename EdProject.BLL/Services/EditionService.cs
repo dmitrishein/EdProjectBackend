@@ -34,7 +34,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.ALREADY_EXIST, HttpStatusCode.BadRequest);
             }
 
-            var newEdition = _mapper.Map<EditionModel, Edition>(editionModel);
+            var newEdition = _mapper.Map<Edition>(editionModel);
             await _editionRepos.CreateAsync(newEdition);
         }
         public async Task UpdateEditionAsync(EditionModel editionModel)
@@ -48,8 +48,8 @@ namespace EdProject.BLL.Services
             }
 
             await _editionRepos.UpdateAsync(oldEdition,newEdition);
-
         }
+
         public async Task RemoveEditionAsync(long id)
         {
             await _editionRepos.RemoveEditionById(id);
@@ -64,7 +64,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
             }
 
-            return _mapper.Map<List<Edition>, List<EditionModel>>(editionList);
+            return _mapper.Map<List<EditionModel>>(editionList);
         }
         public async Task<EditionModel> GetEditionByIdAsync(long id)
         {
@@ -74,7 +74,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
             }
 
-            return _mapper.Map<Edition, EditionModel>(getEdition);
+            return _mapper.Map<EditionModel>(getEdition);
         }
         public async Task<List<EditionModel>> GetEditionPageAsync(FilterPageModel pageModel)
         {
@@ -84,7 +84,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
             }
 
-            return _mapper.Map<List<Edition>, List<EditionModel>>(editionList);
+            return _mapper.Map<List<EditionModel>>(editionList);
         }
     }
 }
