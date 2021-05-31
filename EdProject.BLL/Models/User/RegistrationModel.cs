@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace EdProject.BLL
@@ -60,7 +61,7 @@ namespace EdProject.BLL
             {
                 return errors;
             }
-            throw new CustomException(string.Join(",", errors), System.Net.HttpStatusCode.BadRequest);
+            throw new CustomException(string.Join(",", errors), HttpStatusCode.BadRequest);
         }
     }
 }

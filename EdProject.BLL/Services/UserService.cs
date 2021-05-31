@@ -19,8 +19,6 @@ namespace EdProject.BLL.Services
         private RoleManager<IdentityRole<long>> _roleManager;
         IMapper _mapper;
       
-
-      
         public UserService(UserManager<User> userManager, RoleManager<IdentityRole<long>> roleManager, IMapper mapper)
         {
             _userManager = userManager;
@@ -54,6 +52,7 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
             }
+
             var userModel = _mapper.Map<UserModel>(user);
             return userModel;
         }

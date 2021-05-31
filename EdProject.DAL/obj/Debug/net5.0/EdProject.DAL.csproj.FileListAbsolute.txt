@@ -12,3 +12,4 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProj
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\ref\EdProject.DAL.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.pdb
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.genruntimeconfig.cache
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.DAL\obj\Debug\net5.0\EdProject.DAL.csprojAssemblyReference.cache

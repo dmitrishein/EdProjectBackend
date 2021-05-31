@@ -29,7 +29,6 @@ namespace EdProject.DAL.Repositories.Base
         }
         public async Task DeleteAsync(TEntity item)
         {
-
           _dbSet.Remove(item);
           await _dbContext.SaveChangesAsync();
         }

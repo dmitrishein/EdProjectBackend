@@ -100,7 +100,6 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.EMAIL_NOT_CONFIRMED, HttpStatusCode.BadRequest);
             }
         }
-
         public async Task ResetPasswordTokenAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);

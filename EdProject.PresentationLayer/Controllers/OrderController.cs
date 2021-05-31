@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using EdProject.BLL.Models.User;
+using EdProject.DAL.Entities;
 
 namespace EdProject.PresentationLayer.Controllers
 {
@@ -89,7 +90,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task UpdateOrderItem(UpdateOrderItem orderItem)
+        public async Task UpdateOrderItem(OrderItem orderItem)
         {
             await _orderService.UpdateOrderItemAsync(orderItem);
         }

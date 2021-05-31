@@ -18,6 +18,7 @@ namespace EdProject.DAL.Repositories
         {
             return await GetAll().Where(x => !x.IsRemoved).ToListAsync();
         }
+
         public Author FindAuthorByName(string authorName)
         {
             return GetAll().FirstOrDefault(a => a.Name == authorName && !a.IsRemoved);
@@ -28,15 +29,6 @@ namespace EdProject.DAL.Repositories
             res.IsRemoved = true;
             await UpdateAsync(res); 
         }
-        public async Task RemoveAuthorInEdition(Author author, Edition edition)
-        {
-            author.Editions.Remove(edition);
-            await UpdateAsync(author);
-        }
-        public async Task RemoveAuthorInEditionList(Author author, List<Edition> editions)
-        {
-            editions.ForEach(a => a.Authors.Remove(author));
-            await UpdateAsync(author);
-        }
+
     }
 }

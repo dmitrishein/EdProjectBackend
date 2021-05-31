@@ -4,6 +4,7 @@ using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -32,21 +33,18 @@ namespace EdProject.BLL.Services
             }
             var newAuthor = _mapper.Map<Author>(authorModel);
 
-            string[] editionsId = authorModel.EditionsString.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
-            if(!editionsId.Any())
+            var authorEditions = await  _editionRepository.GetEditionRangeAsync(authorModel.EditionsId);
+            if (!authorEditions.Any())
             {
-                throw new CustomException(ErrorConstant.AUTHOR_CREATING_ERROR, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.AUTHOR_CREATING_ERROR, HttpStatusCode.BadRequest);    
             }
 
-            await _editionRepository.AddEditionListToAuthor(newAuthor, editionsId);
-            if(newAuthor.Editions is null)
-            {
-                throw new CustomException($"{ErrorConstant.AUTHOR_CREATING_ERROR}.{ErrorConstant.CANNOT_ADD_EDITION}", HttpStatusCode.BadRequest);
-            }
+            newAuthor.Editions = new List<Edition>();
+            newAuthor.Editions.AddRange(authorEditions);
 
-            await _authorRepository.CreateAsync(newAuthor);
+            await _editionRepository.SaveChangesAsync();
         }
-        public async Task AddAuthorToEdition(AuthorModel authorModel)
+        public async Task AddAuthorToEditionAsync(AuthorModel authorModel)
         {
             var author = await _authorRepository.FindByIdAsync(authorModel.Id);
             if (author is null || author.IsRemoved)
@@ -54,15 +52,13 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
             }
 
-            string[] editionsId = authorModel.EditionsString.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
-            if (!editionsId.Any())
-            {
-                throw new CustomException(ErrorConstant.AUTHOR_CREATING_ERROR, HttpStatusCode.BadRequest);
-            }
+            var editionsToAdd = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsId);
+            author.Editions.AddRange(editionsToAdd);
 
-            await _editionRepository.AddEditionListToAuthor(author,editionsId);
+            await _editionRepository.SaveChangesAsync();
+
         }
-        public async Task<List<AuthorModel>> GetAuthorListAsync()
+        public async Task<List<AuthorModel>> GetAuthorsAsync()
         {
             var authors = await _authorRepository.GetAllAuthorsAsync();
             return _mapper.Map<List<AuthorModel>>(authors);          
@@ -125,30 +121,17 @@ namespace EdProject.BLL.Services
             }
             await _authorRepository.RemoveAuthorById(id);
         }
-        public async Task RemoveAuthorInEditionsList(AuthorInEditionsList authorModel)
+        public async Task RemoveAuthorInEditionsAsync(AuthorModel authorModel)
         {
-            var author = await _authorRepository.FindByIdAsync(authorModel.AuthorId);
+            var author = await _authorRepository.FindByIdAsync(authorModel.Id);
             if (author is null || author.IsRemoved)
             {
                 throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
             }
 
+            author.Editions.RemoveAll(ed => authorModel.EditionsId.Contains(ed.Id));
 
-            string[] editionsId = authorModel.Editions.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
-            var editionsInRepos = await _editionRepository.GetAllEditionsAsync();
-            List<Edition> editionsToRemove = new List<Edition>();
-
-            foreach (var id in editionsId)
-            {
-                var item = editionsInRepos.Find(ed => ed.Id == int.Parse(id));
-                if (item is null)
-                {
-                    continue;
-                }
-                editionsToRemove.Add(item);
-            }
-
-            await _authorRepository.RemoveAuthorInEditionList(author, editionsToRemove);
+            await _editionRepository.SaveChangesAsync();
         }
 
     }

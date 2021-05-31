@@ -30,11 +30,12 @@ namespace EdProject.PresentationLayer.Controllers
         {
             await _authorService.CreateAuthorAsync(createAuthor);
         }
+
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task AddAuthorToEdition(AuthorModel createAuthor)
         {
-            await _authorService.AddAuthorToEdition(createAuthor);
+            await _authorService.AddAuthorToEditionAsync(createAuthor);
         }
 
         [Authorize(Roles = "admin")]
@@ -48,7 +49,7 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpGet("[action]")]
         public Task<List<AuthorModel>> GetAuthorList()
         {
-            return _authorService.GetAuthorListAsync();
+            return _authorService.GetAuthorsAsync();
         }
 
         [Authorize(Roles = "admin,client")]
@@ -75,9 +76,9 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task RemoveAuthorInEditionsList(AuthorInEditionsList authorIn)
+        public async Task RemoveAuthorInEditionsList(AuthorModel authorIn)
         {
-            await _authorService.RemoveAuthorInEditionsList(authorIn);
+            await _authorService.RemoveAuthorInEditionsAsync(authorIn);
         }
 
         [Authorize(Roles = "admin")]

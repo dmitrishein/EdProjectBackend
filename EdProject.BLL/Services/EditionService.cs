@@ -25,11 +25,7 @@ namespace EdProject.BLL.Services
         public async Task CreateEditionAsync(EditionModel editionModel)
         {
             var edition = _editionRepos.FindEditionByTitle(editionModel.Title);
-            if (edition is not null && edition.IsRemoved)
-            {
-                await _editionRepos.DeleteAsync(edition);
-            }
-            if (edition is not null && !edition.IsRemoved)
+            if (edition is not null)
             {
                 throw new CustomException(ErrorConstant.ALREADY_EXIST, HttpStatusCode.BadRequest);
             }
@@ -39,7 +35,7 @@ namespace EdProject.BLL.Services
         }
         public async Task UpdateEditionAsync(EditionModel editionModel)
         {
-            var newEdition = _mapper.Map<EditionModel, Edition>(editionModel);
+            var newEdition = _mapper.Map<Edition>(editionModel);
             var oldEdition = await _editionRepos.FindByIdAsync(newEdition.Id);
 
             if (oldEdition is null || oldEdition.IsRemoved)
@@ -52,23 +48,25 @@ namespace EdProject.BLL.Services
 
         public async Task RemoveEditionAsync(long id)
         {
-            await _editionRepos.RemoveEditionById(id);
+            var editionToRemove= await _editionRepos.FindByIdAsync(id);
+            if (editionToRemove is null || editionToRemove.IsRemoved)
+            {
+                throw new CustomException(ErrorConstant.INCORRECT_EDITION, HttpStatusCode.BadRequest);
+            }    
+            editionToRemove.IsRemoved = true;
+            await _editionRepos.UpdateAsync(editionToRemove);
         }
 
-        public async Task<List<EditionModel>> GetEditionListAsync()
+        public async Task<List<EditionModel>> GetEditionsAsync()
         {
             var editionList = await _editionRepos.GetAllEditionsAsync();
-
-            if (!editionList.Any())
-            {
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
-            }
 
             return _mapper.Map<List<EditionModel>>(editionList);
         }
         public async Task<EditionModel> GetEditionByIdAsync(long id)
         {
             var getEdition = await _editionRepos.FindByIdAsync(id);
+
             if (getEdition is null || getEdition.IsRemoved)
             {
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);

@@ -12,7 +12,7 @@ namespace EdProject.BLL.Profiles
             CreateMap<Orders, OrderModel>();
             CreateMap<OrderModel, Orders>();
             CreateMap<OrderItemModel, OrderItem>().ReverseMap();
-            CreateMap<UpdateOrderItem, OrderItem>();
+
         }
     }
 }

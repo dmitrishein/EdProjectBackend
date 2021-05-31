@@ -11,8 +11,6 @@ namespace EdProject.BLL.Models.User
         public long EditionId { get; set; }
         public long OrderId { get; set; }
         public int ItemsCount { get; set; }
-        public decimal Amount { get; set; }
-        public CurrencyTypes Currency { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

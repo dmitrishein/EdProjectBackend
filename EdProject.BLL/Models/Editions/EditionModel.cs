@@ -18,6 +18,7 @@ namespace EdProject.BLL.Models.PrintingEditions
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             List<ValidationResult> errors = new List<ValidationResult>();
+
             if(string.IsNullOrWhiteSpace(Title))
             {
                 errors.Add(new ValidationResult(ErrorConstant.INVALID_TITLE));

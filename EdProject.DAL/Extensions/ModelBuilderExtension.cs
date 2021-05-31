@@ -53,11 +53,11 @@ namespace EdProject.DAL.Extension
                 );
 
             modelBuilder.Entity<Edition>().HasData(
-                new Edition{ Id = 1, Title = "Hamlet", Description = "Classic Printing Edition", Price = 1444.9M, Currency = CurrencyTypes.UAH, Status = AvailableStatusType.Available, Type = EditionTypes.Book },
-                new Edition { Id = 2, Title = "Othello", Description = "Classic Printing Edition", Price = 1200.9M, Currency = CurrencyTypes.UAH, Status = AvailableStatusType.Available, Type = EditionTypes.Book },
-                new Edition { Id = 3, Title = "Pet Graveyard", Description = "Classic Printing Edition", Price = 1300.9M, Currency = CurrencyTypes.UAH, Status = AvailableStatusType.Available, Type = EditionTypes.Book },
-                new Edition { Id = 4, Title = "Confrontation", Description = "Classic Printing Edition", Price = 1140.6M, Currency = CurrencyTypes.UAH, Status = AvailableStatusType.NotAvailable, Type = EditionTypes.Book },
-                new Edition { Id = 5, Title = "Something Weird", Description = "Featuring Willy Shakespare", Price = 120.23M, Currency = CurrencyTypes.EUR, Status = AvailableStatusType.NotAvailable, Type = EditionTypes.Magazine }
+                new Edition{ Id = 1, Title = "Hamlet", Description = "Classic Printing Edition", Price = 1444.9M, Currency = CurrencyTypes.USD, Status = AvailableStatusType.Available, Type = EditionTypes.Book },
+                new Edition { Id = 2, Title = "Othello", Description = "Classic Printing Edition", Price = 1200.9M, Currency = CurrencyTypes.USD, Status = AvailableStatusType.Available, Type = EditionTypes.Book },
+                new Edition { Id = 3, Title = "Pet Graveyard", Description = "Classic Printing Edition", Price = 1300.9M, Currency = CurrencyTypes.USD, Status = AvailableStatusType.Available, Type = EditionTypes.Book },
+                new Edition { Id = 4, Title = "Confrontation", Description = "Classic Printing Edition", Price = 1140.6M, Currency = CurrencyTypes.USD, Status = AvailableStatusType.NotAvailable, Type = EditionTypes.Book },
+                new Edition { Id = 5, Title = "Something Weird", Description = "Featuring Willy Shakespare", Price = 120.23M, Currency = CurrencyTypes.USD, Status = AvailableStatusType.NotAvailable, Type = EditionTypes.Magazine }
                 );
             modelBuilder.Entity<Author>().HasData(
               new Author { Id = 1, Name = "William Shakespare" },

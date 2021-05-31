@@ -34,5 +34,6 @@
         public const string INCORRECT_ROLE = "Incorrect role!";
         public const string EMAIL_NOT_CONFIRMED = "Email was not confirmed";
         public const string FAILED_TO_CHANGE_PASSWORD = "Failed to change password";
+        public const string INVALID_EDITIONS_STRING = "Error! Invalid edition string";
     }
 }

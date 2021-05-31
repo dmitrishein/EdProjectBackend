@@ -43,7 +43,7 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpGet("[action]")]
         public Task<List<EditionModel>> GetEditions()
         {
-           return _printEditionService.GetEditionListAsync();
+           return _printEditionService.GetEditionsAsync();
         }
 
 
