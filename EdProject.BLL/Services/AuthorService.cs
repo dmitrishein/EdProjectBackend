@@ -101,15 +101,19 @@ namespace EdProject.BLL.Services
 
         public async Task UpdateAuthorAsync(AuthorModel authorModel)
         {   
-            var updatedAuthor = _mapper.Map<AuthorModel, Author>(authorModel);
-            var oldAuthor = await _authorRepository.FindByIdAsync(updatedAuthor.Id);
+            var oldAuthor = await _authorRepository.FindByIdAsync(authorModel.Id);
+            var updEditionList = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsId);
 
             if (oldAuthor is null || oldAuthor.IsRemoved)
             {
                 throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
             }
 
-            await _authorRepository.UpdateAsync(oldAuthor,updatedAuthor);
+            oldAuthor.Name = authorModel.Name;
+            oldAuthor.Editions = new List<Edition>();
+            oldAuthor.Editions.AddRange(updEditionList);
+
+            await _authorRepository.UpdateAsync(oldAuthor);
         }
 
         public async Task RemoveAuthorAsync(long id)
@@ -121,18 +125,5 @@ namespace EdProject.BLL.Services
             }
             await _authorRepository.RemoveAuthorById(id);
         }
-        public async Task RemoveAuthorInEditionsAsync(AuthorModel authorModel)
-        {
-            var author = await _authorRepository.FindByIdAsync(authorModel.Id);
-            if (author is null || author.IsRemoved)
-            {
-                throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
-            }
-
-            author.Editions.RemoveAll(ed => authorModel.EditionsId.Contains(ed.Id));
-
-            await _editionRepository.SaveChangesAsync();
-        }
-
     }
 }

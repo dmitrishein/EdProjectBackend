@@ -76,13 +76,6 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task RemoveAuthorInEditionsList(AuthorModel authorIn)
-        {
-            await _authorService.RemoveAuthorInEditionsAsync(authorIn);
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
         public async Task RemoveAuthorAsync(long id)
         {
             await _authorService.RemoveAuthorAsync(id);

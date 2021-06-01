@@ -30,11 +30,7 @@ namespace EdProject.DAL.DataContext
                     .HasForeignKey(ed => ed.EditionId),
                     j =>
                     {
-                        j.Property(pt => pt.Amount).HasColumnType("decimal(18,4)")
-                                                   .HasDefaultValue(VariableConstant.MIN_PRICE);
-
                         j.Property(pt => pt.ItemsCount).HasDefaultValue(VariableConstant.DEFAULT_AMOUNT);
-                        j.Property(pt => pt.Currency).HasDefaultValue(CurrencyTypes.None);
                         j.HasKey(t => new { t.EditionId, t.OrderId });
                         j.ToTable("OrderItems");
                     }

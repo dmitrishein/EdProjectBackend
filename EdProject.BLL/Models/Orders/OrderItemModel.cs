@@ -1,8 +1,7 @@
-﻿using EdProject.DAL.Entities.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Net;
 
 namespace EdProject.BLL.Models.User
 {
@@ -23,7 +22,7 @@ namespace EdProject.BLL.Models.User
             {
                 errors.Add(new ValidationResult(ErrorConstant.INCORRECT_ORDER));
             }
-            if (ItemsCount <= VariableConstant.EMPTY)
+            if (ItemsCount < VariableConstant.EMPTY)
             {
                errors.Add(new ValidationResult(ErrorConstant.INCORRECT_ITEMS_COUNT));
             }
@@ -33,7 +32,7 @@ namespace EdProject.BLL.Models.User
                 return errors;
             }
 
-            throw new CustomException(string.Join(",", errors), System.Net.HttpStatusCode.BadRequest);
+            throw new CustomException(string.Join(",", errors), HttpStatusCode.BadRequest);
 
         }
     }

@@ -22,9 +22,9 @@ namespace EdProject.DAL.Repositories
         public decimal GetOrderCost(Orders order)
         {
             decimal amount = order.OrderItems.Sum(x => x.Edition.Price * x.ItemsCount);
-   
             return amount; 
         }
+
         public async Task<List<Orders>> GetOrdersByUserIdAsync(long userId)
         {
             List<Orders> ordersQuery =  await GetAll().Where(e => e.UserId == userId).ToListAsync();

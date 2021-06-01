@@ -19,8 +19,7 @@ namespace EdProject.BLL.Services.Interfaces
         public Task<List<OrderModel>> GetOrdersListAsync();
         public Task<OrderModel> GetOrderByIdAsync(long orderId);
         public Task<List<OrderItemModel>> GetItemsInOrderAsync(long orderId);
-        public Task UpdateOrderItemAsync(OrderItem orderItem);
-        public Task RemoveItemsFromOrder(List<OrderItemModel> orderItemsListModel);
+        public Task UpdateOrderItemAsync(OrderItemModel orderItem);
         public Task RemoveOrderByIdAsync(long orderId);
         public Task ClearOrder(long orderId);
     }

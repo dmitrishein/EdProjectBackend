@@ -10,9 +10,7 @@ namespace EdProject.DAL.Entities
         public long EditionId { get; set; }
         public virtual Edition Edition { get; set; }
 
-        public decimal Amount { get; set; }
         public int ItemsCount { get; set; }
-        public CurrencyTypes Currency { get; set; }
 
     }
 }
