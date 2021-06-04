@@ -61,7 +61,8 @@ namespace EdProject.PresentationLayer
                        {
                            ValidateIssuer = true,
                            ValidIssuer = Configuration["Jwt:Issuer"],
-                           ValidateAudience = false,
+                           ValidateAudience = true,
+                           ValidAudience = Configuration["Jwt:Audience"],
                            ValidateLifetime = true,
                            ValidateIssuerSigningKey = true,
                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),

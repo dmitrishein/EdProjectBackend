@@ -39,7 +39,7 @@ namespace EdProject.BLL
             }
 
             var token = new JwtSecurityToken(_jwtOptions.Issuer,
-                                             _jwtOptions.Issuer,
+                                             _jwtOptions.Audience,
                                              claims,
                                              expires: DateTime.Now.AddMinutes(40), 
                                              signingCredentials: credentials);

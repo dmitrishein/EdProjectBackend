@@ -13,7 +13,7 @@ namespace EdProject.PresentationLayer.Controllers
     [ApiController]
     public class EditionController : Controller
     {
-        IEditionService _printEditionService;
+        private readonly IEditionService _printEditionService;
         public EditionController(IEditionService printingEditionService)
         {
             _printEditionService = printingEditionService;
@@ -40,7 +40,7 @@ namespace EdProject.PresentationLayer.Controllers
             await _printEditionService.RemoveEditionAsync(id);
         }
 
-       //[Authorize]
+        [Authorize]
         [HttpGet("GetEditions")]
         public async Task<List<EditionModel>> GetEditions()
         {
@@ -49,14 +49,14 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
 
-        [Authorize(Roles = "admin,client")]
+        [Authorize]
         [HttpGet("[action]")]
         public async Task<EditionModel> GetEditionById(long id)
         {
             return await _printEditionService.GetEditionByIdAsync(id);
         }
 
-        [Authorize(Roles = "admin,client")]
+        [Authorize]
         [HttpGet("[action]")]
         public Task<List<EditionModel>> GetEditionPage(FilterPageModel pageModel)
         {

@@ -15,7 +15,7 @@ namespace EdProject.PresentationLayer.Controllers
     public class UserController : Controller
     {
 
-        IUserService _userService;
+        private readonly IUserService _userService;
 
         public UserController(IUserService userService,IMapper mapper)
         {

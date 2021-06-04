@@ -10,7 +10,7 @@ namespace EdProject.PresentationLayer.Controllers
     [ApiController]
     public class AccountController : Controller
     {
-        IAccountService _accountService;
+        private readonly IAccountService  _accountService;
 
 
         public AccountController(IAccountService accountService)

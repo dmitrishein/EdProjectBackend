@@ -16,7 +16,7 @@ namespace EdProject.PresentationLayer.Controllers
     [ApiController]
     public class AuthorController : Controller
     {
-        IAuthorService _authorService;
+        private readonly IAuthorService _authorService;
      
         public AuthorController(IAuthorService authorService,IMapper mapper)
         {

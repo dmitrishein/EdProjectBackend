@@ -18,8 +18,8 @@ namespace EdProject.PresentationLayer.Controllers
     [ApiController]
     public class OrderController : Controller
     {
-        IConfiguration _config;
-        IOrdersService _orderService;
+        private readonly IConfiguration _config;
+        private readonly IOrdersService _orderService;
         public OrderController(IOrdersService orderService, IConfiguration configuration,IMapper mapper)
         {
             _orderService = orderService;
