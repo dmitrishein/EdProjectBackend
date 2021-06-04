@@ -1,6 +1,7 @@
 ﻿using EdProject.BLL.Models.Base;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace EdProject.PresentationLayer.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class EditionController : ControllerBase
+    public class EditionController : Controller
     {
         IEditionService _printEditionService;
         public EditionController(IEditionService printingEditionService)
@@ -39,11 +40,12 @@ namespace EdProject.PresentationLayer.Controllers
             await _printEditionService.RemoveEditionAsync(id);
         }
 
-        
-        [HttpGet("[action]")]
-        public Task<List<EditionModel>> GetEditions()
+       //[Authorize]
+        [HttpGet("GetEditions")]
+        public async Task<List<EditionModel>> GetEditions()
         {
-           return _printEditionService.GetEditionsAsync();
+            var result= await _printEditionService.GetEditionsAsync();
+            return result;
         }
 
 

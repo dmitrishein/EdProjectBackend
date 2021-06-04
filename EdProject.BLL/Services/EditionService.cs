@@ -60,8 +60,8 @@ namespace EdProject.BLL.Services
         public async Task<List<EditionModel>> GetEditionsAsync()
         {
             var editionList = await _editionRepos.GetAllEditionsAsync();
-
-            return _mapper.Map<List<EditionModel>>(editionList);
+            var result= _mapper.Map<List<EditionModel>>(editionList);
+            return result;
         }
         public async Task<EditionModel> GetEditionByIdAsync(long id)
         {

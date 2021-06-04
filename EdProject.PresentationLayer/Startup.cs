@@ -46,36 +46,44 @@ namespace EdProject.PresentationLayer
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdProject.PresentationLayer", Version = "v1" });
+
             });
 
-            services.AddAuthentication(options =>
-                    {
-                       options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                       options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                       options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    })
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //options =>
+            //        {
+            //           options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //           options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        })
                     .AddJwtBearer(options =>
                     {
                        options.TokenValidationParameters = new TokenValidationParameters
                        {
-                         ValidateIssuer = true,
-                         ValidateAudience = true,
-                         ValidateLifetime = true,
-                         ValidateIssuerSigningKey = true,
-                         ValidIssuer = Configuration["Jwt:Issuer"],
-                         ValidAudience = Configuration["Jwt:Issuer"],
-                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                           ValidateIssuer = true,
+                           ValidIssuer = Configuration["Jwt:Issuer"],
+                           ValidateAudience = true,
+                           ValidAudience = Configuration["Jwt:Audience"],
+                           ValidateLifetime = true,
+                           ValidateIssuerSigningKey = true,
+                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                        };
                     });
 
-            services.AddIdentity<User, IdentityRole<long>>().AddEntityFrameworkStores<AppDbContext>()
-                                                            .AddDefaultTokenProviders();
-            services.AddAuthorization();
+            services.AddIdentityCore<User>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+            })
+                           .AddRoles<IdentityRole<long>>()
+                           .AddSignInManager()
+                           .AddDefaultTokenProviders()
+                           .AddEntityFrameworkStores<AppDbContext>();
+
+            services.AddAuthentication().AddIdentityCookies();
 
             services.AddDbContext<AppDbContext>(options => options
                                                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                                                 .UseLazyLoadingProxies());
-
+            services.AddAuthorization();
             #region Providers Inject
             services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IEmailProvider, EmailProvider>();
@@ -99,6 +107,7 @@ namespace EdProject.PresentationLayer
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(EditionProfile), typeof(OrderProfile), typeof(UserProfile), 
                                    typeof(PaymentProfile),typeof(AuthorProfile), typeof(AccountProfile));
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 5;
@@ -109,17 +118,10 @@ namespace EdProject.PresentationLayer
 
             services.AddControllers();
 
-            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(options =>
-            options.WithOrigins("http://localhost:4200/")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowAnyOrigin()
-            );
 
             if (env.IsDevelopment())
             {
@@ -130,8 +132,10 @@ namespace EdProject.PresentationLayer
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseExceptionMiddleware();
 
             app.UseEndpoints(endpoints =>
