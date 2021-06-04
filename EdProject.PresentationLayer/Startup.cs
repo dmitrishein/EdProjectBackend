@@ -49,20 +49,19 @@ namespace EdProject.PresentationLayer
 
             });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //options =>
-            //        {
-            //           options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //           options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //        })
+            services.AddAuthentication(
+            options =>
+                    {
+                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    })
                     .AddJwtBearer(options =>
                     {
                        options.TokenValidationParameters = new TokenValidationParameters
                        {
                            ValidateIssuer = true,
                            ValidIssuer = Configuration["Jwt:Issuer"],
-                           ValidateAudience = true,
-                           ValidAudience = Configuration["Jwt:Audience"],
+                           ValidateAudience = false,
                            ValidateLifetime = true,
                            ValidateIssuerSigningKey = true,
                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),

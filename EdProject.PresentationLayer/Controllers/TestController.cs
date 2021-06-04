@@ -19,7 +19,7 @@ namespace EdProject.PresentationLayer.Controllers
             _printEditionService = printEditionService;
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         [HttpGet("GetEditions")]
         public async Task<IActionResult> GetEditions()
         {

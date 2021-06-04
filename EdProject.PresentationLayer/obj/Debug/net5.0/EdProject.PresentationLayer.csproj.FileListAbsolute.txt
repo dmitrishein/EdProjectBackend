@@ -62,7 +62,6 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\EdProject.DAL.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\EdProject.BLL.pdb
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\bin\Debug\net5.0\EdProject.DAL.pdb
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\EdProject.PresentationLayer.csprojAssemblyReference.cache
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\EdProject.PresentationLayer.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\EdProject.PresentationLayer.AssemblyInfoInputs.cache
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\EdProject.PresentationLayer.AssemblyInfo.cs
@@ -78,3 +77,4 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\ref\EdProject.PresentationLayer.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\EdProject.PresentationLayer.pdb
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\EdProject.PresentationLayer.genruntimeconfig.cache
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\obj\Debug\net5.0\EdProject.PresentationLayer.csproj.AssemblyReference.cache

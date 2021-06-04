@@ -8,7 +8,7 @@ namespace EdProject.BLL.Common.FileLogger
 {
     public class CustomFileLoggerConfiguration
     {
-        public virtual string FilePath { get; set; }
-        public virtual string FolderPath { get; set; }
+        public virtual string LoggerFilename { get; set; }
+        public virtual string LoggerPath { get; set; }
     }
 }

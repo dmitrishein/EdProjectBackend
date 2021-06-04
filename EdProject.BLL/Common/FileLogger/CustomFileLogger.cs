@@ -12,9 +12,9 @@ namespace EdProject.BLL.Common.FileLogger
         public CustomFileLogger(string name, CustomFileLoggerConfiguration config)
         {
             (_name, _config) = (name, config);
-            if(!Directory.Exists(_config.FolderPath))
+            if(!Directory.Exists(_config.LoggerPath))
             {
-                Directory.CreateDirectory(_config.FolderPath);
+                Directory.CreateDirectory(_config.LoggerPath);
             }
         }
         public IDisposable BeginScope<TState>(TState state) => default;
@@ -30,7 +30,7 @@ namespace EdProject.BLL.Common.FileLogger
                 return;
             }
 
-            var fullFilePath = $"{_config.FolderPath}/{_config.FilePath.Replace("{date}", DateTimeOffset.UtcNow.ToString("d"))}";
+            var fullFilePath = $"{_config.LoggerPath}/{_config.LoggerFilename.Replace("{date}", DateTimeOffset.UtcNow.ToString("d"))}";
             var stack = exception != null ? exception.StackTrace : string.Empty;
             
             var resEx = exception != null ? formatter(state, exception):string.Empty;

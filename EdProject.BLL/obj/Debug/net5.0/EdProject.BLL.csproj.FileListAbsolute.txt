@@ -6,7 +6,6 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\bin\Debug\net5.0\ref\Ed
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\bin\Debug\net5.0\EdProject.BLL.pdb
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\bin\Debug\net5.0\EdProject.DAL.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\bin\Debug\net5.0\EdProject.DAL.pdb
-C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\obj\Debug\net5.0\EdProject.BLL.csprojAssemblyReference.cache
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\obj\Debug\net5.0\EdProject.BLL.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\obj\Debug\net5.0\EdProject.BLL.AssemblyInfoInputs.cache
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\obj\Debug\net5.0\EdProject.BLL.AssemblyInfo.cs
@@ -16,3 +15,4 @@ C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\obj\Debug\net5.0\EdProj
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\obj\Debug\net5.0\ref\EdProject.BLL.dll
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\obj\Debug\net5.0\EdProject.BLL.pdb
 C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\obj\Debug\net5.0\EdProject.BLL.genruntimeconfig.cache
+C:\Users\Anuitex-96\source\repos\EdProject\EdProject.BLL\obj\Debug\net5.0\EdProject.BLL.csproj.AssemblyReference.cache
