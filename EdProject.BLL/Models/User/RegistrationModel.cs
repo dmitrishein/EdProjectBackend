@@ -8,7 +8,7 @@ namespace EdProject.BLL
 {
     public class RegistrationModel: IValidatableObject
     {
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public string FirstName { get; set;}
         public string LastName { get; set; }
         public string Password { get; set; }
@@ -19,7 +19,7 @@ namespace EdProject.BLL
         {   
             List<ValidationResult> errors = new List<ValidationResult>();
 
-            if (!UserName.Any(char.IsLetterOrDigit) || string.IsNullOrWhiteSpace(UserName))
+            if (!Username.Any(char.IsLetterOrDigit) || string.IsNullOrWhiteSpace(Username))
             {
                 errors.Add(new ValidationResult(ErrorConstant.INVALID_FIELD_USERNAME));
             }
@@ -44,7 +44,7 @@ namespace EdProject.BLL
                 errors.Add(new ValidationResult("Password's doesn't match"));
             }
 
-            if (UserName.Length < VariableConstant.MIN_FIELD_SIZE)
+            if (Username.Length < VariableConstant.MIN_FIELD_SIZE)
             {
                 errors.Add(new ValidationResult($"{ErrorConstant.INVALID_FIELD_USERNAME}. {ErrorConstant.FIELD_IS_TOO_SHORT}"));
             }
@@ -61,7 +61,7 @@ namespace EdProject.BLL
             {
                 return errors;
             }
-            throw new CustomException(string.Join(",", errors), HttpStatusCode.BadRequest);
+            throw new CustomException(string.Join(", ", errors), HttpStatusCode.BadRequest);
         }
     }
 }

@@ -1,0 +1,55 @@
+[07.06.2021 07:24:56 +00:00] Warning, , 
+[07.06.2021 07:24:56 +00:00] Warning, , 
+[07.06.2021 07:25:15 +00:00] Warning, , 
+[07.06.2021 07:25:15 +00:00] Warning, , 
+[07.06.2021 09:37:05 +00:00] Warning, , 
+[07.06.2021 09:37:10 +00:00] Error, , 
+[07.06.2021 09:37:10 +00:00] Error, , 
+[07.06.2021 09:37:10 +00:00] Error, , 
+[07.06.2021 09:37:10 +00:00] Error, , 
+[07.06.2021 09:38:33 +00:00] Warning, , 
+[07.06.2021 09:40:42 +00:00] Warning, , 
+[07.06.2021 09:40:54 +00:00] Warning, , 
+[07.06.2021 13:25:33 +00:00] Error, , 
+[07.06.2021 13:25:40 +00:00] Error, , 
+[07.06.2021 13:27:41 +00:00] Error, , 
+[07.06.2021 13:28:03 +00:00] Error, , 
+[07.06.2021 13:28:06 +00:00] Error, , 
+[07.06.2021 13:28:06 +00:00] Error, , 
+[07.06.2021 13:32:12 +00:00] Error, , 
+[07.06.2021 13:32:47 +00:00] Error, , 
+[07.06.2021 13:32:48 +00:00] Error, , 
+[07.06.2021 13:32:52 +00:00] Error, , 
+[07.06.2021 13:32:52 +00:00] Error, , 
+[07.06.2021 13:34:44 +00:00] Error, , 
+[07.06.2021 13:34:52 +00:00] Error, , 
+[07.06.2021 13:34:52 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)
+   at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.LoggerExtensions.Log(ILogger logger, LogLevel logLevel, EventId eventId, Exception exception, String message, Object[] args)
+   at Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, String message, Object[] args)
+   at EdProject.PresentationLayer.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\Middleware\ExceptionMiddleware.cs:line 34
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[07.06.2021 13:34:52 +00:00] Warning, , 
+[07.06.2021 13:34:52 +00:00] Error, Connection ID "18302628900129211009", Request ID "80000282-0003-fe00-b63f-84710c7967bb": An unhandled exception was thrown by the application.,    at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)
+   at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.LoggerExtensions.Log(ILogger logger, LogLevel logLevel, EventId eventId, Exception exception, String message, Object[] args)
+   at Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, String message, Object[] args)
+   at EdProject.PresentationLayer.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\Middleware\ExceptionMiddleware.cs:line 34
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT`1.ProcessRequestAsync()
+[07.06.2021 13:37:14 +00:00] Error, , 
+[07.06.2021 13:37:19 +00:00] Error, , 
+[07.06.2021 13:38:47 +00:00] Error, , 
+[07.06.2021 13:38:51 +00:00] Error, , 
+[07.06.2021 13:38:53 +00:00] Error, , 

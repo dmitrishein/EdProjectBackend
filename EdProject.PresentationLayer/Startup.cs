@@ -21,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 
 namespace EdProject.PresentationLayer
@@ -64,6 +65,7 @@ namespace EdProject.PresentationLayer
                            ValidateAudience = true,
                            ValidAudience = Configuration["Jwt:Audience"],
                            ValidateLifetime = true,
+                           ClockSkew = TimeSpan.Zero,
                            ValidateIssuerSigningKey = true,
                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                        };
@@ -117,11 +119,17 @@ namespace EdProject.PresentationLayer
             });
 
             services.AddControllers();
-
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(options =>
+                       options.WithOrigins("http://localhost:4200/")
+                       .AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .AllowAnyOrigin()
+             );
 
             if (env.IsDevelopment())
             {

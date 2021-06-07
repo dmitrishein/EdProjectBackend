@@ -58,6 +58,24 @@ namespace EdProject.BLL.Services
 
             return tokenPairModel;
         }
+
+        public async Task<TokenPairModel> ChangeToken(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user is null || user.isRemoved)
+            {
+                throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            TokenPairModel tokenPairModel = new TokenPairModel
+            {
+                AccessToken = _jwt.GenerateAccessToken(user, userRoles),
+                RefreshToken = _jwt.GenerateRefreshToken()
+            };
+
+            return tokenPairModel;
+        }
         public async Task SignOutAsync()
         {              
           await _signInManager.SignOutAsync();

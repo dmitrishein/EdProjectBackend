@@ -48,7 +48,6 @@ namespace EdProject.PresentationLayer.Controllers
             return result;
         }
 
-
         [Authorize]
         [HttpGet("[action]")]
         public async Task<EditionModel> GetEditionById(long id)

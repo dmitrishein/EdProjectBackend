@@ -9,16 +9,16 @@
         public const string FIELD_IS_TOO_SHORT = "Size must be greater!";
         public const string ORDER_ERROR = "You have empty orders. To create new you have to remove them";
         public const string UNPAID_ORDER_ERROR = "You have unpaid orders. To create new you have to paid them";
-        public const string INCORRECT_EMAIL = "Error! Incorrect email!";
-        public const string INCORRECT_PASSWORD = "Error! Incorrect password!";
+        public const string INCORRECT_EMAIL = "Incorrect email!";
+        public const string INCORRECT_PASSWORD = "Incorrect password!";
         public const string UNCONFIRMED_EMAIL = "Error! Cannot do this action while email unconfirmed!";
         public const string NOTHING_FOUND = "Error! Nothing was found! ";
         public const string ALREADY_EXIST = "Entity already exist!";
         public const string ALREADY_IN_ROLE = "User already in role";
         public const string NOTHING_EXIST = "Error! Item is not exist or was removed";
-        public const string INVALID_FIELD_FIRSTNAME = "Error! Incorrect name";
-        public const string INVALID_FIELD_LASTNAME = "Error! Incorrect lastname";
-        public const string INVALID_FIELD_USERNAME = "Error! Incorrect username";
+        public const string INVALID_FIELD_FIRSTNAME = "Incorrect firstname";
+        public const string INVALID_FIELD_LASTNAME = "Incorrect lastname";
+        public const string INVALID_FIELD_USERNAME = "Incorrect username";
         public const string CANNOT_ADD_EDITION = "Cannot add edition!";
         public const string AUTHOR_NOT_FOUND = "Author wasn't found or was removed!";
         public const string INVALID_TITLE = "Incorrect title!";
@@ -34,6 +34,6 @@
         public const string INCORRECT_ROLE = "Incorrect role!";
         public const string EMAIL_NOT_CONFIRMED = "Email was not confirmed";
         public const string FAILED_TO_CHANGE_PASSWORD = "Failed to change password";
-        public const string INVALID_EDITIONS_STRING = "Error! Invalid edition string";
+        public const string INVALID_EDITIONS_STRING = "Invalid edition string";
     }
 }

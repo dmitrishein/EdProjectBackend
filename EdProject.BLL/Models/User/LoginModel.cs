@@ -28,7 +28,7 @@ namespace EdProject.BLL.Models.User
                 return errors;
             }
 
-            throw new CustomException(string.Join(",", errors), System.Net.HttpStatusCode.BadRequest);
+            throw new CustomException(string.Join("\n", errors), System.Net.HttpStatusCode.BadRequest);
         }
     }
 }
