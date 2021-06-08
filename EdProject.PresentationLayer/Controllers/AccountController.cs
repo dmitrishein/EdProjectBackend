@@ -10,32 +10,39 @@ namespace EdProject.PresentationLayer.Controllers
     [ApiController]
     public class AccountController : Controller
     {
-        private readonly IAccountService  _accountService;
+        private readonly IAccountService _accountService;
 
 
         public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
-      
+
 
         [HttpPost("[action]")]
         public async Task Registration(RegistrationModel register)
-        {        
+        {
             await _accountService.RegisterUserAsync(register);
         }
 
         [HttpPost("[action]")]
         public async Task ConfirmEmail(EmailValidationModel validationModel)
         {
-           await _accountService.ConfirmEmailAsync(validationModel);
+            await _accountService.ConfirmEmailAsync(validationModel);
         }
 
         [HttpPost("[action]")]
         public async Task<TokenPairModel> Login(LoginModel login)
         {
-           return await _accountService.SignInAsync(login);
+            return await _accountService.SignInAsync(login);
         }
+
+        [HttpPost("[action]")]
+        public async Task<TokenPairModel> RefreshToken(RefreshTokenModel refreshTokenModel)
+        {
+            return await _accountService.RefreshTokenAsync(refreshTokenModel.RefreshToken);
+        }
+
 
         [HttpPost("[action]")]
         public async Task Logout()

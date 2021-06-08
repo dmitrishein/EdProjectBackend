@@ -8,7 +8,9 @@ using EdProject.DAL.Entities;
 using EdProject.DAL.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -55,16 +57,21 @@ namespace EdProject.BLL.Services
                 AccessToken = _jwt.GenerateAccessToken(user,userRoles),
                 RefreshToken = _jwt.GenerateRefreshToken()
             };
-
+            user.RefreshToken = tokenPairModel.RefreshToken;
+            user.RefreshTokenExpiryTime = DateTimeOffset.Now.AddMinutes(30);
+            await _userManager.UpdateAsync(user);
             return tokenPairModel;
         }
-
-        public async Task<TokenPairModel> ChangeToken(string email)
+        public async Task<TokenPairModel> RefreshTokenAsync(string refreshToken)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = _userManager.Users.Where(u => u.RefreshToken == refreshToken).FirstOrDefault();
             if (user is null || user.isRemoved)
             {
                 throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
+            if (user.RefreshTokenExpiryTime < DateTimeOffset.Now)
+            {
+                throw new CustomException(ErrorConstant.INVALID_REFRESH_TOKEN, HttpStatusCode.BadRequest);
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -74,6 +81,9 @@ namespace EdProject.BLL.Services
                 RefreshToken = _jwt.GenerateRefreshToken()
             };
 
+            user.RefreshToken = tokenPairModel.RefreshToken;
+            user.RefreshTokenExpiryTime = DateTimeOffset.Now.AddHours(2);
+            await _userManager.UpdateAsync(user);
             return tokenPairModel;
         }
         public async Task SignOutAsync()

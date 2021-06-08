@@ -2,6 +2,7 @@
 {
     public static class ErrorConstant
     {
+        public const string INVALID_REFRESH_TOKEN = "Invalid refresh token!";
         public const string REGISTRATION_FAILED = "Registration failed!";
         public const string AUTHOR_CREATING_ERROR = "Author cannot be create without editions";
         public const string ITEM_NOT_FOUND = "Error! Item wasn't found!";
