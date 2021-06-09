@@ -58,7 +58,7 @@ namespace EdProject.PresentationLayer.Controllers
             return _userService.GetAllUsersAsync();
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize]
         [HttpGet("[action]")]
         public List<UserModel> GetUserByQuery(string searchString)
         {

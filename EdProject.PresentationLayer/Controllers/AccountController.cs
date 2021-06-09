@@ -51,9 +51,9 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task ResetPassword(string email)
+        public async Task ResetPassword([FromBody]ChangePasswordModel email)
         {
-            await _accountService.ResetPasswordTokenAsync(email);
+            await _accountService.ResetPasswordTokenAsync(email.Email);
         }
 
         [HttpPost("[action]")]

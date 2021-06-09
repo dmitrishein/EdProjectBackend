@@ -58,7 +58,7 @@ namespace EdProject.BLL.Services
                 RefreshToken = _jwt.GenerateRefreshToken()
             };
             user.RefreshToken = tokenPairModel.RefreshToken;
-            user.RefreshTokenExpiryTime = DateTimeOffset.Now.AddMinutes(30);
+            user.RefreshTokenExpiryTime = DateTimeOffset.Now.AddHours(2);
             await _userManager.UpdateAsync(user);
             return tokenPairModel;
         }
@@ -67,11 +67,11 @@ namespace EdProject.BLL.Services
             var user = _userManager.Users.Where(u => u.RefreshToken == refreshToken).FirstOrDefault();
             if (user is null || user.isRemoved)
             {
-                throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.Forbidden);
             }
             if (user.RefreshTokenExpiryTime < DateTimeOffset.Now)
             {
-                throw new CustomException(ErrorConstant.INVALID_REFRESH_TOKEN, HttpStatusCode.BadRequest);
+                throw new CustomException(ErrorConstant.INVALID_REFRESH_TOKEN, HttpStatusCode.Forbidden);
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
