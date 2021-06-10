@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using EdProject.DAL.Entities;
+using EdProject.BLL.Models.AuthorDTO;
 
 namespace EdProject.BLL.Models.PrintingEditions
 {
@@ -10,6 +12,7 @@ namespace EdProject.BLL.Models.PrintingEditions
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
+        public List<AuthorModel> Authors { get; set; }
         public AvailableStatusType Status { get; set; }
         public CurrencyTypes Currency { get; set; }
         public AvailableStatusType Type { get; set; }

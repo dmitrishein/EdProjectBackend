@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EdProject.BLL.Models.Author;
+using EdProject.BLL.Models.AuthorDTO;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;

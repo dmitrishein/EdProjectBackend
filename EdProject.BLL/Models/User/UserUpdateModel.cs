@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace EdProject.BLL.Models.User
 {
@@ -9,6 +10,7 @@ namespace EdProject.BLL.Models.User
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }
+        public string Email { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -36,6 +38,10 @@ namespace EdProject.BLL.Models.User
             if (LastName.Any(char.IsDigit) || LastName.Any(char.IsPunctuation) || LastName.Any(char.IsSymbol) || string.IsNullOrWhiteSpace(LastName))
             {
                 errors.Add(new ValidationResult("Invalid LastName"));
+            }
+            if (!Regex.IsMatch(Email, VariableConstant.EMAIL_PATERN, RegexOptions.IgnoreCase))
+            {
+                errors.Add(new ValidationResult(ErrorConstant.INCORRECT_EMAIL));
             }
             if (!errors.Any())
             {

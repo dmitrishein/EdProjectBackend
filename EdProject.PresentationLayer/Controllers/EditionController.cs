@@ -40,7 +40,6 @@ namespace EdProject.PresentationLayer.Controllers
             await _printEditionService.RemoveEditionAsync(id);
         }
 
-        [Authorize]
         [HttpGet("GetEditions")]
         public async Task<List<EditionModel>> GetEditions()
         {
@@ -48,7 +47,6 @@ namespace EdProject.PresentationLayer.Controllers
             return result;
         }
 
-        [Authorize]
         [HttpGet("[action]")]
         public async Task<EditionModel> GetEditionById(long id)
         {

@@ -10,8 +10,9 @@ namespace EdProject.BLL.Profiles
         {
             CreateMap<RegistrationModel, User>();
 
-            CreateMap<User,UserModel>()
-                .ForMember(u => u.Fullname, opt=>opt.MapFrom(x => string.Format("{0} {1}",x.FirstName,x.LastName)));
+            CreateMap<User, UserModel>()
+                .ForMember(u => u.Fullname, opt => opt.MapFrom(x => string.Format("{0} {1}", x.FirstName, x.LastName)))
+                .ForMember(u => u.IsEmailConfirmed, opt => opt.MapFrom(x => x.EmailConfirmed));
         }
     }
 }

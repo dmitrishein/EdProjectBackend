@@ -29,7 +29,7 @@ namespace EdProject.PresentationLayer.Controllers
             await _userService.AddToRoleAsync(userToRole);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize]
         [HttpPost("[action]")]
         public async Task UpdateUser(UserUpdateModel userUpdModel)
         {

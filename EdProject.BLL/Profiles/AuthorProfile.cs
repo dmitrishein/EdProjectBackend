@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EdProject.BLL.Models.Author;
+using EdProject.BLL.Models.AuthorDTO;
 using EdProject.DAL.Entities;
 
 namespace EdProject.BLL.Profiles

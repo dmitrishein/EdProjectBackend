@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace EdProject.BLL.Models.Author
+namespace EdProject.BLL.Models.AuthorDTO
 {
     public class AuthorModel:BaseModel,IValidatableObject
     {

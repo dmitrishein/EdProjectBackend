@@ -1,4 +1,4 @@
-﻿using EdProject.BLL.Models.Author;
+﻿using EdProject.BLL.Models.AuthorDTO;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.DAL.Entities;
 using System;
