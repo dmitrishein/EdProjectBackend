@@ -9,6 +9,7 @@ using EdProject.DAL.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
+using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -44,7 +45,10 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-
+            if(!user.EmailConfirmed)
+            {
+                throw new CustomException(ErrorConstant.UNCONFIRMED_EMAIL, HttpStatusCode.BadRequest);
+            }
             var result = await _signInManager.PasswordSignInAsync(user, userSignInModel.Password, userSignInModel.RememberMe, false);
             if(!result.Succeeded)
             {
@@ -104,10 +108,17 @@ namespace EdProject.BLL.Services
             var confirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
             var confirmLink = _conectOption.ConfirmAccountRoute;
 
+            var uriBuilder = new UriBuilder(confirmLink);
+            var paramsValues = HttpUtility.ParseQueryString(uriBuilder.Query);
+            var code = HttpUtility.UrlEncode(confirmLink);
+            paramsValues.Add("token", code);
+            paramsValues.Add("email", userModel.Email);
+            uriBuilder.Query = paramsValues.ToString();
+
             EmailModel emailMessage = new EmailModel()
             {
                 Email = newUser.Email,
-                Message = string.Format(confirmLink, confirmToken, newUser.Email),
+                Message =  $"<a href='{uriBuilder.Uri}'> Confirm Email </a>",
                 Subject = EmailMessageConstant.ACCOUNT_CONFIRM_SUBJECT
             };
 
@@ -121,8 +132,8 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-
-            var result = await _userManager.ConfirmEmailAsync(user, validationModel.Token);
+            var decodedToken = HttpUtility.UrlDecode(validationModel.Token);
+            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
             if(!result.Succeeded)
             {
                 throw new CustomException(ErrorConstant.EMAIL_NOT_CONFIRMED, HttpStatusCode.BadRequest);
@@ -131,14 +142,24 @@ namespace EdProject.BLL.Services
         public async Task ResetPasswordTokenAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            
+            if (!user.EmailConfirmed)
+            {
+                throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
+            }
+
             var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
             var resetLink = _conectOption.ResetAccountPasswordRoute;
+
+            var uriBuilder = new UriBuilder(resetLink);
+            var paramsValues = HttpUtility.ParseQueryString(uriBuilder.Query);
+            paramsValues.Add("token", resetToken);
+            paramsValues.Add("email", email);
+            uriBuilder.Query = paramsValues.ToString();
 
             EmailModel emailMessage = new EmailModel()
             {
                 Email = email,
-                Message = string.Format(resetLink, resetToken, email),
+                Message = $"<a href='{uriBuilder.Uri}'> Reset password </a>",
                 Subject = EmailMessageConstant.RESET_PASSWORD_SUBJECT
             };
 

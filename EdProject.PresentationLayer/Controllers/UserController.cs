@@ -53,9 +53,9 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public Task<List<UserModel>> GetAllUsers()
+        public async Task<List<UserModel>> GetAllUsers()
         {
-            return _userService.GetAllUsersAsync();
+            return await _userService.GetAllUsersAsync();
         }
 
         [Authorize]

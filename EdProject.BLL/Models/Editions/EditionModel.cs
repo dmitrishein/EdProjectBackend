@@ -13,9 +13,9 @@ namespace EdProject.BLL.Models.PrintingEditions
         public string Description { get; set; }
         public decimal Price { get; set; }
         public List<AuthorModel> Authors { get; set; }
-        public AvailableStatusType Status { get; set; }
-        public CurrencyTypes Currency { get; set; }
-        public AvailableStatusType Type { get; set; }
+        public string Status { get; set; }
+        public string Currency { get; set; }
+        public string Type { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
