@@ -58,6 +58,14 @@ namespace EdProject.PresentationLayer.Controllers
             return await _userService.GetAllUsersAsync();
         }
 
+
+        [Authorize]
+        [HttpGet("[action]")]
+        public async Task<UserModel> GetUserByEmail(string searchString)
+        {
+            return await _userService.GetUserByEmailAsync(searchString);
+        }
+
         [Authorize]
         [HttpGet("[action]")]
         public List<UserModel> GetUserByQuery(string searchString)

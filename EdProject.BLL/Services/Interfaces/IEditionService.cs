@@ -1,5 +1,6 @@
-﻿using EdProject.BLL.Models.Base;
+﻿using EdProject.BLL.Models.Editions;
 using EdProject.BLL.Models.PrintingEditions;
+using EdProject.DAL.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,6 +13,6 @@ namespace EdProject.BLL.Services.Interfaces
         public Task RemoveEditionAsync(long id);
         public Task<EditionModel> GetEditionByIdAsync(long id);
         public Task<List<EditionModel>> GetEditionsAsync();
-        public Task<List<EditionModel>> GetEditionPageAsync(FilterPageModel pageModel);
+        public Task<EditionPageResponseModel> GetEditionPageAsync(EditionPageParameters pageModel);
     }
 }

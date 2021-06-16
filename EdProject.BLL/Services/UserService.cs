@@ -4,7 +4,7 @@ using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -45,9 +45,9 @@ namespace EdProject.BLL.Services
 
             await _userManager.AddToRoleAsync(user, userToRole.RoleName);
         }
-        public async Task<UserModel> GetUserByIdAsync(long userId)
+        public async Task<UserModel> GetUserByEmailAsync(string email)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByEmailAsync(email.ToString());
             if (user is null)
             {
                 throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
@@ -104,7 +104,11 @@ namespace EdProject.BLL.Services
         }
         public async Task UpdateUserAsync(UserUpdateModel userModel)
         {
-            var checkUser = await _userManager.FindByIdAsync(userModel.Id.ToString());
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var userToken = tokenHandler.ReadJwtToken(userModel.Jwt);
+            var userId = userToken.Claims.First(claim => claim.Type == "id").Value;
+
+            var checkUser = await _userManager.FindByIdAsync(userId);
 
             if (checkUser is null || checkUser.isRemoved)
             {

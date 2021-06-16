@@ -32,7 +32,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<TokenPairModel> Login(LoginModel login)
+        public async Task<TokenPairModel> Login([FromBody]LoginModel login)
         {
             return await _accountService.SignInAsync(login);
         }
@@ -40,7 +40,7 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpPost("[action]")]
         public async Task<TokenPairModel> RefreshToken(RefreshTokenModel refreshTokenModel)
         {
-            return await _accountService.RefreshTokenAsync(refreshTokenModel.RefreshToken);
+            return await _accountService.RefreshTokensAsync(refreshTokenModel.RefreshToken);
         }
 
 

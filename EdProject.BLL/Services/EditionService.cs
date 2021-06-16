@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using EdProject.BLL.Models.Base;
+using EdProject.BLL.Models.Editions;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
+using EdProject.DAL.Models;
 using EdProject.DAL.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,15 +75,22 @@ namespace EdProject.BLL.Services
 
             return _mapper.Map<EditionModel>(getEdition);
         }
-        public async Task<List<EditionModel>> GetEditionPageAsync(FilterPageModel pageModel)
-        {
-            var editionList = await _editionRepos.Pagination(pageModel.PageNumber,pageModel.ElementsAmount,pageModel.SearchString);
+        public async Task<EditionPageResponseModel> GetEditionPageAsync(EditionPageParameters pageModel)
+        {  
+            var editionList = await _editionRepos.Pagination(pageModel);
+            var editionPage = editionList.Skip((pageModel.PageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageModel.ElementsAmount).Take(pageModel.ElementsAmount);
+
+            EditionPageResponseModel editionPageResponse = new EditionPageResponseModel()
+            {
+                TotalPagesAmount = (editionList.Count + pageModel.ElementsAmount - VariableConstant.SKIP_INCORRECT_ROUNDING)/pageModel.ElementsAmount,
+                Editions = _mapper.Map<List<EditionModel>>(editionPage),
+            };
             if (!editionList.Any())
             {
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
             }
 
-            return _mapper.Map<List<EditionModel>>(editionList);
+            return editionPageResponse;
         }
     }
 }

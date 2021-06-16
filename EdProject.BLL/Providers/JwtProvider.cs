@@ -30,7 +30,7 @@ namespace EdProject.BLL
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Email, appUser.Email),
-                new Claim(JwtRegisteredClaimNames.Sub, appUser.Id.ToString()),
+                new Claim("id", appUser.Id.ToString()),
             };
 
             foreach(var userRole in roles)

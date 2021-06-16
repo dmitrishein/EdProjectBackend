@@ -6,6 +6,7 @@
         public const int MIN_FIELD_SIZE = 3;
         public const decimal MIN_PRICE = 0.1M;
         public const int EMPTY = 0;
+        public const int SKIP_INCORRECT_ROUNDING = 1;
         public const int DEFAULT_AMOUNT = 1;
         public const int REFRESH_TOKEN_CAPACITY = 32;
         public const string CHARGE_SUCCEEDED = "succeeded";

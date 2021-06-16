@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
-using EdProject.BLL.Models.Base;
 using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
+using EdProject.BLL.Models.User;
 using EdProject.BLL.Services.Interfaces;
+using EdProject.DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using EdProject.BLL.Models.User;
-using EdProject.DAL.Entities;
 
 namespace EdProject.PresentationLayer.Controllers
 {
@@ -65,7 +63,7 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
-        public Task<List<OrderModel>> GetOrdersPage(FilterPageModel pageModel)
+        public Task<List<OrderModel>> GetOrdersPage(EditionPageParameters pageModel)
         {
             return _orderService.GetOrdersPageAsync(pageModel);
         }

@@ -1,9 +1,7 @@
-﻿using EdProject.DAL.Entities.Enums;
+﻿using EdProject.BLL.Models.AuthorDTO;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using EdProject.DAL.Entities;
-using EdProject.BLL.Models.AuthorDTO;
 
 namespace EdProject.BLL.Models.PrintingEditions
 {

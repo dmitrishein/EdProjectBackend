@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EdProject.BLL.Common.Options;
-using EdProject.BLL.Models.Base;
 using EdProject.BLL.Models.Orders;
 using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Models.User;
@@ -8,6 +7,7 @@ using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Entities.Enums;
 using EdProject.DAL.Enums;
+using EdProject.DAL.Models;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.Extensions.Options;
 using Stripe;
@@ -129,7 +129,7 @@ namespace EdProject.BLL.Services
 
             return _mapper.Map<List<OrderModel>>(ordersList);
         }
-        public async Task<List<OrderModel>> GetOrdersPageAsync(FilterPageModel pageModel)
+        public async Task<List<OrderModel>> GetOrdersPageAsync(EditionPageParameters pageModel)
         {
             var resultPage = await _orderRepository.OrdersPage(pageModel.PageNumber, pageModel.ElementsAmount, pageModel.SearchString);
             if (!resultPage.Any())

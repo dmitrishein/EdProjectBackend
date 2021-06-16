@@ -10,7 +10,7 @@ namespace EdProject.BLL.Services.Interfaces
         public Task UpdateUserAsync(UserUpdateModel userModel);
         public Task RemoveUserAsync(long userId);
 
-        public Task<UserModel> GetUserByIdAsync(long userId);
+        public Task<UserModel> GetUserByEmailAsync(string email);
         public List<UserModel> GetUsersByQuery(string searchString);
         public Task<List<UserModel>> GetAllUsersAsync();
         public Task<List<UserModel>> GetUserListByRole(string roleName);

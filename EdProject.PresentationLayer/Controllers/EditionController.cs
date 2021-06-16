@@ -1,6 +1,8 @@
-﻿using EdProject.BLL.Models.Base;
+﻿
+using EdProject.BLL.Models.Editions;
 using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
+using EdProject.DAL.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,9 +55,8 @@ namespace EdProject.PresentationLayer.Controllers
             return await _printEditionService.GetEditionByIdAsync(id);
         }
 
-        [Authorize]
         [HttpGet("[action]")]
-        public Task<List<EditionModel>> GetEditionPage(FilterPageModel pageModel)
+        public Task<EditionPageResponseModel> GetEditionPage(EditionPageParameters pageModel)
         {
             return _printEditionService.GetEditionPageAsync(pageModel);
         }

@@ -61,12 +61,13 @@ namespace EdProject.BLL.Services
                 AccessToken = _jwt.GenerateAccessToken(user,userRoles),
                 RefreshToken = _jwt.GenerateRefreshToken()
             };
+
             user.RefreshToken = tokenPairModel.RefreshToken;
             user.RefreshTokenExpiryTime = DateTimeOffset.Now.AddHours(2);
             await _userManager.UpdateAsync(user);
             return tokenPairModel;
         }
-        public async Task<TokenPairModel> RefreshTokenAsync(string refreshToken)
+        public async Task<TokenPairModel> RefreshTokensAsync(string refreshToken)
         {
             var user = _userManager.Users.Where(u => u.RefreshToken == refreshToken).FirstOrDefault();
             if (user is null || user.isRemoved)
@@ -87,6 +88,7 @@ namespace EdProject.BLL.Services
 
             user.RefreshToken = tokenPairModel.RefreshToken;
             user.RefreshTokenExpiryTime = DateTimeOffset.Now.AddHours(2);
+
             await _userManager.UpdateAsync(user);
             return tokenPairModel;
         }
@@ -97,6 +99,10 @@ namespace EdProject.BLL.Services
         public async Task RegisterUserAsync(RegistrationModel userModel)
         {
             var newUser = _mapper.Map<User>(userModel);
+            if (await _userManager.FindByEmailAsync(userModel.Email) is not null)
+            {
+                throw new CustomException(ErrorConstant.USER_EXIST, HttpStatusCode.BadRequest);
+            }
             var result = await _userManager.CreateAsync(newUser, userModel.Password);
 
             if (!result.Succeeded)
@@ -110,8 +116,8 @@ namespace EdProject.BLL.Services
 
             var uriBuilder = new UriBuilder(confirmLink);
             var paramsValues = HttpUtility.ParseQueryString(uriBuilder.Query);
-            var code = HttpUtility.UrlEncode(confirmLink);
-            paramsValues.Add("token", code);
+
+            paramsValues.Add("token", confirmToken);
             paramsValues.Add("email", userModel.Email);
             uriBuilder.Query = paramsValues.ToString();
 
@@ -124,7 +130,6 @@ namespace EdProject.BLL.Services
 
             await _emailService.SendEmailAsync(emailMessage);
         }
-
         public async Task ConfirmEmailAsync(EmailValidationModel validationModel)
         {       
             var user = await _userManager.FindByEmailAsync(validationModel.Email);
@@ -132,13 +137,14 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-            var decodedToken = HttpUtility.UrlDecode(validationModel.Token);
-            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+
+            var result = await _userManager.ConfirmEmailAsync(user, validationModel.Token);
             if(!result.Succeeded)
             {
                 throw new CustomException(ErrorConstant.EMAIL_NOT_CONFIRMED, HttpStatusCode.BadRequest);
             }
         }
+
         public async Task ResetPasswordTokenAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -172,7 +178,6 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-
             var result = await _userManager.ResetPasswordAsync(user, changePasswordModel.Token, changePasswordModel.NewPassword);
             if(!result.Succeeded)
             {
