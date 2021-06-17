@@ -55,7 +55,7 @@ namespace EdProject.PresentationLayer.Controllers
             return await _printEditionService.GetEditionByIdAsync(id);
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public Task<EditionPageResponseModel> GetEditionPage(EditionPageParameters pageModel)
         {
             return _printEditionService.GetEditionPageAsync(pageModel);

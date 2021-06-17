@@ -131,7 +131,7 @@ namespace EdProject.BLL.Services
         }
         public async Task<List<OrderModel>> GetOrdersPageAsync(EditionPageParameters pageModel)
         {
-            var resultPage = await _orderRepository.OrdersPage(pageModel.PageNumber, pageModel.ElementsAmount, pageModel.SearchString);
+            var resultPage = await _orderRepository.OrdersPage(pageModel.CurrentPageNumber, pageModel.ElementsPerPage, pageModel.SearchString);
             if (!resultPage.Any())
             {
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);

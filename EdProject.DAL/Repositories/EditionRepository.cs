@@ -43,9 +43,9 @@ namespace EdProject.DAL.Repositories
         public async Task<List<Edition>> Pagination(EditionPageParameters editionPageParameters)
         {
             var listResults = GetAll().Where(e => e.Title.Contains(editionPageParameters.SearchString) ||
-                                                   e.Authors.Any(a=>a.Name.Contains(editionPageParameters.SearchString)) ||
-                                                   e.Id.ToString().Contains(editionPageParameters.SearchString))
-                                      .Where(e => editionPageParameters.editionTypes.Contains(e.Type))
+                                                  e.Authors.Any(a=>a.Name.Contains(editionPageParameters.SearchString)) ||
+                                                  e.Id.ToString().Contains(editionPageParameters.SearchString))
+                                      .Where(e => editionPageParameters.EditionTypes.Contains(e.Type))
                                       .Where(e => e.Price >= editionPageParameters.MinPrice)
                                       .Where(e => editionPageParameters.MaxPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price < editionPageParameters.MaxPrice)
                                       .Where(e => !e.IsRemoved);

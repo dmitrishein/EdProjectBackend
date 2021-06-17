@@ -78,17 +78,16 @@ namespace EdProject.BLL.Services
         public async Task<EditionPageResponseModel> GetEditionPageAsync(EditionPageParameters pageModel)
         {  
             var editionList = await _editionRepos.Pagination(pageModel);
-            var editionPage = editionList.Skip((pageModel.PageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageModel.ElementsAmount).Take(pageModel.ElementsAmount);
-
+            var editionPage = editionList.Skip((pageModel.CurrentPageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageModel.ElementsPerPage).Take(pageModel.ElementsPerPage);
+            var totalPages = (editionList.Count + pageModel.ElementsPerPage - VariableConstant.SKIP_INCORRECT_ROUNDING) / pageModel.ElementsPerPage;
             EditionPageResponseModel editionPageResponse = new EditionPageResponseModel()
-            {
-                TotalPagesAmount = (editionList.Count + pageModel.ElementsAmount - VariableConstant.SKIP_INCORRECT_ROUNDING)/pageModel.ElementsAmount,
-                Editions = _mapper.Map<List<EditionModel>>(editionPage),
+            {   
+                TotalPagesAmount = totalPages,
+                isNextPage = pageModel.CurrentPageNumber == totalPages ? false : true,
+                isPrevPage = pageModel.CurrentPageNumber == VariableConstant.DEFAULT_AMOUNT? false : true,
+                EditionsPage = _mapper.Map<List<EditionModel>>(editionPage),
+                CurrentPage = pageModel.CurrentPageNumber
             };
-            if (!editionList.Any())
-            {
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.NoContent);
-            }
 
             return editionPageResponse;
         }
