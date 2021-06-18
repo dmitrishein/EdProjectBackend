@@ -1,6 +1,7 @@
-﻿using EdProject.DAL.DataContext;
+﻿using AutoMapper;
+using EdProject.BLL.Models.Editions;
+using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
-using EdProject.DAL.Entities.Enums;
 using EdProject.DAL.Models;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
@@ -13,9 +14,10 @@ namespace EdProject.DAL.Repositories
 {
     public class EditionRepository : BaseRepository<Edition>, IEditionRepository
     {
-        public EditionRepository(AppDbContext appDbContext) : base (appDbContext)
+        IMapper _mapper;
+        public EditionRepository(AppDbContext appDbContext, IMapper mapper) : base (appDbContext)
         {
-           
+            _mapper = mapper;
         }
  
         public Edition FindEditionByTitle(string title)
@@ -40,17 +42,35 @@ namespace EdProject.DAL.Repositories
         {
             return await GetAll().Where(x => x.Orders.Any(y=> y.Id == orderId)).ToListAsync();
         }
-        public async Task<List<Edition>> Pagination(EditionPageParameters editionPageParameters)
+        public async Task<EditionPageModel> Pagination(EditionPageParameters editionPageParameters)
         {
+
+            var countItems = await GetAll().Where(e => e.Title.Contains(editionPageParameters.SearchString) ||
+                                      e.Authors.Any(a => a.Name.Contains(editionPageParameters.SearchString)) ||
+                                      e.Id.ToString().Contains(editionPageParameters.SearchString))
+                          .Where(e => editionPageParameters.EditionTypes.Contains(e.Type))
+                          .Where(e => e.Price >= editionPageParameters.MinPrice)
+                          .Where(e => editionPageParameters.MaxPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price < editionPageParameters.MaxPrice)
+                          .Where(e => !e.IsRemoved)
+                          .CountAsync();
+
             var listResults = GetAll().Where(e => e.Title.Contains(editionPageParameters.SearchString) ||
                                                   e.Authors.Any(a=>a.Name.Contains(editionPageParameters.SearchString)) ||
                                                   e.Id.ToString().Contains(editionPageParameters.SearchString))
                                       .Where(e => editionPageParameters.EditionTypes.Contains(e.Type))
                                       .Where(e => e.Price >= editionPageParameters.MinPrice)
                                       .Where(e => editionPageParameters.MaxPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price < editionPageParameters.MaxPrice)
-                                      .Where(e => !e.IsRemoved);
+                                      .Where(e => !e.IsRemoved)
+                                      .Skip((editionPageParameters.CurrentPageNumber - VariableConstant.SKIP_ZERO_PAGE) * editionPageParameters.ElementsPerPage)
+                                      .Take(editionPageParameters.ElementsPerPage);
 
-            return await listResults.ToListAsync(); 
+            EditionPageModel editionPageModel = new EditionPageModel
+            {
+                TotalItemsAmount = countItems,
+                CurrentPage = editionPageParameters.CurrentPageNumber,
+                EditionsPage = await listResults.ToListAsync()
+            };  
+            return editionPageModel; 
         }
     }
 }

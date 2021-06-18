@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EdProject.BLL.Models.PrintingEditions;
+using EdProject.BLL.Models.Editions;
 using EdProject.DAL.Entities;
 
 namespace EdProject.BLL.Profiles
@@ -10,6 +10,7 @@ namespace EdProject.BLL.Profiles
         {
             CreateMap<Edition, EditionModel>();
             CreateMap<EditionModel, Edition>();
+            CreateMap<EditionPageModel, EditionPageResponseModel>().ReverseMap();
         }
     }
 }

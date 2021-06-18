@@ -1,5 +1,5 @@
 ﻿using EdProject.BLL.Models.AuthorDTO;
-using EdProject.BLL.Models.PrintingEditions;
+using EdProject.BLL.Models.Editions;
 using EdProject.DAL.Entities;
 using System;
 using System.Collections.Generic;

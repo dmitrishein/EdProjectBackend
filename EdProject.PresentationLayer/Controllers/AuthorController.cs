@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EdProject.BLL;
 using EdProject.BLL.Models.AuthorDTO;
-using EdProject.BLL.Models.PrintingEditions;
+using EdProject.BLL.Models.Editions;
 using EdProject.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

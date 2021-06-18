@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace EdProject.BLL.Models.PrintingEditions
+namespace EdProject.BLL.Models.Editions
 {
     public class EditionModel:BaseModel, IValidatableObject
     {

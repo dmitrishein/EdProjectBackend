@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using EdProject.BLL.Models.AuthorDTO;
-using EdProject.BLL.Models.PrintingEditions;
+using EdProject.BLL.Models.Editions;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -33,7 +32,7 @@ namespace EdProject.BLL.Services
             }
             var newAuthor = _mapper.Map<Author>(authorModel);
 
-            var authorEditions = await  _editionRepository.GetEditionRangeAsync(authorModel.EditionsId);
+            var authorEditions = await  _editionRepository.GetEditionRangeAsync(authorModel.EditionsList);
             if (!authorEditions.Any())
             {
                 throw new CustomException(ErrorConstant.AUTHOR_CREATING_ERROR, HttpStatusCode.BadRequest);    
@@ -52,7 +51,7 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
             }
 
-            var editionsToAdd = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsId);
+            var editionsToAdd = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsList);
             author.Editions.AddRange(editionsToAdd);
 
             await _editionRepository.SaveChangesAsync();
@@ -102,7 +101,7 @@ namespace EdProject.BLL.Services
         public async Task UpdateAuthorAsync(AuthorModel authorModel)
         {   
             var oldAuthor = await _authorRepository.FindByIdAsync(authorModel.Id);
-            var updEditionList = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsId);
+            var updEditionList = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsList);
 
             if (oldAuthor is null || oldAuthor.IsRemoved)
             {

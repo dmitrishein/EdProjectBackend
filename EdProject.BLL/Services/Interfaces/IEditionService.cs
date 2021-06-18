@@ -1,5 +1,4 @@
 ﻿using EdProject.BLL.Models.Editions;
-using EdProject.BLL.Models.PrintingEditions;
 using EdProject.DAL.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;

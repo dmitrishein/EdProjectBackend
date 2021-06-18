@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EdProject.BLL.Models.Editions;
-using EdProject.BLL.Models.PrintingEditions;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Models;
@@ -75,21 +74,12 @@ namespace EdProject.BLL.Services
 
             return _mapper.Map<EditionModel>(getEdition);
         }
-        public async Task<EditionPageResponseModel> GetEditionPageAsync(EditionPageParameters pageModel)
+        public async Task<EditionPageResponseModel> GetEditionPageAsync(EditionPageParameters pageParams)
         {  
-            var editionList = await _editionRepos.Pagination(pageModel);
-            var editionPage = editionList.Skip((pageModel.CurrentPageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageModel.ElementsPerPage).Take(pageModel.ElementsPerPage);
-            var totalPages = (editionList.Count + pageModel.ElementsPerPage - VariableConstant.SKIP_INCORRECT_ROUNDING) / pageModel.ElementsPerPage;
-            EditionPageResponseModel editionPageResponse = new EditionPageResponseModel()
-            {   
-                TotalPagesAmount = totalPages,
-                isNextPage = pageModel.CurrentPageNumber == totalPages ? false : true,
-                isPrevPage = pageModel.CurrentPageNumber == VariableConstant.DEFAULT_AMOUNT? false : true,
-                EditionsPage = _mapper.Map<List<EditionModel>>(editionPage),
-                CurrentPage = pageModel.CurrentPageNumber
-            };
+            var editionPageModel = await _editionRepos.Pagination(pageParams);
+            var response = _mapper.Map<EditionPageResponseModel>(editionPageModel);
 
-            return editionPageResponse;
+            return response;
         }
     }
 }
