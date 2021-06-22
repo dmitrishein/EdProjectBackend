@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "XciELH99JnfCRaVsJWuSEneCKWchRmQ5nFYoLe1wIAZC3g4/i7yYUh8LNuqavyP36Afr6P41cymOHGAUYRc2LA==",
+  "dgSpecHash": "bfBSrYatZOvJrAjrIuUcUSmB1Lq4G5WJHAukIwkpxtxlf6Xa56nrFMaMq7pviyMeI73LwDHbnXFnfGZkgg8cuQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Anuitex-96\\source\\repos\\EdProject\\EdProject.BLL\\EdProject.BLL.csproj",
   "expectedPackageFiles": [
@@ -115,6 +115,7 @@
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.io.filesystem\\4.3.0\\system.io.filesystem.4.3.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.io.filesystem.primitives\\4.3.0\\system.io.filesystem.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
+    "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.linq.dynamic.core\\1.2.10\\system.linq.dynamic.core.1.2.10.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.linq.expressions\\4.3.0\\system.linq.expressions.4.3.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.net.http\\4.3.0\\system.net.http.4.3.0.nupkg.sha512",
     "C:\\Users\\Anuitex-96\\.nuget\\packages\\system.net.nameresolution\\4.3.0\\system.net.nameresolution.4.3.0.nupkg.sha512",

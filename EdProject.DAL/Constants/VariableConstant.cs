@@ -15,5 +15,6 @@
         public const string PASSWORD_PATTERN = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$";
         public const string EDITIONS_STRING_PATTERN = @"^[0-9,]*$";
         public const long CONVERT_TO_CENT_VALUE = 100;
+        public const string PRICE_ASCENDING = "Price ASCENDING";
     }
 }

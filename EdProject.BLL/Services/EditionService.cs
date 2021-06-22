@@ -5,8 +5,8 @@ using EdProject.DAL.Entities;
 using EdProject.DAL.Models;
 using EdProject.DAL.Repositories.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EdProject.BLL.Services
@@ -78,7 +78,6 @@ namespace EdProject.BLL.Services
         {  
             var editionPageModel = await _editionRepos.Pagination(pageParams);
             var response = _mapper.Map<EditionPageResponseModel>(editionPageModel);
-
             return response;
         }
     }

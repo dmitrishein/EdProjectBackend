@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using System.Linq.Dynamic.Core;
 using EdProject.BLL.Models.Editions;
 using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
@@ -14,10 +14,8 @@ namespace EdProject.DAL.Repositories
 {
     public class EditionRepository : BaseRepository<Edition>, IEditionRepository
     {
-        IMapper _mapper;
-        public EditionRepository(AppDbContext appDbContext, IMapper mapper) : base (appDbContext)
+        public EditionRepository(AppDbContext appDbContext) : base (appDbContext)
         {
-            _mapper = mapper;
         }
  
         public Edition FindEditionByTitle(string title)
@@ -44,7 +42,6 @@ namespace EdProject.DAL.Repositories
         }
         public async Task<EditionPageModel> Pagination(EditionPageParameters editionPageParameters)
         {
-
             var countItems = await GetAll().Where(e => e.Title.Contains(editionPageParameters.SearchString) ||
                                       e.Authors.Any(a => a.Name.Contains(editionPageParameters.SearchString)) ||
                                       e.Id.ToString().Contains(editionPageParameters.SearchString))
@@ -55,17 +52,20 @@ namespace EdProject.DAL.Repositories
                           .CountAsync();
 
             var listResults = GetAll().Where(e => e.Title.Contains(editionPageParameters.SearchString) ||
-                                                  e.Authors.Any(a=>a.Name.Contains(editionPageParameters.SearchString)) ||
+                                                  e.Authors.Any(a => a.Name.Contains(editionPageParameters.SearchString)) ||
                                                   e.Id.ToString().Contains(editionPageParameters.SearchString))
                                       .Where(e => editionPageParameters.EditionTypes.Contains(e.Type))
                                       .Where(e => e.Price >= editionPageParameters.MinPrice)
                                       .Where(e => editionPageParameters.MaxPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price < editionPageParameters.MaxPrice)
                                       .Where(e => !e.IsRemoved)
+                                      .OrderBy(editionPageParameters.SortType == 0 ? "Id" : $"{editionPageParameters.SortType} {(editionPageParameters.IsReversed ? "DESC" : "ASC")}")
                                       .Skip((editionPageParameters.CurrentPageNumber - VariableConstant.SKIP_ZERO_PAGE) * editionPageParameters.ElementsPerPage)
                                       .Take(editionPageParameters.ElementsPerPage);
 
             EditionPageModel editionPageModel = new EditionPageModel
             {
+                MaxPrice = editionPageParameters.MaxPrice == 0 ? GetAll().Select(x => x.Price).Max() : editionPageParameters.MaxPrice,
+                MinPrice = editionPageParameters.MinPrice == 0 ? GetAll().Select(x => x.Price).Min() : editionPageParameters.MinPrice,
                 TotalItemsAmount = countItems,
                 CurrentPage = editionPageParameters.CurrentPageNumber,
                 EditionsPage = await listResults.ToListAsync()
