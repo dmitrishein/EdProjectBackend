@@ -1,0 +1,12 @@
+[24.06.2021 09:48:07 +00:00] Error, An exception occurred while iterating over the results of a query for context type 'EdProject.DAL.DataContext.AppDbContext'.
+System.InvalidOperationException: Sequence contains no elements.
+   at lambda_method109(Closure , QueryContext , DbDataReader , ResultContext , SingleQueryResultCoordinator )
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext(),    at lambda_method109(Closure , QueryContext , DbDataReader , ResultContext , SingleQueryResultCoordinator )
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+[24.06.2021 09:48:07 +00:00] Error, , 
+[24.06.2021 09:48:10 +00:00] Error, An exception occurred while iterating over the results of a query for context type 'EdProject.DAL.DataContext.AppDbContext'.
+System.InvalidOperationException: Sequence contains no elements.
+   at lambda_method275(Closure , QueryContext , DbDataReader , ResultContext , SingleQueryResultCoordinator )
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext(),    at lambda_method275(Closure , QueryContext , DbDataReader , ResultContext , SingleQueryResultCoordinator )
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+[24.06.2021 09:48:10 +00:00] Error, , 

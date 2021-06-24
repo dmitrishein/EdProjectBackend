@@ -46,8 +46,8 @@ namespace EdProject.DAL.Repositories
                                       e.Authors.Any(a => a.Name.Contains(editionPageParameters.SearchString)) ||
                                       e.Id.ToString().Contains(editionPageParameters.SearchString))
                           .Where(e => editionPageParameters.EditionTypes.Contains(e.Type))
-                          .Where(e => e.Price >= editionPageParameters.MinPrice)
-                          .Where(e => editionPageParameters.MaxPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price < editionPageParameters.MaxPrice)
+                          .Where(e => e.Price >= editionPageParameters.MinUserPrice)
+                          .Where(e => editionPageParameters.MaxUserPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price <= editionPageParameters.MaxUserPrice)
                           .Where(e => !e.IsRemoved)
                           .CountAsync();
 
@@ -55,8 +55,8 @@ namespace EdProject.DAL.Repositories
                                                   e.Authors.Any(a => a.Name.Contains(editionPageParameters.SearchString)) ||
                                                   e.Id.ToString().Contains(editionPageParameters.SearchString))
                                       .Where(e => editionPageParameters.EditionTypes.Contains(e.Type))
-                                      .Where(e => e.Price >= editionPageParameters.MinPrice)
-                                      .Where(e => editionPageParameters.MaxPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price < editionPageParameters.MaxPrice)
+                                      .Where(e => e.Price >= editionPageParameters.MinUserPrice)
+                                      .Where(e => editionPageParameters.MaxUserPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price <= editionPageParameters.MaxUserPrice)
                                       .Where(e => !e.IsRemoved)
                                       .OrderBy(editionPageParameters.SortType == 0 ? "Id" : $"{editionPageParameters.SortType} {(editionPageParameters.IsReversed ? "DESC" : "ASC")}")
                                       .Skip((editionPageParameters.CurrentPageNumber - VariableConstant.SKIP_ZERO_PAGE) * editionPageParameters.ElementsPerPage)
@@ -64,8 +64,8 @@ namespace EdProject.DAL.Repositories
 
             EditionPageModel editionPageModel = new EditionPageModel
             {
-                MaxPrice = editionPageParameters.MaxPrice == 0 ? GetAll().Select(x => x.Price).Max() : editionPageParameters.MaxPrice,
-                MinPrice = editionPageParameters.MinPrice == 0 ? GetAll().Select(x => x.Price).Min() : editionPageParameters.MinPrice,
+                MaxPrice = GetAll().Select(x => x.Price).Max(),
+                MinPrice = GetAll().Select(x => x.Price).Min(),
                 TotalItemsAmount = countItems,
                 CurrentPage = editionPageParameters.CurrentPageNumber,
                 EditionsPage = await listResults.ToListAsync()
