@@ -14,10 +14,10 @@ namespace EdProject.BLL.Models.Payment
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             List<ValidationResult> errors = new List<ValidationResult>();
-            if (OrderId <= VariableConstant.EMPTY)
-            {
-                errors.Add(new ValidationResult(ErrorConstant.INCORRECT_ORDER));
-            }
+            //if (OrderId <= VariableConstant.EMPTY)
+            //{
+            //    errors.Add(new ValidationResult(ErrorConstant.INCORRECT_ORDER));
+            //}
            
             if (!errors.Any())
             {
