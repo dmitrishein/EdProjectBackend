@@ -9,9 +9,7 @@ namespace EdProject.BLL.Services.Interfaces
 {
     public interface IOrdersService 
     {
-        public Task CreateOrderAsync(OrderModel orderModel);
-        public Task CreatePaymentAsync(PaymentModel paymentModel);
-        public Task CreateItemsInOrderAsync(List<OrderItemModel> orderItemlistModel);
+        public Task<long> CreateOrderAsync(string token, OrderCreateModel orderCreateModel);
         public Task<List<OrderModel>> GetOrdersByUserIdAsync(long userId);
         public Task<List<OrderModel>> GetOrdersPageAsync(EditionPageParameters pageModel);
         public Task<List<OrderModel>> GetOrdersListAsync();

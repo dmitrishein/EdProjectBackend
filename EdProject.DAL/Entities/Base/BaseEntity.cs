@@ -7,6 +7,7 @@ namespace EdProject.DAL.Entities.Base
     {
         [Key]
         public long Id { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public bool IsRemoved { get; set; }
         public BaseEntity()

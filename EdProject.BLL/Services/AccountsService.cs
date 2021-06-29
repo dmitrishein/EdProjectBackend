@@ -63,7 +63,7 @@ namespace EdProject.BLL.Services
             };
 
             user.RefreshToken = tokenPairModel.RefreshToken;
-            user.RefreshTokenExpiryTime = DateTimeOffset.Now.AddHours(2);
+            user.RefreshTokenExpiryTime = DateTime.Now.AddHours(6);
             await _userManager.UpdateAsync(user);
             return tokenPairModel;
         }

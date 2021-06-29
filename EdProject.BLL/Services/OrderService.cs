@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Stripe;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -38,77 +39,62 @@ namespace EdProject.BLL.Services
             _conectStripeOption = options.Value;
         }
 
-        public async Task CreateOrderAsync(OrderModel orderModel)
+        public async Task<long> CreateOrderAsync(string token, OrderCreateModel orderCreateModel)
         {
-            var newOrder = _mapper.Map<Orders>(orderModel);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            token = token.Replace("Bearer ", string.Empty);
+            var userToken = tokenHandler.ReadJwtToken(token);
+            var userId = userToken.Claims.First(claim => claim.Type == "id").Value;
 
-            await _orderRepository.CreateAsync(newOrder);
-        }
-        public async Task CreateItemsInOrderAsync(List<OrderItemModel> orderItemsModel)
-        {
-            var order = await _orderRepository.FindByIdAsync(orderItemsModel.First().OrderId);
-            if (order is null || order.IsRemoved || order.StatusType.Equals(PaidStatusType.Paid))
-            {
-                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
-            }
+            var orderItems = _mapper.Map<List<OrderItem>>(orderCreateModel.OrderItems);
 
-            var itemsId = orderItemsModel.Select(item => item.EditionId).ToList();
-            var editionList = (await _editionRepository.GetEditionRangeAsync(itemsId)).Select(item => item.Id);
-            if(!editionList.Any())
+            Orders userOrder = new Orders
             {
-                throw new CustomException(ErrorConstant.ITEM_NOT_FOUND, HttpStatusCode.BadRequest);
-            }
+                OrderItems = orderItems,
+                UserId = Convert.ToInt64(userId)
+            };
+            await _orderRepository.CreateAsync(userOrder);
 
-            orderItemsModel.RemoveAll(edit => !editionList.Contains(edit.EditionId));
-            var orderItems = _mapper.Map<List<OrderItem>>(orderItemsModel);
-
-            order.OrderItems.AddRange(orderItems);
-            await _orderRepository.SaveChangesAsync();
-        }
-        public async Task CreatePaymentAsync(PaymentModel paymentModel)
-        {
-            var order = await _orderRepository.FindByIdAsync(paymentModel.OrderId);
-            if (order is null || order.IsRemoved)
-            {
-                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
-            }
-            if (!order.OrderItems.Any())
-            {
-                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
-            }
-            if (order.StatusType is PaidStatusType.Paid)
-            {
-                throw new CustomException(ErrorConstant.PAYMENT_ALREADY_PAID, HttpStatusCode.BadRequest);
-            }
-
-            var orderPrice = _orderRepository.GetOrderCost(order);
+            var Editions = await _editionRepository.GetEditionRangeAsync(orderCreateModel.OrderItems.Select(x => x.EditionId).ToList());
+            userOrder.Editions = Editions;
+            var orderPrice = userOrder.Editions.Sum(x => x.Price * userOrder.OrderItems.Find(y => y.EditionId == x.Id).ItemsCount);
 
             StripeConfiguration.ApiKey = _conectStripeOption.SecretKey;
             var options = new ChargeCreateOptions
             {
                 Amount = (long)(orderPrice * VariableConstant.CONVERT_TO_CENT_VALUE),
                 Currency = CurrencyTypes.USD.ToString().ToLower(),
-                Description = $"#{order.Id}",
-                Source = paymentModel.PaymentSource   
+                Description = $"Order #{userOrder.Id}",
+                Source = orderCreateModel.SourceId
             };
 
             var service = new ChargeService();
             var charge = service.Create(options);
 
+            //unsuccess payment
             if (!charge.Status.Equals(VariableConstant.CHARGE_SUCCEEDED))
             {
-                order.StatusType = PaidStatusType.Unpaid;
+                userOrder.StatusType = PaidStatusType.Unpaid;
                 throw new CustomException(ErrorConstant.UNSUCCESSFUL_PAYMENT, HttpStatusCode.OK);
             }
 
-            var newPayment = _mapper.Map<Payments>(paymentModel);
-            order.StatusType = PaidStatusType.Paid;
-            order.Payment = newPayment;
-            newPayment.TransactionId = charge.Id;
-
+            //success payment
+            Payments newPayment = new Payments
+            {
+                TransactionId = charge.Id,
+                Amount = (long)orderPrice,
+                Currency = CurrencyTypes.USD
+            };
             await _paymentRepository.CreateAsync(newPayment);
-        }
 
+
+            userOrder.StatusType = PaidStatusType.Paid;
+            userOrder.Payment = newPayment;
+            userOrder.Description = $"OrderId:{userOrder.Id}| PaymentId : {newPayment.Id}";
+
+            await _orderRepository.SaveChangesAsync();
+            return userOrder.Id;
+        }
 
         public async Task<List<OrderModel>> GetOrdersByUserIdAsync(long userId)
         {
@@ -165,7 +151,7 @@ namespace EdProject.BLL.Services
 
         public async Task UpdateOrderItemAsync(OrderItemModel orderItem)
         {
-            var order = await _orderRepository.FindByIdAsync(orderItem.OrderId);
+            var order = await _orderRepository.FindByIdAsync(1);
             if (order is null || order.IsRemoved || order.StatusType.Equals(PaidStatusType.Paid))
             {
                 throw new CustomException(ErrorConstant.INCORRECT_ORDER,HttpStatusCode.BadRequest);

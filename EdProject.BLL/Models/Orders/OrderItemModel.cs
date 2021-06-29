@@ -8,7 +8,6 @@ namespace EdProject.BLL.Models.User
     public class OrderItemModel : IValidatableObject
     {
         public long EditionId { get; set; }
-        public long OrderId { get; set; }
         public int ItemsCount { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -17,10 +16,6 @@ namespace EdProject.BLL.Models.User
             if (EditionId <= VariableConstant.EMPTY)
             {
                 errors.Add(new ValidationResult(ErrorConstant.INCORRECT_EDITION));
-            }
-            if (OrderId <= VariableConstant.EMPTY)
-            {
-                errors.Add(new ValidationResult(ErrorConstant.INCORRECT_ORDER));
             }
             if (ItemsCount < VariableConstant.EMPTY)
             {

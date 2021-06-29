@@ -7,6 +7,7 @@ using EdProject.DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,27 +27,13 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin,client")]
         [HttpPost("[action]")]
-        public async Task CreateOrder(OrderModel newOrder)
+        public async Task<long> CreateOrder(OrderCreateModel orderCreateModel)
         {
-            await _orderService.CreateOrderAsync(newOrder);
+            var token = Request.Headers[HeaderNames.Authorization].ToString();
+
+            return await _orderService.CreateOrderAsync(token,orderCreateModel);
         }
-
-        [Authorize(Roles = "admin,client")]
-        [HttpPost("[action]")]
-        public async Task CreateOrderItems(List<OrderItemModel> newOrder)
-        {
-            await _orderService.CreateItemsInOrderAsync(newOrder);
-        }
-
-        [Authorize(Roles = "admin,client")]
-        [HttpPost("[action]")]
-        public async Task CreatePayment(PaymentModel newPayment)
-        {
-             await _orderService.CreatePaymentAsync(newPayment);        
-        }
-
-
-       
+   
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<List<OrderModel>> GetOrdersByUserId(long userId)
