@@ -8,7 +8,10 @@ namespace EdProject.BLL.Models.User
     public class OrderItemModel : IValidatableObject
     {
         public long EditionId { get; set; }
+        public string BookType { get; set; }
+        public string Title { get; set; }
         public int ItemsCount { get; set; }
+
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

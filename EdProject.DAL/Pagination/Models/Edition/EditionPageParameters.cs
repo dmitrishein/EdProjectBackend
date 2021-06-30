@@ -12,7 +12,7 @@ namespace EdProject.DAL.Models
         public decimal MinUserPrice { get; set; }
         public EditionTypes[] EditionTypes { get; set; }
         public AvailableStatusType isAvailable { get; set; }
-        public SortingType SortType { get; set; }
+        public EditionSortingType SortType { get; set; }
         public bool IsReversed { get; set; }
 
 

@@ -1,7 +1,6 @@
 ﻿using EdProject.BLL.Models.Orders;
-using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Models.User;
-using EdProject.DAL.Models;
+using EdProject.DAL.Pagination.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace EdProject.BLL.Services.Interfaces
     {
         public Task<long> CreateOrderAsync(string token, OrderCreateModel orderCreateModel);
         public Task<List<OrderModel>> GetOrdersByUserIdAsync(long userId);
-        public Task<List<OrderModel>> GetOrdersPageAsync(EditionPageParameters pageModel);
+        public Task<OrdersPageResponseModel> GetOrdersPageAsync(string token,OrdersPageParameters pageModel);
         public Task<List<OrderModel>> GetOrdersListAsync();
         public Task<OrderModel> GetOrderByIdAsync(long orderId);
         public Task<List<OrderItemModel>> GetItemsInOrderAsync(long orderId);

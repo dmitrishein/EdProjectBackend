@@ -7,6 +7,7 @@ namespace EdProject.DAL.Entities
     public class Orders : BaseEntity
     {
         public string Description { get; set; }
+        public decimal Total { get; set; }
         public PaidStatusType StatusType { get; set; }
 
         public long UserId { get; set; }

@@ -4,14 +4,16 @@ using EdProject.DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EdProject.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210630073357_change_payment_property")]
+    partial class change_payment_property
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,14 +92,14 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2021, 6, 30, 11, 38, 18, 354, DateTimeKind.Local).AddTicks(3830),
+                            CreatedAt = new DateTime(2021, 6, 30, 10, 33, 56, 166, DateTimeKind.Local).AddTicks(7797),
                             IsRemoved = false,
                             Name = "William Shakespare"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2021, 6, 30, 11, 38, 18, 354, DateTimeKind.Local).AddTicks(4128),
+                            CreatedAt = new DateTime(2021, 6, 30, 10, 33, 56, 166, DateTimeKind.Local).AddTicks(8082),
                             IsRemoved = false,
                             Name = "Stephen King"
                         });
@@ -145,7 +147,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2021, 6, 30, 11, 38, 18, 352, DateTimeKind.Local).AddTicks(47),
+                            CreatedAt = new DateTime(2021, 6, 30, 10, 33, 56, 164, DateTimeKind.Local).AddTicks(3497),
                             Currency = "USD",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -157,7 +159,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2021, 6, 30, 11, 38, 18, 354, DateTimeKind.Local).AddTicks(3182),
+                            CreatedAt = new DateTime(2021, 6, 30, 10, 33, 56, 166, DateTimeKind.Local).AddTicks(7146),
                             Currency = "USD",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -169,7 +171,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2021, 6, 30, 11, 38, 18, 354, DateTimeKind.Local).AddTicks(3220),
+                            CreatedAt = new DateTime(2021, 6, 30, 10, 33, 56, 166, DateTimeKind.Local).AddTicks(7180),
                             Currency = "USD",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -181,7 +183,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2021, 6, 30, 11, 38, 18, 354, DateTimeKind.Local).AddTicks(3228),
+                            CreatedAt = new DateTime(2021, 6, 30, 10, 33, 56, 166, DateTimeKind.Local).AddTicks(7185),
                             Currency = "USD",
                             Description = "Classic Printing Edition",
                             IsRemoved = false,
@@ -193,7 +195,7 @@ namespace EdProject.DAL.Migrations
                         new
                         {
                             Id = 5L,
-                            CreatedAt = new DateTime(2021, 6, 30, 11, 38, 18, 354, DateTimeKind.Local).AddTicks(3233),
+                            CreatedAt = new DateTime(2021, 6, 30, 10, 33, 56, 166, DateTimeKind.Local).AddTicks(7188),
                             Currency = "USD",
                             Description = "Featuring Willy Shakespare",
                             IsRemoved = false,
@@ -245,9 +247,6 @@ namespace EdProject.DAL.Migrations
 
                     b.Property<int>("StatusType")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,4)");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -376,7 +375,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6fe103e6-5481-4af0-972e-23789f07f5dc",
+                            ConcurrencyStamp = "5d8abea0-d06b-4929-9807-877c821f63a5",
                             Email = "adminex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -384,10 +383,10 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINEX@SAMPLE.TE",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAxWy7/hCVwGdEN56dpw5MtwtqlIXCLocqs7uMk7HO9TTQ/RUD1UwSDK4evuYKUkiA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFe23BNJ1QKxNhDhpC9P42N5koKpEeQEyHSfMa5YbZZ5DcMhvfocA+3m6Bungx377w==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SecurityStamp = "f6f0ad32-0b7e-4044-93ee-b5bbdbb4e124",
+                            SecurityStamp = "ef33ddf0-0bd5-4c42-8b0c-cccc1d41d82f",
                             TwoFactorEnabled = false,
                             UserName = "admin",
                             isRemoved = false
@@ -396,7 +395,7 @@ namespace EdProject.DAL.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b1089c7c-29f9-46d6-887f-cc42a01c9155",
+                            ConcurrencyStamp = "5b2506ee-150b-4573-8124-eb21c2239807",
                             Email = "userex@sample.te",
                             EmailConfirmed = true,
                             FirstName = "Client",
@@ -404,10 +403,10 @@ namespace EdProject.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USEREX@SAMPLE.TE",
                             NormalizedUserName = "CLIENT",
-                            PasswordHash = "AQAAAAEAACcQAAAAELXmtq2HqYNMsuAuPgkfzLD7wenvm5Yzd7WRxW+VTXnJLMT+ZBeS9b7T6XlVtBiqnQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELq/fmQRO95hP4diImRGnY43hRmNAxB66k3p64r9svdc8reE1yHUCTtDTq3RWD91pQ==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SecurityStamp = "e4c0ad9e-ce4f-42ce-9a1a-2890a5e1941e",
+                            SecurityStamp = "f36efb4e-f0a8-4bbb-bf51-df08c0a2ca54",
                             TwoFactorEnabled = false,
                             UserName = "client",
                             isRemoved = false

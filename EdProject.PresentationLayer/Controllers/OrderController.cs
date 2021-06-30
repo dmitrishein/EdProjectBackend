@@ -4,6 +4,7 @@ using EdProject.BLL.Models.Payment;
 using EdProject.BLL.Models.User;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Models;
+using EdProject.DAL.Pagination.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -48,11 +49,13 @@ namespace EdProject.PresentationLayer.Controllers
             return await _orderService.GetOrdersListAsync();
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpGet("[action]")]
-        public Task<List<OrderModel>> GetOrdersPage(EditionPageParameters pageModel)
+        [Authorize]
+        [HttpPost("[action]")]
+        public async Task<OrdersPageResponseModel> GetOrdersPage([FromBody]OrdersPageParameters pageModel)
         {
-            return _orderService.GetOrdersPageAsync(pageModel);
+            var token = Request.Headers[HeaderNames.Authorization].ToString();
+            var page = await _orderService.GetOrdersPageAsync(token,pageModel);
+            return page ;
         }
 
         [Authorize(Roles = "admin,client")]

@@ -1,5 +1,7 @@
 ﻿using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
+using EdProject.DAL.Pagination.Models;
+using EdProject.DAL.Pagination.Models.Order;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -31,17 +33,42 @@ namespace EdProject.DAL.Repositories
 
             return ordersQuery;
         }
-        public async Task<List<Orders>> OrdersPage(int pageNumber, int pageSize,string searchString)
+        public async Task<OrderPageModel> OrdersPage(OrdersPageParameters pageParameters)
         {
-            var ordersQuery = GetAll().Where(o => o.Id.ToString() == searchString ||
-                                                  o.UserId.ToString().Contains(searchString) ||
-                                                  o.PaymentId.ToString().Equals(searchString) ||
-                                                  o.Description.Contains(searchString))
-                                       .Where(e => !e.IsRemoved);
+            var countItems = await GetAll().Where(o => o.Description.Contains(pageParameters.SearchString) ||
+                                                 o.Payment.Amount.Equals(pageParameters.SearchString) ||
+                                                 o.Id.ToString().Contains(pageParameters.SearchString))
+                                     .Where(o => pageParameters.PaidStatus.Contains(o.StatusType))
+                                     .Where(o => o.Editions.Any(e => e.Title.Contains(pageParameters.SearchString)) ||
+                                             o.Editions.Any(e => e.Authors.Any(o => o.Name.Contains(pageParameters.SearchString))))
+                                     .Where(o => o.Payment.Amount >= pageParameters.MinUserPrice)
+                                     .Where(o => pageParameters.MaxUserPrice <= VariableConstant.MIN_PRICE ? o.Payment.Amount == o.Payment.Amount : o.Payment.Amount <= pageParameters.MaxUserPrice)
+                                     .Where(o => o.UserId.ToString().Equals(pageParameters.UserId))
+                                     .Where(o => !o.IsRemoved)
+                                     .CountAsync();
 
-            var ordersPage = ordersQuery.Skip((pageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageSize).Take(pageSize);
+            var orderToResult = GetAll().Where(o => o.Description.Contains(pageParameters.SearchString) ||
+                                     o.Payment.Amount.Equals(pageParameters.SearchString) ||
+                                     o.Id.ToString().Contains(pageParameters.SearchString) ||
+                                     o.Editions.Any(e => e.Title.Contains(pageParameters.SearchString)) ||
+                                     o.Editions.Any(e => e.Authors.Any(o => o.Name.Contains(pageParameters.SearchString))))
+                         .Where(o => pageParameters.PaidStatus.Contains(o.StatusType))
+                         .Where(o => o.Editions.Any(e => e.Title.Contains(pageParameters.SearchString)) ||
+                                o.Editions.Any(e => e.Authors.Any(o => o.Name.Contains(pageParameters.SearchString))))
+                         .Where(o => o.Payment.Amount >= pageParameters.MinUserPrice)
+                         .Where(o => pageParameters.MaxUserPrice <= VariableConstant.MIN_PRICE ? o.Payment.Amount == o.Payment.Amount : o.Payment.Amount <= pageParameters.MaxUserPrice)
+                         .Where(o => !o.IsRemoved)
+                         .Where(o => o.UserId.ToString().Equals(pageParameters.UserId))
+                         .Skip((pageParameters.CurrentPageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageParameters.ElementsPerPage)
+                         .Take(pageParameters.ElementsPerPage);
 
-            return await ordersPage.ToListAsync();
+            OrderPageModel page = new OrderPageModel
+            {
+                TotalItemsAmount = countItems,
+                CurrentPage = pageParameters.CurrentPageNumber,
+                OrdersPage = await orderToResult.ToListAsync()
+            };
+            return page;
         }
 
     }

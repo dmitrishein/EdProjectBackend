@@ -1,6 +1,7 @@
 ﻿using EdProject.DAL.Entities;
+using EdProject.DAL.Pagination.Models;
+using EdProject.DAL.Pagination.Models.Order;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories.Interfaces
@@ -9,7 +10,7 @@ namespace EdProject.DAL.Repositories.Interfaces
     {
         public Task<List<Orders>> GetOrdersByUserIdAsync(long userId);
         public Task<List<Orders>> GetAllOrdersAsync();
-        public Task<List<Orders>> OrdersPage(int pageNumber, int pageSize, string searchString);
+        public Task<OrderPageModel> OrdersPage(OrdersPageParameters pageParameters);
         public decimal GetOrderCost(Orders order);
     }
 }

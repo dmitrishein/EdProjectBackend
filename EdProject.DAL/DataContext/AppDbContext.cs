@@ -88,6 +88,15 @@ namespace EdProject.DAL.DataContext
             modelBuilder.Entity<Edition>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,4)");
+
+            modelBuilder.Entity<Payments>()
+                .Property(p => p.Amount)
+                .HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<Orders>()
+                .Property(p => p.Total)
+                .HasColumnType("decimal(18,4)");
+
+
         }     
 
         #region Tables

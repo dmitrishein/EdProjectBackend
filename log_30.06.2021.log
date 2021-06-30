@@ -1,0 +1,251 @@
+[30.06.2021 06:36:24 +00:00] Warning, , 
+[30.06.2021 06:36:24 +00:00] Warning, , 
+[30.06.2021 06:36:24 +00:00] Error, An exception occurred while iterating over the results of a query for context type 'EdProject.DAL.DataContext.AppDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): The number of rows provided for a FETCH clause must be greater then zero.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:362a84b4-0fc0-4ab7-9631-4a4d29b2a1e6
+Error Number:10744,State:1,Class:15,    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[30.06.2021 06:36:24 +00:00] Error, , 
+[30.06.2021 06:36:58 +00:00] Error, An exception occurred while iterating over the results of a query for context type 'EdProject.DAL.DataContext.AppDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): The number of rows provided for a FETCH clause must be greater then zero.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:362a84b4-0fc0-4ab7-9631-4a4d29b2a1e6
+Error Number:10744,State:1,Class:15,    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[30.06.2021 06:36:58 +00:00] Error, , 
+[30.06.2021 06:37:13 +00:00] Error, An exception occurred while iterating over the results of a query for context type 'EdProject.DAL.DataContext.AppDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): The number of rows provided for a FETCH clause must be greater then zero.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:362a84b4-0fc0-4ab7-9631-4a4d29b2a1e6
+Error Number:10744,State:1,Class:15,    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[30.06.2021 06:37:17 +00:00] Error, , 
+[30.06.2021 06:37:49 +00:00] Warning, , 
+[30.06.2021 06:37:49 +00:00] Warning, , 
+[30.06.2021 06:37:49 +00:00] Error, An exception occurred while iterating over the results of a query for context type 'EdProject.DAL.DataContext.AppDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): The number of rows provided for a FETCH clause must be greater then zero.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.Read()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDataReader.Read()
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:362a84b4-0fc0-4ab7-9631-4a4d29b2a1e6
+Error Number:10744,State:1,Class:15,    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.Read()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDataReader.Read()
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+[30.06.2021 06:38:07 +00:00] Error, An exception occurred while iterating over the results of a query for context type 'EdProject.DAL.DataContext.AppDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): The number of rows provided for a FETCH clause must be greater then zero.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:362a84b4-0fc0-4ab7-9631-4a4d29b2a1e6
+Error Number:10744,State:1,Class:15,    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[30.06.2021 06:38:07 +00:00] Error, , 
+[30.06.2021 06:38:13 +00:00] Error, An exception occurred while iterating over the results of a query for context type 'EdProject.DAL.DataContext.AppDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): The number of rows provided for a FETCH clause must be greater then zero.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:362a84b4-0fc0-4ab7-9631-4a4d29b2a1e6
+Error Number:10744,State:1,Class:15,    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](AAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[30.06.2021 06:38:13 +00:00] Error, , 
+[30.06.2021 07:24:49 +00:00] Warning, , 
+[30.06.2021 07:25:05 +00:00] Warning, , 
+[30.06.2021 07:25:05 +00:00] Warning, , 
+[30.06.2021 07:25:05 +00:00] Warning, , 
+[30.06.2021 07:27:10 +00:00] Warning, , 
+[30.06.2021 07:27:10 +00:00] Warning, , 
+[30.06.2021 07:27:10 +00:00] Warning, , 
+[30.06.2021 07:27:28 +00:00] Warning, , 
+[30.06.2021 07:27:28 +00:00] Warning, , 
+[30.06.2021 07:27:28 +00:00] Warning, , 
+[30.06.2021 07:27:28 +00:00] Warning, , 
+[30.06.2021 07:28:47 +00:00] Warning, , 
+[30.06.2021 07:28:47 +00:00] Warning, , 
+[30.06.2021 07:28:47 +00:00] Warning, , 
+[30.06.2021 07:30:28 +00:00] Warning, , 
+[30.06.2021 07:30:33 +00:00] Warning, , 
+[30.06.2021 07:30:33 +00:00] Warning, , 
+[30.06.2021 07:30:33 +00:00] Warning, , 
+[30.06.2021 08:13:14 +00:00] Warning, , 
+[30.06.2021 08:13:14 +00:00] Warning, , 
+[30.06.2021 08:13:14 +00:00] Warning, , 
+[30.06.2021 08:13:14 +00:00] Warning, , 
+[30.06.2021 08:39:20 +00:00] Warning, , 
+[30.06.2021 08:39:20 +00:00] Warning, , 
+[30.06.2021 08:39:20 +00:00] Warning, , 
+[30.06.2021 08:39:20 +00:00] Warning, , 
+[30.06.2021 08:49:13 +00:00] Warning, , 
+[30.06.2021 08:49:14 +00:00] Warning, , 
+[30.06.2021 08:49:14 +00:00] Warning, , 
+[30.06.2021 08:49:14 +00:00] Warning, , 
+[30.06.2021 09:04:21 +00:00] Warning, , 
+[30.06.2021 09:04:28 +00:00] Warning, , 
+[30.06.2021 09:04:28 +00:00] Warning, , 
+[30.06.2021 09:04:28 +00:00] Warning, , 
+[30.06.2021 09:04:28 +00:00] Error, , 
+[30.06.2021 09:05:02 +00:00] Warning, , 
+[30.06.2021 09:05:03 +00:00] Warning, , 
+[30.06.2021 09:05:03 +00:00] Warning, , 
+[30.06.2021 09:05:03 +00:00] Warning, , 
+[30.06.2021 09:05:03 +00:00] Error, , 
+[30.06.2021 09:05:32 +00:00] Error, , 
+[30.06.2021 09:05:58 +00:00] Warning, , 
+[30.06.2021 09:05:59 +00:00] Warning, , 
+[30.06.2021 09:05:59 +00:00] Warning, , 
+[30.06.2021 09:05:59 +00:00] Warning, , 
+[30.06.2021 09:07:19 +00:00] Warning, , 
+[30.06.2021 09:07:20 +00:00] Warning, , 
+[30.06.2021 09:07:20 +00:00] Warning, , 
+[30.06.2021 09:07:20 +00:00] Warning, , 
+[30.06.2021 09:14:31 +00:00] Warning, , 
+[30.06.2021 09:14:31 +00:00] Warning, , 
+[30.06.2021 09:14:31 +00:00] Warning, , 
+[30.06.2021 09:14:31 +00:00] Warning, , 
+[30.06.2021 09:16:24 +00:00] Warning, , 
+[30.06.2021 09:16:24 +00:00] Warning, , 
+[30.06.2021 09:16:24 +00:00] Warning, , 
+[30.06.2021 09:16:24 +00:00] Warning, , 
+[30.06.2021 09:17:28 +00:00] Warning, , 
+[30.06.2021 09:17:29 +00:00] Warning, , 
+[30.06.2021 09:17:29 +00:00] Warning, , 
+[30.06.2021 09:17:29 +00:00] Warning, , 
+[30.06.2021 09:22:47 +00:00] Warning, , 
+[30.06.2021 09:22:48 +00:00] Warning, , 
+[30.06.2021 09:22:48 +00:00] Warning, , 
+[30.06.2021 09:22:48 +00:00] Warning, , 
+[30.06.2021 09:25:09 +00:00] Warning, , 
+[30.06.2021 09:25:09 +00:00] Warning, , 
+[30.06.2021 09:25:09 +00:00] Warning, , 
+[30.06.2021 09:27:51 +00:00] Warning, , 
+[30.06.2021 09:27:52 +00:00] Warning, , 
+[30.06.2021 09:27:52 +00:00] Warning, , 
+[30.06.2021 09:27:52 +00:00] Warning, , 
+[30.06.2021 09:31:15 +00:00] Warning, , 
+[30.06.2021 09:32:37 +00:00] Warning, , 
+[30.06.2021 09:35:15 +00:00] Warning, , 
+[30.06.2021 09:35:15 +00:00] Warning, , 
+[30.06.2021 09:35:15 +00:00] Warning, , 
+[30.06.2021 09:36:57 +00:00] Warning, , 
+[30.06.2021 09:36:59 +00:00] Warning, , 
+[30.06.2021 09:36:59 +00:00] Warning, , 
+[30.06.2021 09:36:59 +00:00] Warning, , 
+[30.06.2021 09:39:10 +00:00] Warning, , 
+[30.06.2021 09:39:12 +00:00] Warning, , 
+[30.06.2021 09:39:12 +00:00] Warning, , 
+[30.06.2021 09:39:12 +00:00] Warning, , 
+[30.06.2021 09:39:46 +00:00] Warning, , 
+[30.06.2021 09:40:10 +00:00] Warning, , 
+[30.06.2021 09:40:10 +00:00] Warning, , 
+[30.06.2021 09:40:10 +00:00] Warning, , 
+[30.06.2021 09:40:13 +00:00] Warning, , 
+[30.06.2021 09:40:13 +00:00] Warning, , 
+[30.06.2021 09:40:13 +00:00] Warning, , 
+[30.06.2021 09:42:09 +00:00] Warning, , 
+[30.06.2021 09:42:09 +00:00] Warning, , 
+[30.06.2021 09:42:09 +00:00] Warning, , 
+[30.06.2021 09:42:09 +00:00] Warning, , 
+[30.06.2021 10:18:15 +00:00] Warning, , 
+[30.06.2021 10:18:15 +00:00] Warning, , 
+[30.06.2021 10:18:15 +00:00] Warning, , 
+[30.06.2021 10:18:15 +00:00] Warning, , 
+[30.06.2021 11:05:45 +00:00] Warning, , 
+[30.06.2021 11:05:45 +00:00] Warning, , 
+[30.06.2021 11:07:38 +00:00] Warning, , 
+[30.06.2021 11:07:38 +00:00] Warning, , 
+[30.06.2021 11:07:38 +00:00] Warning, , 
+[30.06.2021 11:07:38 +00:00] Warning, , 

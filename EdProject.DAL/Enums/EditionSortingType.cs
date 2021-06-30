@@ -2,7 +2,7 @@
 
 namespace EdProject.DAL.Enums
 {
-   public enum SortingType
+   public enum EditionSortingType
    {
         None = 0,
         Price = 1,

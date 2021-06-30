@@ -8,6 +8,7 @@ using EdProject.DAL.Entities;
 using EdProject.DAL.Entities.Enums;
 using EdProject.DAL.Enums;
 using EdProject.DAL.Models;
+using EdProject.DAL.Pagination.Models;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.Extensions.Options;
 using Stripe;
@@ -82,7 +83,7 @@ namespace EdProject.BLL.Services
             Payments newPayment = new Payments
             {
                 TransactionId = charge.Id,
-                Amount = (long)orderPrice,
+                Amount = orderPrice,
                 Currency = CurrencyTypes.USD
             };
             await _paymentRepository.CreateAsync(newPayment);
@@ -91,6 +92,7 @@ namespace EdProject.BLL.Services
             userOrder.StatusType = PaidStatusType.Paid;
             userOrder.Payment = newPayment;
             userOrder.Description = $"OrderId:{userOrder.Id}| PaymentId : {newPayment.Id}";
+            userOrder.Total = orderPrice;
 
             await _orderRepository.SaveChangesAsync();
             return userOrder.Id;
@@ -115,15 +117,16 @@ namespace EdProject.BLL.Services
 
             return _mapper.Map<List<OrderModel>>(ordersList);
         }
-        public async Task<List<OrderModel>> GetOrdersPageAsync(EditionPageParameters pageModel)
+        public async Task<OrdersPageResponseModel> GetOrdersPageAsync(string token,OrdersPageParameters pageParams)
         {
-            var resultPage = await _orderRepository.OrdersPage(pageModel.CurrentPageNumber, pageModel.ElementsPerPage, pageModel.SearchString);
-            if (!resultPage.Any())
-            {
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
-            }
-
-            return _mapper.Map<List<OrderModel>>(resultPage);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            token = token.Replace("Bearer ", string.Empty);
+            var userToken = tokenHandler.ReadJwtToken(token);
+            var userId = userToken.Claims.First(claim => claim.Type == "id").Value;
+            pageParams.UserId = userId;
+            var resultPage = await _orderRepository.OrdersPage(pageParams);
+            var lis = _mapper.Map<OrdersPageResponseModel>(resultPage);
+            return lis;
         }
         public async Task<OrderModel> GetOrderByIdAsync(long orderId)
         {
