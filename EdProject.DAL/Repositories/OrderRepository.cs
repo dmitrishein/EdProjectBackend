@@ -1,4 +1,5 @@
-﻿using EdProject.DAL.DataContext;
+﻿using System.Linq.Dynamic.Core;
+using EdProject.DAL.DataContext;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Pagination.Models;
 using EdProject.DAL.Pagination.Models.Order;
@@ -35,14 +36,12 @@ namespace EdProject.DAL.Repositories
         }
         public async Task<OrderPageModel> OrdersPage(OrdersPageParameters pageParameters)
         {
-            var countItems = await GetAll().Where(o => o.Description.Contains(pageParameters.SearchString) ||
+            var countItems = await GetAll()
+                                     .Where(o => o.Description.Contains(pageParameters.SearchString) ||
                                                  o.Payment.Amount.Equals(pageParameters.SearchString) ||
-                                                 o.Id.ToString().Contains(pageParameters.SearchString))
-                                     .Where(o => pageParameters.PaidStatus.Contains(o.StatusType))
-                                     .Where(o => o.Editions.Any(e => e.Title.Contains(pageParameters.SearchString)) ||
-                                             o.Editions.Any(e => e.Authors.Any(o => o.Name.Contains(pageParameters.SearchString))))
-                                     .Where(o => o.Payment.Amount >= pageParameters.MinUserPrice)
-                                     .Where(o => pageParameters.MaxUserPrice <= VariableConstant.MIN_PRICE ? o.Payment.Amount == o.Payment.Amount : o.Payment.Amount <= pageParameters.MaxUserPrice)
+                                                 o.Id.ToString().Contains(pageParameters.SearchString) ||
+                                                 o.Editions.Any(e => e.Title.Contains(pageParameters.SearchString)) ||
+                                                 o.Editions.Any(e => e.Authors.Any(o => o.Name.Contains(pageParameters.SearchString))))
                                      .Where(o => o.UserId.ToString().Equals(pageParameters.UserId))
                                      .Where(o => !o.IsRemoved)
                                      .CountAsync();
@@ -52,13 +51,9 @@ namespace EdProject.DAL.Repositories
                                      o.Id.ToString().Contains(pageParameters.SearchString) ||
                                      o.Editions.Any(e => e.Title.Contains(pageParameters.SearchString)) ||
                                      o.Editions.Any(e => e.Authors.Any(o => o.Name.Contains(pageParameters.SearchString))))
-                         .Where(o => pageParameters.PaidStatus.Contains(o.StatusType))
-                         .Where(o => o.Editions.Any(e => e.Title.Contains(pageParameters.SearchString)) ||
-                                o.Editions.Any(e => e.Authors.Any(o => o.Name.Contains(pageParameters.SearchString))))
-                         .Where(o => o.Payment.Amount >= pageParameters.MinUserPrice)
-                         .Where(o => pageParameters.MaxUserPrice <= VariableConstant.MIN_PRICE ? o.Payment.Amount == o.Payment.Amount : o.Payment.Amount <= pageParameters.MaxUserPrice)
-                         .Where(o => !o.IsRemoved)
                          .Where(o => o.UserId.ToString().Equals(pageParameters.UserId))
+                         .Where(o => !o.IsRemoved)
+                         .OrderBy(pageParameters.SortType == 0 ? "Id" : $"{pageParameters.SortType.ToString()} {(pageParameters.IsReversed ? "DESC":"ASC")}" )
                          .Skip((pageParameters.CurrentPageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageParameters.ElementsPerPage)
                          .Take(pageParameters.ElementsPerPage);
 
