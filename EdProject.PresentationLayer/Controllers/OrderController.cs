@@ -34,7 +34,14 @@ namespace EdProject.PresentationLayer.Controllers
 
             return await _orderService.CreateOrderAsync(token,orderCreateModel);
         }
-   
+
+        [HttpPost("[action]")]
+        public async Task UpdateOrder (OrderUpdateModel orderCreateModel)
+        {
+            var token = Request.Headers[HeaderNames.Authorization].ToString();
+            await _orderService.UpdateOrderAsync(token, orderCreateModel);
+        }
+
         [Authorize(Roles = "admin")]
         [HttpGet("[action]")]
         public Task<List<OrderModel>> GetOrdersByUserId(long userId)

@@ -69,35 +69,92 @@ namespace EdProject.BLL.Services
                 Source = orderCreateModel.SourceId
             };
 
-            var service = new ChargeService();
-            var charge = service.Create(options);
-
-            //unsuccess payment
-            if (!charge.Status.Equals(VariableConstant.CHARGE_SUCCEEDED))
+            try
             {
-                userOrder.StatusType = PaidStatusType.Unpaid;
-                throw new CustomException(ErrorConstant.UNSUCCESSFUL_PAYMENT, HttpStatusCode.OK);
+                var service = new ChargeService();
+                var charge = service.Create(options);
+                Payments newPayment = new Payments
+                {
+                    TransactionId = charge.Id,
+                    Amount = orderPrice,
+                    Currency = CurrencyTypes.USD
+                };
+                await _paymentRepository.CreateAsync(newPayment);
+
+
+                userOrder.StatusType = PaidStatusType.Paid;
+                userOrder.Payment = newPayment;
+                userOrder.Description = $"OrderId:{userOrder.Id}| PaymentId : {newPayment.Id}";
+                userOrder.Total = orderPrice;
             }
-
-            //success payment
-            Payments newPayment = new Payments
+            catch (Exception x)
             {
-                TransactionId = charge.Id,
-                Amount = orderPrice,
-                Currency = CurrencyTypes.USD
-            };
-            await _paymentRepository.CreateAsync(newPayment);
-
-
-            userOrder.StatusType = PaidStatusType.Paid;
-            userOrder.Payment = newPayment;
-            userOrder.Description = $"OrderId:{userOrder.Id}| PaymentId : {newPayment.Id}";
-            userOrder.Total = orderPrice;
-
-            await _orderRepository.SaveChangesAsync();
+               userOrder.Description = PaidStatusType.Unpaid.ToString();
+               userOrder.StatusType = PaidStatusType.Unpaid;
+               userOrder.Total = orderPrice;
+               throw new CustomException($"{ErrorConstant.UNSUCCESSFUL_PAYMENT}, {x.Message}", HttpStatusCode.BadRequest);
+            }
+            finally
+            {
+              await _orderRepository.SaveChangesAsync();
+            }
             return userOrder.Id;
         }
+        public async Task UpdateOrderAsync(string token, OrderUpdateModel orderUpdate)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            token = token.Replace("Bearer ", string.Empty);
+            var userToken = tokenHandler.ReadJwtToken(token);
+            var userId = userToken.Claims.First(claim => claim.Type == "id").Value;
 
+            var updateOrder = await _orderRepository.FindByIdAsync(orderUpdate.OrderId);
+            if(!updateOrder.UserId.ToString().Equals(userId))
+            {
+                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
+            }
+
+            var orderPrice = updateOrder.OrderItems.Sum(x => x.Edition.Price * x.ItemsCount);
+
+            StripeConfiguration.ApiKey = _conectStripeOption.SecretKey;
+            var options = new ChargeCreateOptions
+            {
+                Amount = (long)(orderPrice * VariableConstant.CONVERT_TO_CENT_VALUE),
+                Currency = CurrencyTypes.USD.ToString().ToLower(),
+                Description = $"Order #{updateOrder.Id}",
+                Source = orderUpdate.SourceId
+            };
+
+            try
+            {
+                var service = new ChargeService();
+                var charge = service.Create(options);
+                Payments newPayment = new Payments
+                {
+                    TransactionId = charge.Id,
+                    Amount = orderPrice,
+                    Currency = CurrencyTypes.USD
+                };
+                await _paymentRepository.CreateAsync(newPayment);
+
+
+                updateOrder.StatusType = PaidStatusType.Paid;
+                updateOrder.Payment = newPayment;
+                updateOrder.Description = $"OrderId:{updateOrder.Id}| PaymentId : {newPayment.Id}";
+                updateOrder.Total = orderPrice;
+            }
+            catch (Exception x)
+            {
+                updateOrder.Description = PaidStatusType.Unpaid.ToString();
+                updateOrder.StatusType = PaidStatusType.Unpaid;
+                updateOrder.Total = orderPrice;
+                throw new CustomException($"{ErrorConstant.UNSUCCESSFUL_PAYMENT}, {x.Message}", HttpStatusCode.BadRequest);
+            }
+            finally
+            {
+                await _orderRepository.SaveChangesAsync();
+            }
+
+        }
         public async Task<List<OrderModel>> GetOrdersByUserIdAsync(long userId)
         {
             var orderList = await _orderRepository.GetOrdersByUserIdAsync(userId);
