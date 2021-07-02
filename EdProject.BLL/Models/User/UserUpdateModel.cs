@@ -40,10 +40,6 @@ namespace EdProject.BLL.Models.User
             {
                 errors.Add(new ValidationResult("Invalid LastName"));
             }
-            //if (!Regex.IsMatch(Email, VariableConstant.EMAIL_PATERN, RegexOptions.IgnoreCase))
-            //{
-            //    errors.Add(new ValidationResult(ErrorConstant.INCORRECT_EMAIL));
-            //}
             if (!errors.Any())
             {
                 return errors;

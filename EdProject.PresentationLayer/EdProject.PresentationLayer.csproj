@@ -25,4 +25,9 @@
     <ProjectReference Include="..\EdProject.BLL\EdProject.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Admin\Controller\" />
+    <Folder Include="Admin\Views\" />
+  </ItemGroup>
+
 </Project>
