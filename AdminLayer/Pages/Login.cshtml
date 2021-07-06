@@ -1,0 +1,20 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model AdminLayer.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="login-container" id="login">
+    <div id="loginForm">
+        <form asp-action="Login" asp-controller="Admin" method="post">
+            <label asp-for="loginModel.Email"></label>
+            <input type="text" asp-for="loginModel.Email" id="Email" />
+            <label asp-for="loginModel.Password"></label>
+            <input type="text" asp-for="loginModel.Password" id="Password" />
+            <div class="button" id="loginButton">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+</div>

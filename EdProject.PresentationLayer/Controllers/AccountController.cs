@@ -32,7 +32,7 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<TokenPairModel> Login([FromBody]LoginModel login)
+        public async Task<TokenPairModel> Login(LoginDTOModel login)
         {
             return await _accountService.SignInAsync(login);
         }
@@ -51,11 +51,10 @@ namespace EdProject.PresentationLayer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task ResetPassword([FromBody]ChangePasswordModel email)
+        public async Task ResetPassword(ChangePasswordModel email)
         {
             await _accountService.ResetPasswordTokenAsync(email.Email);
         }
-
         [HttpPost("[action]")]
         public async Task ChangePassword(ChangePasswordModel resetPasswordModel)
         {

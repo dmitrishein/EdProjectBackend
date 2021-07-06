@@ -1,0 +1,33 @@
+﻿@using EdProject.BLL.Models.ViewModels
+@using EdProject.BLL.Models.AuthorDTO
+@using EdProject.BLL.Models.Editions
+@model AuthorsViewModel
+@{
+    ViewData["Title"] = "Authors list";
+}
+
+<table>
+    <thead>
+        <tr>
+            <th class="authors-id">Id</th>
+            <th class="authors-name">Name</th>
+            <th class="authors-works">Works</th>
+            <th class="authors-controls"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(AuthorModel author  in Model.AuthorsList)
+            {
+                <tr>
+                    <td> @author.Id</td>
+                    <td>@author.Name</td>
+                    <td>
+                        @foreach(EditionModel editionModel in author.EditionsList)
+                         {
+                            <p>@editionModel.Title</p>
+                         }
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>

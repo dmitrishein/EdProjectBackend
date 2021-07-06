@@ -8,8 +8,10 @@ namespace EdProject.BLL.Profiles
     {
         public AuthorProfile()
         {
-            CreateMap<Author, AuthorModel>();
+            CreateMap<Author, AuthorModel>()
+                .ForMember(itemModel => itemModel.EditionsList, entity => entity.MapFrom(edit => edit.Editions));
             CreateMap<AuthorModel, Author>();
+                                
         }
     }
 }

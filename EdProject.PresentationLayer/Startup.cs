@@ -12,17 +12,19 @@ using EdProject.DAL.Repositories;
 using EdProject.DAL.Repositories.Interfaces;
 using EdProject.PresentationLayer.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace EdProject.PresentationLayer
 {
@@ -37,6 +39,8 @@ namespace EdProject.PresentationLayer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+            services.AddMvc();
             #region IOptionClasses
             services.Configure<EmailOptions>(Configuration.GetSection("EmailProvider"));
             services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
@@ -51,25 +55,30 @@ namespace EdProject.PresentationLayer
             });
 
             services.AddAuthentication(
-            options =>
-                    {
-                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    })
+                         options =>
+                         {
+                             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                         })
                     .AddJwtBearer(options =>
                     {
-                       options.TokenValidationParameters = new TokenValidationParameters
-                       {
-                           ValidateIssuer = true,
-                           ValidIssuer = Configuration["Jwt:Issuer"],
-                           ValidateAudience = true,
-                           ValidAudience = Configuration["Jwt:Audience"],
-                           ValidateLifetime = true,
-                           ClockSkew = TimeSpan.Zero,
-                           ValidateIssuerSigningKey = true,
-                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
-                       };
-                    });
+                        options.SaveToken = true;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidIssuer = Configuration["Jwt:Issuer"],
+                            ValidateAudience = true,
+                            ValidAudience = Configuration["Jwt:Audience"],
+                            ValidateLifetime = true,
+                            ClockSkew = TimeSpan.Zero,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                        };
+                    })
+                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
+                        options.LoginPath = new PathString("/Admin/Login");
+                    })
+                    .AddIdentityCookies();
 
             services.AddIdentityCore<User>(options =>
             {
@@ -80,12 +89,11 @@ namespace EdProject.PresentationLayer
                            .AddDefaultTokenProviders()
                            .AddEntityFrameworkStores<AppDbContext>();
 
-            services.AddAuthentication().AddIdentityCookies();
-
             services.AddDbContext<AppDbContext>(options => options
                                                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                                                 .UseLazyLoadingProxies());
             services.AddAuthorization();
+
             #region Providers Inject
             services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IEmailProvider, EmailProvider>();
@@ -119,7 +127,8 @@ namespace EdProject.PresentationLayer
             });
 
             services.AddControllers();
-            services.AddCors();
+
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -135,20 +144,32 @@ namespace EdProject.PresentationLayer
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
+                app.UseHsts();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdProject.PresentationLayer v1"));
             }
 
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseRouting();
+
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseExceptionMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();   
+                endpoints.MapAreaControllerRoute(
+                       name: "AdminArea",
+                       areaName: "Admin",
+                       pattern: "Admin/{controller=Admin}/{action=Login}");
+                endpoints.MapAreaControllerRoute(
+                   name: "default",
+                   areaName: "Admin",
+                   pattern: "{controller=Admin}/{action=Login}");
+                endpoints.MapControllers();
             });
         }
     }

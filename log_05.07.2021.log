@@ -1,0 +1,157 @@
+[05.07.2021 06:34:57 +00:00] Warning, , 
+[05.07.2021 06:34:57 +00:00] Warning, , 
+[05.07.2021 06:35:37 +00:00] Warning, , 
+[05.07.2021 06:35:37 +00:00] Warning, , 
+[05.07.2021 06:43:32 +00:00] Error, , 
+[05.07.2021 06:43:35 +00:00] Error, , 
+[05.07.2021 06:44:26 +00:00] Error, , 
+[05.07.2021 06:48:07 +00:00] Warning, , 
+[05.07.2021 06:48:07 +00:00] Warning, , 
+[05.07.2021 07:03:11 +00:00] Error, , 
+[05.07.2021 07:03:11 +00:00] Error, , 
+[05.07.2021 07:03:33 +00:00] Error, , 
+[05.07.2021 07:03:33 +00:00] Error, , 
+[05.07.2021 07:07:24 +00:00] Error, , 
+[05.07.2021 07:07:24 +00:00] Error, , 
+[05.07.2021 07:07:30 +00:00] Error, , 
+[05.07.2021 07:07:30 +00:00] Error, , 
+[05.07.2021 07:09:12 +00:00] Error, , 
+[05.07.2021 07:09:12 +00:00] Error, , 
+[05.07.2021 07:14:10 +00:00] Error, , 
+[05.07.2021 07:14:10 +00:00] Error, , 
+[05.07.2021 07:15:54 +00:00] Error, , 
+[05.07.2021 07:15:54 +00:00] Error, , 
+[05.07.2021 07:20:34 +00:00] Error, , 
+[05.07.2021 07:20:34 +00:00] Error, , 
+[05.07.2021 07:34:07 +00:00] Error, , 
+[05.07.2021 07:34:07 +00:00] Error, , 
+[05.07.2021 07:40:18 +00:00] Error, , 
+[05.07.2021 07:40:18 +00:00] Error, , 
+[05.07.2021 07:41:45 +00:00] Error, , 
+[05.07.2021 07:41:45 +00:00] Error, , 
+[05.07.2021 07:45:13 +00:00] Error, , 
+[05.07.2021 07:45:13 +00:00] Error, , 
+[05.07.2021 07:46:05 +00:00] Error, , 
+[05.07.2021 07:46:05 +00:00] Error, , 
+[05.07.2021 07:47:11 +00:00] Error, , 
+[05.07.2021 07:47:11 +00:00] Error, , 
+[05.07.2021 07:47:21 +00:00] Error, , 
+[05.07.2021 07:47:21 +00:00] Error, , 
+[05.07.2021 08:40:44 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[05.07.2021 08:41:04 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[05.07.2021 08:41:53 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, CandidateState[] candidateState)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.MatchAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[05.07.2021 09:13:20 +00:00] Error, , 
+[05.07.2021 09:14:34 +00:00] Error, , 
+[05.07.2021 09:14:36 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)
+   at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.LoggerExtensions.Log(ILogger logger, LogLevel logLevel, EventId eventId, Exception exception, String message, Object[] args)
+   at Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, String message, Object[] args)
+   at EdProject.PresentationLayer.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\Middleware\ExceptionMiddleware.cs:line 34
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[05.07.2021 09:14:36 +00:00] Warning, , 
+[05.07.2021 09:14:36 +00:00] Error, Connection ID "18086456105130525472", Request ID "80000321-0000-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.,    at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)
+   at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.LoggerExtensions.Log(ILogger logger, LogLevel logLevel, EventId eventId, Exception exception, String message, Object[] args)
+   at Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, String message, Object[] args)
+   at EdProject.PresentationLayer.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\Middleware\ExceptionMiddleware.cs:line 34
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT`1.ProcessRequestAsync()
+[05.07.2021 10:26:14 +00:00] Error, , 
+[05.07.2021 10:45:46 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authorization.Policy.PolicyEvaluator.AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[05.07.2021 10:47:14 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authorization.Policy.PolicyEvaluator.AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[05.07.2021 11:13:42 +00:00] Error, , 
+[05.07.2021 11:14:59 +00:00] Error, , 
+[05.07.2021 11:15:52 +00:00] Error, , 
+[05.07.2021 11:18:02 +00:00] Error, , 
+[05.07.2021 12:30:51 +00:00] Error, , 
+[05.07.2021 12:31:36 +00:00] Error, , 
+[05.07.2021 12:47:09 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.AuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[05.07.2021 13:11:43 +00:00] Error, , 
+[05.07.2021 14:14:36 +00:00] Error, , 
+[05.07.2021 14:30:11 +00:00] Error, , 
+[05.07.2021 14:38:09 +00:00] Error, , 
+[05.07.2021 14:38:21 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)
+   at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.LoggerExtensions.Log(ILogger logger, LogLevel logLevel, EventId eventId, Exception exception, String message, Object[] args)
+   at Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, String message, Object[] args)
+   at EdProject.PresentationLayer.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\Middleware\ExceptionMiddleware.cs:line 34
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[05.07.2021 14:38:21 +00:00] Warning, , 
+[05.07.2021 14:38:21 +00:00] Error, Connection ID "17942340921349636162", Request ID "80000043-0001-f900-b63f-84710c7967bb": An unhandled exception was thrown by the application.,    at Microsoft.Extensions.Logging.Logger.ThrowLoggingError(List`1 exceptions)
+   at Microsoft.Extensions.Logging.Logger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.Logger`1.Microsoft.Extensions.Logging.ILogger.Log[TState](LogLevel logLevel, EventId eventId, TState state, Exception exception, Func`3 formatter)
+   at Microsoft.Extensions.Logging.LoggerExtensions.Log(ILogger logger, LogLevel logLevel, EventId eventId, Exception exception, String message, Object[] args)
+   at Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, String message, Object[] args)
+   at EdProject.PresentationLayer.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Anuitex-96\source\repos\EdProject\EdProject.PresentationLayer\Middleware\ExceptionMiddleware.cs:line 34
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT`1.ProcessRequestAsync()
+[05.07.2021 14:38:35 +00:00] Error, , 

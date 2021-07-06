@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EdProject.BLL.Models.AuthorDTO;
 using EdProject.BLL.Models.Editions;
+using EdProject.BLL.Models.ViewModels;
 using EdProject.BLL.Services.Interfaces;
 using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Interfaces;
@@ -32,14 +33,14 @@ namespace EdProject.BLL.Services
             }
             var newAuthor = _mapper.Map<Author>(authorModel);
 
-            var authorEditions = await  _editionRepository.GetEditionRangeAsync(authorModel.EditionsList);
-            if (!authorEditions.Any())
-            {
-                throw new CustomException(ErrorConstant.AUTHOR_CREATING_ERROR, HttpStatusCode.BadRequest);    
-            }
+            //var authorEditions = await  _editionRepository.GetEditionRangeAsync();
+            //if (!authorEditions.Any())
+            //{
+            //    throw new CustomException(ErrorConstant.AUTHOR_CREATING_ERROR, HttpStatusCode.BadRequest);    
+            //}
 
-            newAuthor.Editions = new List<Edition>();
-            newAuthor.Editions.AddRange(authorEditions);
+            //newAuthor.Editions = new List<Edition>();
+            //newAuthor.Editions.AddRange(authorEditions);
 
             await _editionRepository.SaveChangesAsync();
         }
@@ -51,8 +52,8 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.AUTHOR_NOT_FOUND, HttpStatusCode.BadRequest);
             }
 
-            var editionsToAdd = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsList);
-            author.Editions.AddRange(editionsToAdd);
+            //var editionsToAdd = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsList);
+            //author.Editions.AddRange(editionsToAdd);
 
             await _editionRepository.SaveChangesAsync();
 
@@ -101,7 +102,7 @@ namespace EdProject.BLL.Services
         public async Task UpdateAuthorAsync(AuthorModel authorModel)
         {   
             var oldAuthor = await _authorRepository.FindByIdAsync(authorModel.Id);
-            var updEditionList = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsList);
+            //var updEditionList = await _editionRepository.GetEditionRangeAsync(authorModel.EditionsList);
 
             if (oldAuthor is null || oldAuthor.IsRemoved)
             {
@@ -110,11 +111,16 @@ namespace EdProject.BLL.Services
 
             oldAuthor.Name = authorModel.Name;
             oldAuthor.Editions = new List<Edition>();
-            oldAuthor.Editions.AddRange(updEditionList);
+            //oldAuthor.Editions.AddRange(updEditionList);
 
             await _authorRepository.UpdateAsync(oldAuthor);
         }
 
+        public async Task<AuthorsViewModel> GetAuthorsViewModel()
+        {
+            var authors = await GetAuthorsAsync();
+            return new AuthorsViewModel { AuthorsList = authors };
+        }
         public async Task RemoveAuthorAsync(long id)
         {
             var author = await _authorRepository.FindByIdAsync(id);

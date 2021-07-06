@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using EdProject.BLL.Models.Editions;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace EdProject.BLL.Models.AuthorDTO
 {
     public class AuthorModel:BaseModel,IValidatableObject
     {
         public string Name { get; set; }
-        public List<long> EditionsList { get; set; }
+        public List<EditionModel> EditionsList { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

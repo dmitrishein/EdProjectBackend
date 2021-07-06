@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using EdProject.BLL.Models.ViewModels;
 
 namespace EdProject.BLL.Services
 {
@@ -62,6 +63,11 @@ namespace EdProject.BLL.Services
             var userList = await _userManager.Users.Where(u => !u.isRemoved).ToListAsync();
            
             return _mapper.Map<List<UserModel>>(userList);  
+        }
+        public async Task<ProfileViewModel> UserProfileViewModel(string email)
+        {
+            var user = await GetUserByEmailAsync(email);
+            return new ProfileViewModel { User = user };
         }
         public List<UserModel> GetUsersByQuery(string searchString)
         {

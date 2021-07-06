@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
 using System.Web;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -38,7 +37,7 @@ namespace EdProject.BLL.Services
         }
 
 
-        public async Task<TokenPairModel> SignInAsync(LoginModel userSignInModel)
+        public async Task<TokenPairModel> SignInAsync(LoginDTOModel userSignInModel)
         {
             var user = await _userManager.FindByEmailAsync(userSignInModel.Email);
             if(user is null)
@@ -66,6 +65,11 @@ namespace EdProject.BLL.Services
             user.RefreshTokenExpiryTime = DateTime.Now.AddHours(6);
             await _userManager.UpdateAsync(user);
             return tokenPairModel;
+        }
+        public async Task Login(LoginDTOModel login)
+        {
+            var user =await _userManager.FindByEmailAsync(login.Email);
+            await _signInManager.SignInAsync(user, false);
         }
         public async Task<TokenPairModel> RefreshTokensAsync(string refreshToken)
         {

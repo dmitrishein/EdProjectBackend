@@ -1,0 +1,15 @@
+[04.07.2021 10:15:29 +00:00] Error, An unhandled exception has occurred while executing the request.,    at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[04.07.2021 10:46:44 +00:00] Error, , 
+[04.07.2021 10:47:02 +00:00] Error, , 
+[04.07.2021 10:47:12 +00:00] Error, , 
+[04.07.2021 10:47:32 +00:00] Error, , 
+[04.07.2021 10:48:14 +00:00] Error, , 
+[04.07.2021 10:49:12 +00:00] Error, , 
+[04.07.2021 11:01:50 +00:00] Error, , 
+[04.07.2021 11:01:50 +00:00] Error, , 
+[04.07.2021 11:02:43 +00:00] Error, , 
+[04.07.2021 11:02:43 +00:00] Error, , 
