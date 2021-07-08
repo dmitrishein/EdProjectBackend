@@ -127,6 +127,9 @@ namespace EdProject.PresentationLayer
             });
 
             services.AddControllers();
+            services.AddControllersWithViews();
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
 
 
         }

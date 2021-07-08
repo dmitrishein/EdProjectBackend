@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Linq;
 using System.Threading.Tasks;
+using EdProject.BLL.Models.ViewModels;
 
 namespace EdProject.BLL.Services
 {
@@ -22,7 +23,7 @@ namespace EdProject.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task CreateEditionAsync(EditionModel editionModel)
+        public async Task CreateEditionAsync(CreateEditionModel editionModel)
         {
             var edition = _editionRepos.FindEditionByTitle(editionModel.Title);
             if (edition is not null)
@@ -33,7 +34,7 @@ namespace EdProject.BLL.Services
             var newEdition = _mapper.Map<Edition>(editionModel);
             await _editionRepos.CreateAsync(newEdition);
         }
-        public async Task UpdateEditionAsync(EditionModel editionModel)
+        public async Task UpdateEditionAsync(CreateEditionModel editionModel)
         {
             var newEdition = _mapper.Map<Edition>(editionModel);
             var oldEdition = await _editionRepos.FindByIdAsync(newEdition.Id);
@@ -63,7 +64,7 @@ namespace EdProject.BLL.Services
             var result= _mapper.Map<List<EditionModel>>(editionList);
             return result;
         }
-        public async Task<EditionModel> GetEditionByIdAsync(long id)
+        public async Task<CreateEditionModel> GetEditionByIdAsync(long id)
         {
             var getEdition = await _editionRepos.FindByIdAsync(id);
 
@@ -72,7 +73,19 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
             }
 
-            return _mapper.Map<EditionModel>(getEdition);
+            return _mapper.Map<CreateEditionModel>(getEdition);
+        }
+        public async Task<ProductsViewModel> GetViewModelAsync(EditionPageParameters pageParams)
+        {
+            var pageResponseModel = await GetEditionPageAsync(pageParams);
+            ProductsViewModel authorsViewModel = new ProductsViewModel
+            {
+                ElementsPerPage = pageParams.ElementsPerPage,
+                CurrentPage = pageResponseModel.CurrentPage,
+                TotalItemsAmount = pageResponseModel.TotalItemsAmount,
+                EditionsPage = pageResponseModel.EditionsPage
+            };
+            return authorsViewModel;
         }
         public async Task<EditionPageResponseModel> GetEditionPageAsync(EditionPageParameters pageParams)
         {  

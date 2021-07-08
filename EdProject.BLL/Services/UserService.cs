@@ -57,6 +57,17 @@ namespace EdProject.BLL.Services
             var userModel = _mapper.Map<UserModel>(user);
             return userModel;
         }
+        public async Task<UserModel> GetUserByIdAsync(long id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user is null)
+            {
+                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
+            }
+
+            var userModel = _mapper.Map<UserModel>(user);
+            return userModel;
+        }
 
         public async Task<List<UserModel>> GetAllUsersAsync()
         {
@@ -64,10 +75,16 @@ namespace EdProject.BLL.Services
            
             return _mapper.Map<List<UserModel>>(userList);  
         }
-        public async Task<ProfileViewModel> UserProfileViewModel(string email)
+        public async Task<ProfileViewModel> UserProfileViewModel(string id)
         {
-            var user = await GetUserByEmailAsync(email);
-            return new ProfileViewModel { User = user };
+            var user = await _userManager.FindByIdAsync(id);
+            var mappedUser = _mapper.Map<UserModel>(user);
+            return new ProfileViewModel { User = mappedUser };
+        }
+        public async Task<UsersViewModel> UsersViewModel()
+        {
+            var users = await GetAllUsersAsync();
+            return new UsersViewModel { UsersList = users };
         }
         public List<UserModel> GetUsersByQuery(string searchString)
         {
@@ -110,6 +127,7 @@ namespace EdProject.BLL.Services
         }
         public async Task UpdateUserAsync(UserUpdateModel userModel)
         {
+            
             var tokenHandler = new JwtSecurityTokenHandler();
             var userToken = tokenHandler.ReadJwtToken(userModel.Jwt);
             var userId = userToken.Claims.First(claim => claim.Type == "id").Value;
@@ -127,7 +145,23 @@ namespace EdProject.BLL.Services
    
             await _userManager.UpdateAsync(checkUser);    
         }
+        public async Task UpdateUserAsync(UserModel user, bool isAdmin)
+        {
+            if(!isAdmin)
+            {
+                return;
+            }
+            var checkUser = await _userManager.FindByIdAsync(user.Id.ToString());
 
+            await _userManager.SetUserNameAsync(checkUser,user.Username);
+            string[] splitedFullName = user.Fullname.Split(' ');
+            checkUser.FirstName = splitedFullName[0];
+            checkUser.LastName = splitedFullName[1];
+            checkUser.Email = user.Email;
+            checkUser.EmailConfirmed = user.IsEmailConfirmed;
+            await _userManager.UpdateAsync(checkUser);
+
+        }
        
 
     }

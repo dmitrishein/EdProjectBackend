@@ -13,7 +13,7 @@ using System.Web;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-
+using EdProject.BLL.Models.ViewModels;
 
 namespace EdProject.BLL.Services
 {
@@ -44,10 +44,10 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-            if(!user.EmailConfirmed)
-            {
-                throw new CustomException(ErrorConstant.UNCONFIRMED_EMAIL, HttpStatusCode.BadRequest);
-            }
+            //if(!user.EmailConfirmed)
+            //{
+            //    throw new CustomException(ErrorConstant.UNCONFIRMED_EMAIL, HttpStatusCode.BadRequest);
+            //}
             var result = await _signInManager.PasswordSignInAsync(user, userSignInModel.Password, userSignInModel.RememberMe, false);
             if(!result.Succeeded)
             {
@@ -68,7 +68,7 @@ namespace EdProject.BLL.Services
         }
         public async Task Login(LoginDTOModel login)
         {
-            var user =await _userManager.FindByEmailAsync(login.Email);
+            var user = await _userManager.FindByEmailAsync(login.Email);
             await _signInManager.SignInAsync(user, false);
         }
         public async Task<TokenPairModel> RefreshTokensAsync(string refreshToken)
@@ -189,5 +189,16 @@ namespace EdProject.BLL.Services
             }
         }
 
+        //Change password in admin profile and users profiles
+        public async Task AdminChangePasswordAsync(string email,string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+            if(!result.Succeeded)
+            {
+                throw new CustomException(ErrorConstant.FAILED_TO_CHANGE_PASSWORD, HttpStatusCode.BadRequest);
+            }
+        }
     }
 }

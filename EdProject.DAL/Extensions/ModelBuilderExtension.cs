@@ -12,7 +12,7 @@ namespace EdProject.DAL.Extension
         public static void Seed(this ModelBuilder modelBuilder)
         {
             var hasher = new PasswordHasher<User>();
-
+            
             modelBuilder.Entity<User>().HasData(
                 new User
                 {

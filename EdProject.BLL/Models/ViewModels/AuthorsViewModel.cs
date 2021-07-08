@@ -1,4 +1,5 @@
-﻿using EdProject.BLL.Models.AuthorDTO;
+﻿using EdProject.BLL.Models.Author;
+using EdProject.BLL.Models.AuthorDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace EdProject.BLL.Models.ViewModels
 {
     public class AuthorsViewModel
     {
-        public List<AuthorModel> AuthorsList { get; set; }
+        public List<AuthorInEditionModel> AuthorsList { get; set; }
     }
 }

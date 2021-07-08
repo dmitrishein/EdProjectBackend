@@ -8,7 +8,7 @@ namespace EdProject.BLL.Models.AuthorDTO
     public class AuthorModel:BaseModel,IValidatableObject
     {
         public string Name { get; set; }
-        public List<EditionModel> EditionsList { get; set; }
+        //public List<EditionModel> EditionsList { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

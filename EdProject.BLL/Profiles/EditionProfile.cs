@@ -9,6 +9,7 @@ namespace EdProject.BLL.Profiles
         public EditionProfile()
         {
             CreateMap<Edition, EditionModel>();
+            CreateMap<Edition, CreateEditionModel>().ReverseMap();
             CreateMap<EditionModel, Edition>();
             CreateMap<EditionPageModel, EditionPageResponseModel>().ReverseMap();
         }

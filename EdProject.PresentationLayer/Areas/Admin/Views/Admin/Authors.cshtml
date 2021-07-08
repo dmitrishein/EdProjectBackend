@@ -1,33 +1,38 @@
 ﻿@using EdProject.BLL.Models.ViewModels
-@using EdProject.BLL.Models.AuthorDTO
+@using EdProject.BLL.Models.Author;
 @using EdProject.BLL.Models.Editions
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model AuthorsViewModel
 @{
     ViewData["Title"] = "Authors list";
 }
 
-<table>
+<table class="table">
     <thead>
         <tr>
-            <th class="authors-id">Id</th>
-            <th class="authors-name">Name</th>
-            <th class="authors-works">Works</th>
-            <th class="authors-controls"></th>
+            <th >Id</th>
+            <th >Name</th>
+            <th >Works</th>
+            <th >Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach(AuthorModel author  in Model.AuthorsList)
-            {
-                <tr>
-                    <td> @author.Id</td>
-                    <td>@author.Name</td>
-                    <td>
-                        @foreach(EditionModel editionModel in author.EditionsList)
-                         {
-                            <p>@editionModel.Title</p>
-                         }
-                    </td>
-                </tr>
-            }
+        @foreach (AuthorInEditionModel author in Model.AuthorsList)
+        {
+            <tr>
+                <td>@author.Id</td>
+                <td>@author.Name</td>
+                <td>
+                    @foreach (EditionModel edition in author.Editions)
+                    {
+                        <p>@edition.Title</p>
+                    }
+                </td>
+                <td class="authors-controls">
+                    <a class="btn btn-primary" asp-controller="Admin" asp-action="UpdateAuthor" asp-route-id="@author.Id">Edit</a> |
+                    <a class="btn btn-primary" asp-controller="Admin" asp-action="RemoveAuthor" asp-route-id="@author.Id">Remove</a> 
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

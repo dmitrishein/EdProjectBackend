@@ -1,4 +1,5 @@
-﻿using EdProject.BLL.Models.AuthorDTO;
+﻿using EdProject.BLL.Models.Author;
+using EdProject.BLL.Models.AuthorDTO;
 using EdProject.BLL.Models.Editions;
 using EdProject.BLL.Models.ViewModels;
 using EdProject.DAL.Entities;

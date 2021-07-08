@@ -57,7 +57,7 @@ namespace EdProject.DAL.DataContext
                 .HasForeignKey<Orders>(o => o.PaymentId);
             #endregion
 
-            #region Convert enum.Currency into string
+            #region Convert Edition.Currency into string
             modelBuilder
                 .Entity<Edition>()
                 .Property(e => e.Currency)

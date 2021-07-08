@@ -20,20 +20,6 @@ namespace EdProject.PresentationLayer.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task CreateEdition(EditionModel newEdition)
-        {        
-            await _printEditionService.CreateEditionAsync(newEdition);
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
-        public async Task UpdateEdition(EditionModel updateModel)
-        {        
-            await _printEditionService.UpdateEditionAsync(updateModel);
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
         public async Task RemoveEditionAsync(long id)
         {
             await _printEditionService.RemoveEditionAsync(id);
@@ -49,7 +35,8 @@ namespace EdProject.PresentationLayer.Controllers
         [HttpGet("[action]")]
         public async Task<EditionModel> GetEditionById(long id)
         {
-            return await _printEditionService.GetEditionByIdAsync(id);
+            //return await _printEditionService.GetEditionByIdAsync(id);
+            return null;
         }
 
         [HttpPost("[action]")]

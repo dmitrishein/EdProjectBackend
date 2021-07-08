@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdProject.BLL.Models.Author;
 using EdProject.BLL.Models.AuthorDTO;
 using EdProject.BLL.Models.Editions;
 using EdProject.BLL.Models.ViewModels;
@@ -118,8 +119,9 @@ namespace EdProject.BLL.Services
 
         public async Task<AuthorsViewModel> GetAuthorsViewModel()
         {
-            var authors = await GetAuthorsAsync();
-            return new AuthorsViewModel { AuthorsList = authors };
+            var authors = await _authorRepository.GetAllAuthorsAsync();
+            var authorInEditions = _mapper.Map<List<AuthorInEditionModel>>(authors);
+            return new AuthorsViewModel { AuthorsList = authorInEditions };
         }
         public async Task RemoveAuthorAsync(long id)
         {

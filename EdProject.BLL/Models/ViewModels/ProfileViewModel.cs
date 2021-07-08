@@ -10,5 +10,6 @@ namespace EdProject.BLL.Models.ViewModels
     public class ProfileViewModel
     {
         public UserModel User { get; set; }
+        public string NewPassword { get; set; }
     }
 }

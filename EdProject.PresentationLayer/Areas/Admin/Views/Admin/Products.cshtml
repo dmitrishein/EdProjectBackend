@@ -1,0 +1,64 @@
+﻿@using EdProject.BLL.Models.ViewModels
+@using EdProject.BLL.Models.Editions
+@using EdProject.BLL.Models.AuthorDTO
+
+@using EdProject.DAL.Enums
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model ProductsViewModel
+@{
+    ViewData["Title"] = "Products list";
+
+}
+<a class="btn btn-primary" asp-controller="Admin" asp-action="AddEdition">Add Edition</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Authors</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (EditionModel edition in Model.EditionsPage)
+        {
+            <tr>
+                <td>@edition.Id</td>
+                <td>@edition.Title</td>
+                <td>@edition.Description</td>
+                <td>@edition.Type</td>
+                <td>
+                    @foreach (AuthorModel author in edition.Authors)
+                    {
+                        @if (!author.IsRemoved)
+                        {
+                            <p>@author.Name</p>
+                        }
+                    }
+                </td>
+                <td>@edition.Price.ToString("#.##")$</td>
+                <td>@edition.Status</td>
+                <td>
+                    <a class="btn btn-primary" asp-controller="Admin" asp-action="UpdateEdition" asp-route-id="@edition.Id">Edit</a> |
+                    <a class="btn btn-primary" asp-controller="Admin" asp-action="RemoveEdition" asp-route-id="@edition.Id">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    @if (Model.CurrentPage >= (Model.TotalItemsAmount / Model.ElementsPerPage))
+    {
+        <a class="btn btn-primary" asp-controller="Admin" asp-action="Products" asp-route-curent="@(Model.CurrentPage-1)">Previous</a>
+    }
+    @if (Model.CurrentPage <= (Model.TotalItemsAmount / Model.ElementsPerPage))
+    {
+        <a class="btn btn-primary" asp-controller="Admin" asp-action="Products" asp-route-curent="@(Model.CurrentPage+1)">Next</a>
+    }
+
+</div>

@@ -16,5 +16,6 @@
         public const string EDITIONS_STRING_PATTERN = @"^[0-9,]*$";
         public const long CONVERT_TO_CENT_VALUE = 100;
         public const string PRICE_ASCENDING = "Price ASCENDING";
+        public const long DEFAULT_ADMIN_ID = 1;
     }
 }

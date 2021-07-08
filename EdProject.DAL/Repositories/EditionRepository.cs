@@ -67,10 +67,12 @@ namespace EdProject.DAL.Repositories
                 MaxPrice = GetAll().Select(x => x.Price).Max(),
                 MinPrice = GetAll().Select(x => x.Price).Min(),
                 TotalItemsAmount = countItems,
+                ElementsPerPage = editionPageParameters.ElementsPerPage,
                 CurrentPage = editionPageParameters.CurrentPageNumber,
                 EditionsPage = await listResults.ToListAsync()
             };  
             return editionPageModel; 
         }
+
     }
 }

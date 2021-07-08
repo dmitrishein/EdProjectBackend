@@ -4,38 +4,28 @@
 @{
     ViewData["Title"] = "Profile";
 }
-<div class="profile-container">
     <h2>Admin profile</h2>
 
-    <div id="userInfo">
-        <form asp-action="UpdateUser" asp-controller="Admin" method="post">
+        <form class="form-group" asp-action="UpdateUser" asp-controller="Admin" method="post">
             <input type="hidden" asp-for="User.Id" />
             <label asp-for="User.Username"></label>
-            <input type="text" asp-for="User.Username" disabled />
+            <input type="text" asp-for="User.Username"  />
             <label asp-for="User.Email"></label>
-            <input type="text" asp-for="User.Email" disabled />
+            <input type="text" asp-for="User.Email"  />
             <label asp-for="User.Fullname"></label>
-            <input id="FirstName" type="text" asp-for="User.Fullname" disabled />
-            <div class="button" id="saveChanges" style="display:none">
+            <input type="text" asp-for="User.Fullname"  />
+            <div class="button">
                 <button type="submit">Save changes</button>
             </div>
         </form>
-    </div>
-    <div class="button">
-        <button id="changePasswordStart" style="display:block">Change password</button>
-    </div>
-    @*<div id="changePasswordForm" style="display:none">
-        <form asp-action="ChangePassword" asp-controller="Admin" method="post">
-            <input type="hidden" asp-for="User.Id" />
-            <label asp-for="OldPassword"></label>
-            <input type="password" asp-for="OldPassword" />
+
+
+
+        <form class="form-group" asp-action="ChangePassword" asp-controller="Admin" method="post">
+            <input type="hidden" asp-for="User.Email" />
             <label asp-for="NewPassword"></label>
             <input type="password" asp-for="NewPassword" />
-            <label asp-for="ConfirmPassword"></label>
-            <input type="password" asp-for="ConfirmPassword" />
-            <div class="button" id="changePasswordBtn">
+            <div class="button" >
                 <button type="submit">Change password</button>
             </div>
         </form>
-    </div>*@
-</div>

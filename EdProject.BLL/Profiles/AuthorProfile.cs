@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdProject.BLL.Models.Author;
 using EdProject.BLL.Models.AuthorDTO;
 using EdProject.DAL.Entities;
 
@@ -8,9 +9,9 @@ namespace EdProject.BLL.Profiles
     {
         public AuthorProfile()
         {
-            CreateMap<Author, AuthorModel>()
-                .ForMember(itemModel => itemModel.EditionsList, entity => entity.MapFrom(edit => edit.Editions));
+            CreateMap<Author, AuthorModel>();
             CreateMap<AuthorModel, Author>();
+            CreateMap<Author, AuthorInEditionModel>().ReverseMap();
                                 
         }
     }

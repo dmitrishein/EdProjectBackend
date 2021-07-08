@@ -1,0 +1,22 @@
+﻿@using EdProject.BLL.Models.User
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model UserModel
+@{
+    ViewData["Title"] = "Update Client";
+}
+<h2>User profile</h2>
+
+<form class="form-group" asp-action="UpdateClient" asp-controller="Admin" method="post">
+    <input type="hidden" asp-for="@Model.Id" />
+    <label asp-for="@Model.Username"></label>
+    <input type="text" asp-for="@Model.Username" />
+    <label asp-for="@Model.Email"></label>
+    <input type="text" asp-for="@Model.Email" />
+    <label asp-for="@Model.Fullname"></label>
+    <input type="text" asp-for="@Model.Fullname" />
+    <label asp-for="@Model.IsEmailConfirmed"></label>
+    <input type="checkbox" asp-for="@Model.IsEmailConfirmed" />
+    <div class="button">
+        <button type="submit">Save changes</button>
+    </div>
+</form>

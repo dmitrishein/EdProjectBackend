@@ -1,0 +1,35 @@
+﻿@using EdProject.BLL.Models.ViewModels
+@using EdProject.BLL.Models.User;
+@using EdProject.BLL.Models.Editions
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model UsersViewModel
+@{
+    ViewData["Title"] = "Users list";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>FullName</th>
+            <th>Email</th>
+            <th>EmailConfirmed</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (UserModel user in Model.UsersList)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Fullname</td>
+                <td>@user.Email</td>
+                <td>@user.IsEmailConfirmed</td>
+                <td class="authors-controls">
+                    <a class="btn btn-primary" asp-controller="Admin" asp-action="UpdateClient" asp-route-id="@user.Id">Edit</a> |
+                    <a class="btn btn-primary" asp-controller="Admin" asp-action="RemoveClient" asp-route-id="@user.Id">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
