@@ -11,6 +11,5 @@ namespace EdProject.DAL.Repositories.Interfaces
         public Task<List<Orders>> GetOrdersByUserIdAsync(long userId);
         public Task<List<Orders>> GetAllOrdersAsync();
         public Task<OrderPageModel> OrdersPage(OrdersPageParameters pageParameters);
-        public decimal GetOrderCost(Orders order);
     }
 }

@@ -44,10 +44,10 @@ namespace EdProject.BLL.Services
             {
                 throw new CustomException(ErrorConstant.USER_NOT_FOUND, HttpStatusCode.BadRequest);
             }
-            //if(!user.EmailConfirmed)
-            //{
-            //    throw new CustomException(ErrorConstant.UNCONFIRMED_EMAIL, HttpStatusCode.BadRequest);
-            //}
+            if (!user.EmailConfirmed)
+            {
+                throw new CustomException(ErrorConstant.UNCONFIRMED_EMAIL, HttpStatusCode.BadRequest);
+            }
             var result = await _signInManager.PasswordSignInAsync(user, userSignInModel.Password, userSignInModel.RememberMe, false);
             if(!result.Succeeded)
             {
@@ -66,11 +66,6 @@ namespace EdProject.BLL.Services
             await _userManager.UpdateAsync(user);
             return tokenPairModel;
         }
-        public async Task Login(LoginDTOModel login)
-        {
-            var user = await _userManager.FindByEmailAsync(login.Email);
-            await _signInManager.SignInAsync(user, false);
-        }
         public async Task<TokenPairModel> RefreshTokensAsync(string refreshToken)
         {
             var user = _userManager.Users.Where(u => u.RefreshToken == refreshToken).FirstOrDefault();
@@ -83,11 +78,14 @@ namespace EdProject.BLL.Services
                 throw new CustomException(ErrorConstant.INVALID_REFRESH_TOKEN, HttpStatusCode.Forbidden);
             }
 
+
             var userRoles = await _userManager.GetRolesAsync(user);
+            var accessTok = _jwt.GenerateAccessToken(user, userRoles);
+            var refreshTok = _jwt.GenerateRefreshToken();
             TokenPairModel tokenPairModel = new TokenPairModel
             {
-                AccessToken = _jwt.GenerateAccessToken(user, userRoles),
-                RefreshToken = _jwt.GenerateRefreshToken()
+                AccessToken = accessTok,
+                RefreshToken = refreshTok
             };
 
             user.RefreshToken = tokenPairModel.RefreshToken;
@@ -189,7 +187,6 @@ namespace EdProject.BLL.Services
             }
         }
 
-        //Change password in admin profile and users profiles
         public async Task AdminChangePasswordAsync(string email,string newPassword)
         {
             var user = await _userManager.FindByEmailAsync(email);

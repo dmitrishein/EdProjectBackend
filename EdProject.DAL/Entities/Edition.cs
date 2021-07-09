@@ -15,7 +15,6 @@ namespace EdProject.DAL.Entities
         public EditionTypes Type { get; set; }
 
 
-        //relationships
         public virtual List<Author> Authors { get; set; }
         public virtual List<Orders> Orders { get; set; }
         public virtual List<OrderItem> OrderItems { get; set; }

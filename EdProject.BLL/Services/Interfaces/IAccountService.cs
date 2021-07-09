@@ -9,7 +9,6 @@ namespace EdProject.BLL.Services.Interfaces
     {
         public Task RegisterUserAsync(RegistrationModel newUser);
         public Task<TokenPairModel> SignInAsync(LoginDTOModel userSignInModel);
-        public Task Login(LoginDTOModel login);
         public Task<TokenPairModel> RefreshTokensAsync(string refreshToken);
         public Task SignOutAsync();
         public Task ConfirmEmailAsync(EmailValidationModel validationModel);

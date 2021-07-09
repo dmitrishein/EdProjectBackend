@@ -154,9 +154,10 @@ namespace EdProject.BLL.Services
             var checkUser = await _userManager.FindByIdAsync(user.Id.ToString());
 
             await _userManager.SetUserNameAsync(checkUser,user.Username);
+
             string[] splitedFullName = user.Fullname.Split(' ');
-            checkUser.FirstName = splitedFullName[0];
-            checkUser.LastName = splitedFullName[1];
+            checkUser.FirstName = splitedFullName.FirstOrDefault();
+            checkUser.LastName = splitedFullName.LastOrDefault();
             checkUser.Email = user.Email;
             checkUser.EmailConfirmed = user.IsEmailConfirmed;
             await _userManager.UpdateAsync(checkUser);

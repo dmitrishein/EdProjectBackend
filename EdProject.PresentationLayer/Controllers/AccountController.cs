@@ -43,7 +43,6 @@ namespace EdProject.PresentationLayer.Controllers
             return await _accountService.RefreshTokensAsync(refreshTokenModel.RefreshToken);
         }
 
-
         [HttpPost("[action]")]
         public async Task Logout()
         {

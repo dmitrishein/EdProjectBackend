@@ -22,12 +22,7 @@ namespace EdProject.DAL.Repositories
         {
             return await GetAll().Where(x => !x.IsRemoved).ToListAsync();
         }
-        public decimal GetOrderCost(Orders order)
-        {
-            decimal amount = order.OrderItems.Sum(x => x.Edition.Price * x.ItemsCount);
-            return amount; 
-        }
-
+ 
         public async Task<List<Orders>> GetOrdersByUserIdAsync(long userId)
         {
             List<Orders> ordersQuery =  await GetAll().Where(e => e.UserId == userId).ToListAsync();
@@ -46,7 +41,7 @@ namespace EdProject.DAL.Repositories
                                      .Where(o => !o.IsRemoved)
                                      .CountAsync();
 
-            var orderToResult = GetAll().Where(o => o.Description.Contains(pageParameters.SearchString) ||
+            var orderToResult = await GetAll().Where(o => o.Description.Contains(pageParameters.SearchString) ||
                                      o.Payment.Amount.Equals(pageParameters.SearchString) ||
                                      o.Id.ToString().Contains(pageParameters.SearchString) ||
                                      o.Editions.Any(e => e.Title.Contains(pageParameters.SearchString)) ||
@@ -55,13 +50,14 @@ namespace EdProject.DAL.Repositories
                          .Where(o => !o.IsRemoved)
                          .OrderBy(pageParameters.SortType == 0 ? "Id" : $"{pageParameters.SortType.ToString()} {(pageParameters.IsReversed ? "DESC":"ASC")}" )
                          .Skip((pageParameters.CurrentPageNumber - VariableConstant.SKIP_ZERO_PAGE) * pageParameters.ElementsPerPage)
-                         .Take(pageParameters.ElementsPerPage);
+                         .Take(pageParameters.ElementsPerPage)
+                         .ToListAsync();
 
             OrderPageModel page = new OrderPageModel
             {
                 TotalItemsAmount = countItems,
                 CurrentPage = pageParameters.CurrentPageNumber,
-                OrdersPage = await orderToResult.ToListAsync()
+                OrdersPage = orderToResult
             };
             return page;
         }

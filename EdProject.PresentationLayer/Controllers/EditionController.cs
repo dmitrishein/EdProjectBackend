@@ -18,31 +18,11 @@ namespace EdProject.PresentationLayer.Controllers
             _printEditionService = printingEditionService;
         }
 
-        [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
-        public async Task RemoveEditionAsync(long id)
+        public async Task<EditionPageResponseModel> GetEditionPage(EditionPageParameters pageModel)
         {
-            await _printEditionService.RemoveEditionAsync(id);
-        }
-
-        [HttpGet("GetEditions")]
-        public async Task<List<EditionModel>> GetEditions()
-        {
-            var result= await _printEditionService.GetEditionsAsync();
-            return result;
-        }
-
-        [HttpGet("[action]")]
-        public async Task<EditionModel> GetEditionById(long id)
-        {
-            //return await _printEditionService.GetEditionByIdAsync(id);
-            return null;
-        }
-
-        [HttpPost("[action]")]
-        public Task<EditionPageResponseModel> GetEditionPage(EditionPageParameters pageModel)
-        {
-            return _printEditionService.GetEditionPageAsync(pageModel);
+            var response = await _printEditionService.GetEditionPageAsync(pageModel);
+            return response;
         }
     }
 }

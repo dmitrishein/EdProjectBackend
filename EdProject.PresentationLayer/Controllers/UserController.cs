@@ -22,13 +22,6 @@ namespace EdProject.PresentationLayer.Controllers
             _userService = userService;
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
-        public async Task AddToRole(UserToRoleModel userToRole)
-        {
-            await _userService.AddToRoleAsync(userToRole);
-        }
-
         [Authorize]
         [HttpPost("[action]")]
         public async Task UpdateUser(UserUpdateModel userUpdModel)
@@ -36,43 +29,11 @@ namespace EdProject.PresentationLayer.Controllers
             await _userService.UpdateUserAsync(userUpdModel);
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpPost("[action]")]
-        public async Task RemoveUser(long userId)
-        {
-            await _userService.RemoveUserAsync(userId);
-        }
-
-
-        [Authorize(Roles = "admin")]
-        [HttpGet("[action]")]
-        public async Task<List<UserModel>> GetUserByRole(string roleName)
-        {
-            return await _userService.GetUserListByRole(roleName);
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpGet("[action]")]
-        public async Task<List<UserModel>> GetAllUsers()
-        {
-            return await _userService.GetAllUsersAsync();
-        }
-
-
         [Authorize]
         [HttpGet("[action]")]
         public async Task<UserModel> GetUserByEmail(string searchString)
         {
             return await _userService.GetUserByEmailAsync(searchString);
         }
-
-        [Authorize]
-        [HttpGet("[action]")]
-        public List<UserModel> GetUserByQuery(string searchString)
-        {
-            return _userService.GetUsersByQuery(searchString);
-        }
-
- 
     }
 }

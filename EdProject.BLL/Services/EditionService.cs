@@ -57,13 +57,6 @@ namespace EdProject.BLL.Services
             editionToRemove.IsRemoved = true;
             await _editionRepos.UpdateAsync(editionToRemove);
         }
-
-        public async Task<List<EditionModel>> GetEditionsAsync()
-        {
-            var editionList = await _editionRepos.GetAllEditionsAsync();
-            var result= _mapper.Map<List<EditionModel>>(editionList);
-            return result;
-        }
         public async Task<CreateEditionModel> GetEditionByIdAsync(long id)
         {
             var getEdition = await _editionRepos.FindByIdAsync(id);

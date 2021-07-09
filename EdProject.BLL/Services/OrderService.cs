@@ -155,25 +155,6 @@ namespace EdProject.BLL.Services
             }
 
         }
-        public async Task<List<OrderModel>> GetOrdersByUserIdAsync(long userId)
-        {
-            var orderList = await _orderRepository.GetOrdersByUserIdAsync(userId);
-            if (!orderList.Any())
-            {
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.BadRequest);
-            }
-            return _mapper.Map<List<OrderModel>>(orderList);
-        }
-        public async Task<List<OrderModel>> GetOrdersListAsync()
-        {
-            var ordersList = await _orderRepository.GetAllOrdersAsync();
-            if (!ordersList.Any())
-            {
-                throw new CustomException(ErrorConstant.NOTHING_FOUND, HttpStatusCode.OK);
-            }
-
-            return _mapper.Map<List<OrderModel>>(ordersList);
-        }
         public async Task<OrdersPageResponseModel> GetOrdersPageAsync(string token,OrdersPageParameters pageParams)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -185,63 +166,8 @@ namespace EdProject.BLL.Services
             var lis = _mapper.Map<OrdersPageResponseModel>(resultPage);
             return lis;
         }
-        public async Task<OrderModel> GetOrderByIdAsync(long orderId)
-        {
-            var order = await _orderRepository.FindByIdAsync(orderId);
-            if (order is null || order.IsRemoved)
-            {
-                throw new CustomException(ErrorConstant.NOTHING_EXIST, HttpStatusCode.BadRequest);
-            }
 
-            return _mapper.Map<OrderModel>(order);          
-        }
-        public async Task<List<OrderItemModel>> GetItemsInOrderAsync(long orderId)
-        {
-            var order = await _orderRepository.FindByIdAsync(orderId);
-            if (order is null || order.IsRemoved)
-            {
-                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
-            }
-
-            var orderItemList = order.OrderItems.ToList();
-
-            return _mapper.Map<List<OrderItemModel>>(orderItemList);
-        }
-
-
-        public async Task UpdateOrderItemAsync(OrderItemModel orderItem)
-        {
-            var order = await _orderRepository.FindByIdAsync(1);
-            if (order is null || order.IsRemoved || order.StatusType.Equals(PaidStatusType.Paid))
-            {
-                throw new CustomException(ErrorConstant.INCORRECT_ORDER,HttpStatusCode.BadRequest);
-            }
-
-            var item = order.OrderItems.First(ed => ed.EditionId == orderItem.EditionId);
-            if(item is null)
-            {
-                throw new CustomException(ErrorConstant.INCORRECT_EDITION,HttpStatusCode.BadRequest);
-            }
-
-            item.ItemsCount = orderItem.ItemsCount;
-            if(item.ItemsCount is VariableConstant.EMPTY)
-            {
-                order.OrderItems.Remove(item);
-            }    
-
-            await _orderRepository.UpdateAsync(order);
-        }
-        public async Task ClearOrder(long orderId)
-        {
-            var order = await _orderRepository.FindByIdAsync(orderId);
-            if(order is null)
-            {
-                throw new CustomException(ErrorConstant.INCORRECT_ORDER, HttpStatusCode.BadRequest);
-            }
-            order.OrderItems.Clear();
-            await _orderRepository.UpdateAsync(order);
-        }
-
+        //for admin
         public async Task RemoveOrderByIdAsync(long orderId)
         {
             var order = await _orderRepository.FindByIdAsync(orderId);

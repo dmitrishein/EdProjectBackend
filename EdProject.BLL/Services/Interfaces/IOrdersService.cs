@@ -10,13 +10,7 @@ namespace EdProject.BLL.Services.Interfaces
     {
         public Task<long> CreateOrderAsync(string token, OrderCreateModel orderCreateModel);
         public Task UpdateOrderAsync(string token, OrderUpdateModel orderUpdate);
-        public Task<List<OrderModel>> GetOrdersByUserIdAsync(long userId);
         public Task<OrdersPageResponseModel> GetOrdersPageAsync(string token,OrdersPageParameters pageModel);
-        public Task<List<OrderModel>> GetOrdersListAsync();
-        public Task<OrderModel> GetOrderByIdAsync(long orderId);
-        public Task<List<OrderItemModel>> GetItemsInOrderAsync(long orderId);
-        public Task UpdateOrderItemAsync(OrderItemModel orderItem);
         public Task RemoveOrderByIdAsync(long orderId);
-        public Task ClearOrder(long orderId);
     }
 }

@@ -3,10 +3,7 @@ using EdProject.DAL.Entities;
 using EdProject.DAL.Repositories.Base;
 using EdProject.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EdProject.DAL.Repositories

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EdProject.PresentationLayer.Middleware
@@ -25,8 +26,10 @@ namespace EdProject.PresentationLayer.Middleware
             }
             catch (CustomException ex)
             {
+                //TODO make serialize by jsonSerializer
+                var json = JsonSerializer.Serialize(ex.Errors);
                 httpContext.Response.StatusCode = (int)ex.StatusCode;
-                await httpContext.Response.WriteAsync(ex.Message);
+                await httpContext.Response.WriteAsync(json);
             }
             catch (Exception ex)
             {

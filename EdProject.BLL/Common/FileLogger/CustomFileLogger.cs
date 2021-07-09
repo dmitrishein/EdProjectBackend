@@ -30,10 +30,10 @@ namespace EdProject.BLL.Common.FileLogger
                 return;
             }
 
-            var fullFilePath = $"{_config.LoggerPath}/{_config.LoggerFilename.Replace("{date}", DateTimeOffset.UtcNow.ToString("d"))}";
-            var stack = exception != null ? exception.StackTrace : string.Empty;
+            var fullFilePath = Directory.GetCurrentDirectory();/*$"{_config.LoggerPath}/{_config.LoggerFilename.Replace("{date}", DateTimeOffset.UtcNow.ToString("d"))}";*/
+            var stack = exception is not null ? exception.StackTrace : string.Empty;
             
-            var resEx = exception != null ? formatter(state, exception):string.Empty;
+            var resEx = exception is not null  ? formatter(state, exception):string.Empty;
             var logRecord = $"[{DateTimeOffset.UtcNow}] {logLevel}, {resEx}, {stack}";
 
             using (var streamWriter = new StreamWriter(fullFilePath, true))
