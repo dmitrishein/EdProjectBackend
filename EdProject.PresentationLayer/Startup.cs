@@ -42,6 +42,7 @@ namespace EdProject.PresentationLayer
             services.AddCors();
             services.AddMvc();
             #region IOptionClasses
+            services.Configure<DBOptions>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<EmailOptions>(Configuration.GetSection("EmailProvider"));
             services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
             services.Configure<RoutingOptions>(Configuration.GetSection("ApiRoutes"));
