@@ -141,6 +141,18 @@ namespace EdProject.PresentationLayer.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public IActionResult CreateAuthor()
+        {
+            return View();
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateAuthor([FromForm] AuthorModel author)
+        {
+            await _authorService.CreateAuthorAsync(author);
+            return RedirectToAction("Authors");
+        }
+        [HttpGet]
         public async Task<IActionResult> RemoveAuthor(long id)
         {
             await _authorService.RemoveAuthorAsync(id);
@@ -156,12 +168,19 @@ namespace EdProject.PresentationLayer.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateAuthor([FromForm]AuthorModel author)
+        public async Task<IActionResult> UpdateAuthor([FromForm] AuthorModel author)
         {
             await _authorService.UpdateAuthorAsync(author);
             return RedirectToAction("Authors");
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> AddAuthorToEdition([FromBody]AddAuthorToEdition edition)
+        {
+            await _authorService.AddAuthorToEditionAsync(edition);
+            return RedirectToAction("Products");
+        }
 
         [HttpGet]
         public IActionResult AddEdition()

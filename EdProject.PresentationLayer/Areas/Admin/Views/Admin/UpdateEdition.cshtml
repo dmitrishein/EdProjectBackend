@@ -16,13 +16,10 @@
     <label asp-for="Price"></label><br />
     <input asp-for="Price" /><br />
     <label asp-for="Currency"></label><br />
-    @*<input type="text" asp-for="Currency" /><br />*@
     <select asp-for="Currency" asp-items="Html.GetEnumSelectList<CurrencyTypes>()"></select>
     <label asp-for="Status"></label><br />
-    @*<input type="text" asp-for="Status" /><br />*@
     <select asp-for="Status" asp-items="Html.GetEnumSelectList<AvailableStatusType>()"></select>
     <label asp-for="Type"></label><br />
-    @*<input type="text" asp-for="Type" /><br />*@
     <select asp-for="Type" asp-items="Html.GetEnumSelectList<EditionTypes>()"></select>
     <button type="submit">Save Changes</button>
 </form>

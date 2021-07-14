@@ -49,19 +49,6 @@ namespace EdProject.DAL.Repositories
                           .Where(e => e.Price >= editionPageParameters.MinUserPrice)
                           .Where(e => editionPageParameters.MaxUserPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price <= editionPageParameters.MaxUserPrice)
                           .Where(e => !e.IsRemoved);
-
-            //var listResults = await GetAll().Where(e => e.Title.Contains(editionPageParameters.SearchString) ||
-            //                                      e.Authors.Any(a => a.Name.Contains(editionPageParameters.SearchString)) ||
-            //                                      e.Id.ToString().Contains(editionPageParameters.SearchString))
-            //                          .Where(e => editionPageParameters.EditionTypes.Contains(e.Type))
-            //                          .Where(e => e.Price >= editionPageParameters.MinUserPrice)
-            //                          .Where(e => editionPageParameters.MaxUserPrice <= VariableConstant.MIN_PRICE ? e.Price == e.Price : e.Price <= editionPageParameters.MaxUserPrice)
-            //                          .Where(e => !e.IsRemoved)
-            //                          .OrderBy(editionPageParameters.SortType == 0 ? "Id" : $"{editionPageParameters.SortType} {(editionPageParameters.IsReversed ? "DESC" : "ASC")}")
-            //                          .Skip((editionPageParameters.CurrentPageNumber - VariableConstant.SKIP_ZERO_PAGE) * editionPageParameters.ElementsPerPage)
-            //                          .Take(editionPageParameters.ElementsPerPage)
-            //                          .ToListAsync();
-
             var listResults = GetAll().Where(e => e.Title.Contains(editionPageParameters.SearchString) ||
                                       e.Authors.Any(a => a.Name.Contains(editionPageParameters.SearchString)) ||
                                       e.Id.ToString().Contains(editionPageParameters.SearchString))
@@ -75,8 +62,8 @@ namespace EdProject.DAL.Repositories
 
             EditionPageModel editionPageModel = new EditionPageModel
             {
-                MaxPrice = countItems.Select(x => x.Price).Max(),
-                MinPrice = countItems.Select(x => x.Price).Min(),
+                MaxPrice = countItems.Any() ? countItems.Select(x => x.Price).Max() : editionPageParameters.MaxUserPrice,
+                MinPrice = countItems.Any() ? countItems.Select(x => x.Price).Min() : editionPageParameters.MinUserPrice,
                 TotalItemsAmount = await countItems.CountAsync(),
                 ElementsPerPage = editionPageParameters.ElementsPerPage,
                 CurrentPage = editionPageParameters.CurrentPageNumber,

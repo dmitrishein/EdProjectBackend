@@ -26,7 +26,6 @@ namespace EdProject.PresentationLayer.Middleware
             }
             catch (CustomException ex)
             {
-                //TODO make serialize by jsonSerializer
                 var json = JsonSerializer.Serialize(ex.Errors);
                 httpContext.Response.StatusCode = (int)ex.StatusCode;
                 await httpContext.Response.WriteAsync(json);

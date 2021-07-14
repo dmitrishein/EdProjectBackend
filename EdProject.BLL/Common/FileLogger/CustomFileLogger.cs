@@ -30,7 +30,9 @@ namespace EdProject.BLL.Common.FileLogger
                 return;
             }
 
-            var fullFilePath = Directory.GetCurrentDirectory();/*$"{_config.LoggerPath}/{_config.LoggerFilename.Replace("{date}", DateTimeOffset.UtcNow.ToString("d"))}";*/
+            var environmentPath = Directory.GetCurrentDirectory();/*$"{_config.LoggerPath}/{_config.LoggerFilename.Replace("{date}", DateTimeOffset.UtcNow.ToString("d"))}";*/
+            var loggerFilename = String.Format("log_{0}", DateTime.Now.ToString("d"));
+            var fullFilePath = String.Format("{0}\\{1}.txt", environmentPath, loggerFilename);
             var stack = exception is not null ? exception.StackTrace : string.Empty;
             
             var resEx = exception is not null  ? formatter(state, exception):string.Empty;
